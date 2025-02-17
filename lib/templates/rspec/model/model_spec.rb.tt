@@ -1,0 +1,45 @@
+require 'rails_helper'
+
+RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
+  subject(:<%= singular_table_name %>) { build(:<%= singular_table_name %>) }
+
+  describe "validações" do
+<% attributes.each do |attribute| -%>
+  <% if attribute.reference? -%>
+    it { should belong_to(:<%= attribute.name %>) }
+  <% end -%>
+<% end -%>
+  end
+
+  describe "soft delete" do
+    let(:<%= singular_table_name %>) { create(:<%= singular_table_name %>) }
+
+    it "marca o registro como descartado" do
+      expect { <%= singular_table_name %>.discard }.to change { <%= singular_table_name %>.discarded? }.from(false).to(true)
+    end
+
+    it "mantém o registro no banco de dados" do
+      expect { <%= singular_table_name %>.discard }.not_to change(<%= class_name %>, :count)
+    end
+
+    it "exclui o registro do escopo padrão" do
+      <%= singular_table_name %>.discard
+      expect(<%= class_name %>.kept).not_to include(<%= singular_table_name %>)
+    end
+
+    it "inclui o registro no escopo discarded" do
+      <%= singular_table_name %>.discard
+      expect(<%= class_name %>.discarded).to include(<%= singular_table_name %>)
+    end
+  end
+
+  describe "scopes" do
+    it "tem um escopo kept para registros ativos" do
+      expect(<%= class_name %>.kept).to eq(<%= class_name %>.where(discarded_at: nil))
+    end
+
+    it "tem um escopo discarded para registros inativos" do
+      expect(<%= class_name %>.discarded).to eq(<%= class_name %>.where.not(discarded_at: nil))
+    end
+  end
+end

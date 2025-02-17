@@ -1,0 +1,14 @@
+<div class="p-12 bg-purple-900 mx-auto rounded-3xl w-96">
+  <div class="mb-7">
+    <h3 class="font-semibold text-2xl text-gray-100">Editar create perfil permission</h3>
+  </div>
+
+  <div class="space-y-6">
+    <%= render "form", create_perfil_permission: @create_perfil_permission, data: {controller: "sweetalert", action: "click->sweetalert#confirmAlertEdit", sweetalert_confirm: "Tem Certeza ?", turbo_method: :patch} %>
+    
+    <div class="mt-7">
+      <%= link_to "Voltar para create perfil permissions", create_perfil_permissions_path, 
+          class: 'w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500' %>
+    </div>
+  </div>
+</div>

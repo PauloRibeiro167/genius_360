@@ -1,14 +1,70 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resources :create_perfil_permissions do
+    member do
+      patch :discard
+    end
+  end
+  resources :permissions
+  resources :permissions do
+    member do
+      patch :discard
+      patch :undiscard
+    end
+  end
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  resources :action_permissions do
+    member do
+      patch :discard
+      patch :undiscard
+    end
+  end
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  resources :controller_permissions do
+    member do
+      patch :discard
+      patch :undiscard
+    end
+  end
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  resources :perfils do
+    member do
+      patch :discard
+      patch :undiscard
+    end
+  end
+
+  devise_for :users, controllers: {
+    sessions: "users/sessions",
+    registrations: "users/registrations"
+  }
+
+  # PWA routes
+  get "pwa/manifest", to: "pwa#manifest", format: "json", as: "pwa_manifest"
+  get "pwa/pwa"
+
+  # Public routes
+  namespace :public do
+    get "/", to: "pages#index"
+    get "sobre", to: "pages#sobre"
+    get "servico", to: "pages#servico"
+    get "precos", to: "pages#precos"
+    get "contato", to: "pages#contato"
+  end
+
+  # Root route
+  root "public/pages#index"
+
+  # Admin routes
+  namespace :admin do
+    get "dashboard/index"
+    get "pages/index"
+  end
+
+  # Test resources
+  resources :tests do
+    member do
+      patch :discard
+      patch :undiscard
+    end
+  end
 end

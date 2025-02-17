@@ -1,0 +1,18 @@
+<%= paginator.render do -%>
+  <nav aria-label="Page navigation">
+    <ul class="inline-flex -space-x-px text-base h-10">
+      <%= paginator.render do %>
+        <% each_page do |page| %>
+          <% if page.display_tag? %>
+            <%= page_tag page %>
+          <% end %>
+        <% end %>
+        
+        <% unless current_page.last? %>
+          <%= next_page_tag %>
+          <%= last_page_tag %>
+        <% end %>
+      <% end %>
+    </ul>
+  </nav>
+<% end -%>

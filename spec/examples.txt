@@ -1,0 +1,7 @@
+example_id                               | status | run_time        |
+---------------------------------------- | ------ | --------------- |
+./spec/features/assets_spec.rb[1:1]      | failed | 0.00512 seconds |
+./spec/features/assets_spec.rb[1:2]      | failed | 0.16952 seconds |
+./spec/features/hello_world_spec.rb[1:1] | failed | 0.0045 seconds  |
+./spec/features/hello_world_spec.rb[1:2] | failed | 0.00545 seconds |
+./spec/features/hello_world_spec.rb[2:1] | failed | 0.16954 seconds |

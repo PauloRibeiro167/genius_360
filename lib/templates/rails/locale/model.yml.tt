@@ -1,0 +1,20 @@
+pt-BR:
+  activerecord:
+    models:
+      <%= singular_name %>:
+        one: <%= human_name %>
+        other: <%= human_name.pluralize %>
+    
+    attributes:
+      <%= singular_name %>:
+<% attributes.each do |attribute| -%>
+        <%= attribute.name %>: <%= attribute.human_name %>
+<% end -%>
+    
+    messages:
+      <%= singular_name %>:
+        created: "%{model} foi criado com sucesso."
+        updated: "%{model} foi atualizado com sucesso."
+        destroyed: "%{model} foi removido com sucesso."
+        discarded: "%{model} foi desativado com sucesso."
+        undiscarded: "%{model} foi reativado com sucesso."

@@ -1,0 +1,14 @@
+FactoryBot.define do
+  factory :<%= singular_name %> do
+<% attributes.each do |attribute| -%>
+  <%- if attribute.password_digest? -%>
+    password { "password123" }
+    password_confirmation { "password123" }
+  <%- elsif attribute.reference? -%>
+    association :<%= attribute.name %>
+  <%- else -%>
+    <%= attribute.name %> { <%= attribute.default.present? ? attribute.default : 'Faker::Lorem.word' %> }
+  <%- end -%>
+<% end -%>
+  end
+end

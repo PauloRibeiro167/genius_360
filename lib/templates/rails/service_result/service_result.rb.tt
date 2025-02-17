@@ -1,0 +1,21 @@
+class ServiceResult
+  attr_reader :success, :message, :data
+
+  def initialize(success:, message: nil, data: nil)
+    @success = success
+    @message = message
+    @data = data
+  end
+
+  def self.success(data = nil, message = nil)
+    new(success: true, message: message, data: data)
+  end
+
+  def self.error(message, data = nil)
+    new(success: false, message: message, data: data)
+  end
+
+  def success?
+    @success
+  end
+end

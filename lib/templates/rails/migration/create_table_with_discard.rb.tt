@@ -1,0 +1,14 @@
+# filepath: lib/templates/rails/migration/create_table_with_discard.rb.tt
+class <%= migration_name %> < ActiveRecord::Migration[<%= Rails.application.config.target_version %>]
+  def change
+    create_table :<%= table_name %> do |t|
+      <% attributes.each do |attribute| -%>
+        t.<%= attribute.type %> :<%= attribute.name %>
+      <% end -%>
+
+      t.datetime :discarded_at, index: true
+
+      t.timestamps
+    end
+  end
+end

@@ -1,0 +1,19 @@
+class <%= class_name %>Decorator < Draper::Decorator
+  delegate_all
+
+  def created_at_formatted
+    h.l(object.created_at, format: :long) if object.created_at
+  end
+
+  def updated_at_formatted
+    h.l(object.updated_at, format: :long) if object.updated_at
+  end
+
+  def status
+    h.<%= singular_name %>_status_badge(object)
+  end
+
+  def actions
+    h.<%= singular_name %>_actions(object)
+  end
+end

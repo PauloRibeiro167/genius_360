@@ -1,0 +1,31 @@
+require 'rails_helper'
+
+RSpec.describe "<%= ns_table_name %>/new", <%= type_metatag(:view) %> do
+  before(:each) do
+    assign(:<%= singular_table_name %>, <%= class_name %>.new)
+  end
+
+  it "exibe o título da página" do
+    render
+    expect(rendered).to have_content("Novo <%= human_name.downcase %>")
+  end
+
+  it "exibe o formulário de criação" do
+    render
+    expect(rendered).to have_selector("form[action='#{<%= index_helper %>_path}']")
+  end
+
+  it "exibe todos os campos do formulário" do
+    render
+<% attributes.each do |attribute| -%>
+  <% unless attribute.password_digest? -%>
+    expect(rendered).to have_field("<%= singular_table_name %>[<%= attribute.column_name %>]")
+  <% end -%>
+<% end -%>
+  end
+
+  it "exibe o botão de voltar" do
+    render
+    expect(rendered).to have_link("Voltar para <%= human_name.pluralize.downcase %>")
+  end
+end

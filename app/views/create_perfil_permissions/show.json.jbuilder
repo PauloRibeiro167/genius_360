@@ -1,0 +1,1 @@
+json.partial! "create_perfil_permissions/create_perfil_permission", create_perfil_permission: @create_perfil_permission

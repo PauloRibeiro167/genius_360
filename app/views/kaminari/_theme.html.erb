@@ -1,0 +1,77 @@
+<% pagination_classes = {
+  nav: "flex items-center justify-between bg-transparent px-4 py-3 sm:px-6",
+  ul: "inline-flex -space-x-px text-base h-10",
+  first: "flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
+  prev: "flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
+  page: "flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
+  page_current: "flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white",
+  gap: "flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400",
+  next: "flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
+  last: "flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+} %>
+
+<%= paginator.render do -%>
+  <nav class="<%= pagination_classes[:nav] %>" aria-label="Page navigation">
+    <ul class="<%= pagination_classes[:ul] %>">
+      <%= first_page_tag unless current_page.first? %>
+      <%= prev_page_tag unless current_page.first? %>
+      
+      <% each_page do |page| %>
+        <% if page.display_tag? %>
+          <%= page_tag page %>
+        <% elsif !page.was_truncated? %>
+          <%= gap_tag %>
+        <% end %>
+      <% end %>
+      
+      <%= next_page_tag unless current_page.last? %>
+      <%= last_page_tag unless current_page.last? %>
+    </ul>
+  </nav>
+<% end -%>
+
+<%# First page %>
+<% content_for :first_page do %>
+  <li>
+    <%= link_to_unless current_page.first?, t('views.pagination.first').html_safe, url, class: pagination_classes[:first] %>
+  </li>
+<% end %>
+
+<%# Previous page %>
+<% content_for :prev_page do %>
+  <li>
+    <%= link_to_unless current_page.first?, t('views.pagination.previous').html_safe, url, class: pagination_classes[:prev] %>
+  </li>
+<% end %>
+
+<%# Page number %>
+<% content_for :page do %>
+  <li>
+    <% if page.current? %>
+      <span class="<%= pagination_classes[:page_current] %>"><%= page %></span>
+    <% else %>
+      <%= link_to page, url, class: pagination_classes[:page], rel: page.rel %>
+    <% end %>
+  </li>
+<% end %>
+
+<%# Gap between pages %>
+<% content_for :gap do %>
+  <li>
+    <span class="<%= pagination_classes[:gap] %>"><%= t('views.pagination.truncate').html_safe %></span>
+  </li>
+<% end %>
+
+<%# Next page %>
+<% content_for :next_page do %>
+  <li>
+    <%= link_to_unless current_page.last?, t('views.pagination.next').html_safe, url, class: pagination_classes[:next] %>
+  </li>
+<% end %>
+
+<%# Last page %>
+<% content_for :last_page do %>
+  <li>
+    <%= link_to_unless current_page.last?, t('views.pagination.last').html_safe, url, class: pagination_classes[:last] %>
+  </li>
+<% end %>

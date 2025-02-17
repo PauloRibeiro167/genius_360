@@ -1,0 +1,22 @@
+class <%= class_name %>Decorator < ApplicationDecorator
+  delegate_all
+
+  def formatted_created_at
+    object.created_at.strftime('%d/%m/%Y %H:%M')
+  end
+
+  def status_badge
+    h.content_tag(:span, object.status, class: "badge badge-#{status_color}")
+  end
+
+  private
+
+  def status_color
+    case object.status
+    when 'ativo' then 'success'
+    when 'pendente' then 'warning'
+    when 'inativo' then 'danger'
+    else 'secondary'
+    end
+  end
+end

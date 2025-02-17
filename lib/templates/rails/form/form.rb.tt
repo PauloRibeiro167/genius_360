@@ -1,0 +1,23 @@
+class <%= class_name %>Form
+  include ActiveModel::Model
+  include ActiveModel::Attributes
+
+  # Defina os atributos do form
+  attribute :name, :string
+  attribute :description, :string
+
+  # Validações
+  validates :name, presence: true
+
+  def save
+    return false unless valid?
+
+    ActiveRecord::Base.transaction do
+      # Lógica de persistência
+    end
+    true
+  rescue StandardError => e
+    errors.add(:base, e.message)
+    false
+  end
+end

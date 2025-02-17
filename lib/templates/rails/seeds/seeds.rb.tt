@@ -1,0 +1,18 @@
+puts "Criando <%= human_name.pluralize %>..."
+
+10.times do
+  <%= class_name %>.create!(
+<% attributes.each do |attribute| -%>
+  <%- if attribute.password_digest? -%>
+    password: "password123",
+    password_confirmation: "password123",
+  <%- elsif attribute.reference? -%>
+    <%= attribute.name %>: <%= attribute.name.classify %>.all.sample,
+  <%- else -%>
+    <%= attribute.name %>: Faker::<%= attribute.type.to_s.classify %>.name,
+  <%- end -%>
+<% end -%>
+  )
+end
+
+puts "✓ <%= human_name.pluralize %> criados com sucesso!"

@@ -1,0 +1,215 @@
+module YourApp
+  class Application < Rails::Application
+    config.autoload_paths += %W[
+      #{config.root}/app/services
+      #{config.root}/app/queries
+      #{config.root}/app/forms
+      #{config.root}/app/decorators
+      #{config.root}/app/validators
+      #{config.root}/app/policies
+      #{config.root}/app/serializers
+      #{config.root}/app/presenters
+      #{config.root}/lib
+    ]
+
+    config.action_dispatch.default_headers = {
+      'X-Frame-Options' => 'SAMEORIGIN',
+      'X-XSS-Protection' => '1; mode=block',
+      'X-Content-Type-Options' => 'nosniff',
+      'X-Download-Options' => 'noopen',
+      'X-Permitted-Cross-Domain-Policies' => 'none',
+      'Referrer-Policy' => 'strict-origin-when-cross-origin'
+    }
+
+    config.i18n.default_locale = :'pt-BR'
+    config.i18n.available_locales = [:'pt-BR', :en]
+    config.time_zone = 'Brasilia'
+  end
+end
+
+Rails.application.configure do
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_URL'],
+    network_timeout: 5,
+    expires_in: 1.day,
+    reconnect_attempts: 1
+  }
+  
+  config.action_controller.perform_caching = true
+  config.public_file_server.headers = {
+    'Cache-Control' => "public, max-age=#{30.days.to_i}"
+  }
+end
+
+Sidekiq.configure_server do |config|
+  config.redis = { url: ENV['REDIS_URL'] }
+  
+  config.server_middleware do |chain|
+    chain.add Sidekiq::Status::ServerMiddleware
+  end
+end
+
+Sidekiq.configure_client do |config|
+  config.redis = { url: ENV['REDIS_URL'] }
+end
+
+class <%= class_name %>Policy < ApplicationPolicy
+  def index?
+    # Permite acesso para usuários com perfil admin ou gerente
+    user.profiles.any? { |profile| ['admin', 'gerente'].include?(profile.name) }
+  end
+
+  def show?
+    # Permite visualização para usuários com qualquer perfil
+    user.profiles.present?
+  end
+
+  def create?
+    # Apenas admin pode criar
+    user.profiles.any? { |profile| profile.name == 'admin' }
+  end
+
+  def update?
+    # Admin ou o próprio usuário do recurso (se aplicável)
+    user.profiles.any? { |profile| profile.name == 'admin' } || 
+      record.user_id == user.id
+  end
+
+  def destroy?
+    # Apenas admin pode destruir
+    user.profiles.any? { |profile| profile.name == 'admin' }
+  end
+
+  def discard?
+    # Apenas admin ou gerente podem descartar
+    user.profiles.any? { |profile| ['admin', 'gerente'].include?(profile.name) }
+  end
+
+  def undiscard?
+    # Apenas admin ou gerente podem recuperar
+    user.profiles.any? { |profile| ['admin', 'gerente'].include?(profile.name) }
+  end
+
+  class Scope < Scope
+    def resolve
+      if user.profiles.any? { |profile| profile.name == 'admin' }
+        scope.all
+      else
+        # Filtra registros baseado no perfil do usuário
+        scope.joins(:user_profiles)
+             .where(user_profiles: { user_id: user.id })
+      end
+    end
+  end
+end
+
+module Admin
+  class <%= controller_class_name %>Controller < ApplicationController
+    before_action :set_<%= singular_table_name %>, only: %i[show edit update destroy]
+    before_action :authorize_<%= singular_table_name %>
+
+    def index
+      @<%= plural_table_name %> = <%= singular_table_name.camelize %>Query.new.call(filter_params)
+      @<%= plural_table_name %> = @<%= plural_table_name %>.page(params[:page])
+    end
+
+    def show
+      @<%= singular_table_name %> = <%= singular_table_name.camelize %>Decorator.new(@<%= singular_table_name %>)
+    end
+
+    def new
+      @<%= singular_table_name %> = <%= orm_class.build(class_name) %>
+    end
+
+    def create
+      @form = <%= singular_table_name.camelize %>Form.new(<%= singular_table_name %>_params)
+
+      if @form.save
+        redirect_to <%= singular_table_name %>_path(@form.<%= singular_table_name %>), notice: t('.success')
+      else
+        render :new
+      end
+    end
+
+    private
+
+    def set_<%= singular_table_name %>
+      @<%= singular_table_name %> = <%= orm_class.find(class_name, "params[:id]") %>
+    end
+
+    def <%= "#{singular_table_name}_params" %>
+      <%- if attributes_names.empty? -%>
+      params.fetch(:<%= singular_table_name %>, {})
+      <%- else -%>
+      params.require(:<%= singular_table_name %>).permit(<%= permitted_params %>)
+      <%- end -%>
+    end
+
+    def authorize_<%= singular_table_name %>
+      authorize <%= singular_table_name.camelize %>
+    end
+
+    def filter_params
+      params.permit(:query, :status, :page)
+    end
+  end
+end
+
+module Services
+  class Base
+    def self.call(*args)
+      new(*args).call
+    end
+  end
+
+  class <%= class_name %>Service < Base
+    def initialize(user)
+      @user = user
+      @result = ServiceResult.new
+    end
+
+    def call
+      return @result.error('Não autorizado') unless authorized?
+
+      ActiveRecord::Base.transaction do
+        # lógica aqui
+      end
+
+      @result.success
+    rescue StandardError => e
+      @result.error(e.message)
+    end
+
+    private
+
+    def authorized?
+      @user.can?(:manage, :<%= singular_table_name %>)
+    end
+  end
+end
+
+require 'rails_helper'
+
+RSpec.describe <%= class_name %>, type: :model do
+  describe 'validations' do
+    it { should validate_presence_of(:name) }
+  end
+
+  describe 'associations' do
+    it { should belong_to(:user) }
+  end
+
+  describe 'scopes' do
+    describe '.active' do
+      it 'returns only active records' do
+        # teste aqui
+      end
+    end
+  end
+
+  describe 'callbacks' do
+    it 'executes callback after create' do
+      # teste aqui
+    end
+  end
+end

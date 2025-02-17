@@ -1,0 +1,45 @@
+require 'rails_helper'
+
+RSpec.describe <%= class_name %>Helper, <%= type_metatag(:helper) %> do
+  let(:<%= singular_table_name %>) { create(:<%= singular_table_name %>) }
+  
+  describe "#<%= singular_table_name %>_status_badge" do
+    context "quando o registro está ativo" do
+      it "retorna um badge verde com texto 'Ativo'" do
+        expect(helper.<%= singular_table_name %>_status_badge(<%= singular_table_name %>)).to have_css(".badge.bg-success", text: "Ativo")
+      end
+    end
+
+    context "quando o registro está inativo" do
+      before { <%= singular_table_name %>.discard }
+
+      it "retorna um badge vermelho com texto 'Inativo'" do
+        expect(helper.<%= singular_table_name %>_status_badge(<%= singular_table_name %>)).to have_css(".badge.bg-danger", text: "Inativo")
+      end
+    end
+  end
+
+  describe "#<%= singular_table_name %>_actions" do
+    it "inclui link para visualizar" do
+      expect(helper.<%= singular_table_name %>_actions(<%= singular_table_name %>)).to have_css("a[href='#{<%= singular_table_name %>_path(<%= singular_table_name %>)}'] i.fa-eye")
+    end
+
+    it "inclui link para editar" do
+      expect(helper.<%= singular_table_name %>_actions(<%= singular_table_name %>)).to have_css("a[href='#{edit_<%= singular_table_name %>_path(<%= singular_table_name %>)}'] i.fa-edit")
+    end
+
+    context "quando o registro está ativo" do
+      it "inclui link para desativar" do
+        expect(helper.<%= singular_table_name %>_actions(<%= singular_table_name %>)).to have_css("a[href='#{discard_<%= singular_table_name %>_path(<%= singular_table_name %>)}'] i.fa-trash-can")
+      end
+    end
+
+    context "quando o registro está inativo" do
+      before { <%= singular_table_name %>.discard }
+
+      it "inclui link para reativar" do
+        expect(helper.<%= singular_table_name %>_actions(<%= singular_table_name %>)).to have_css("a[href='#{undiscard_<%= singular_table_name %>_path(<%= singular_table_name %>)}'] i.fa-trash-restore")
+      end
+    end
+  end
+end

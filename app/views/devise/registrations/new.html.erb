@@ -1,0 +1,105 @@
+<div class="p-12 bg-purple-900 mt-6 mx-auto rounded-3xl w-96">
+  <div class="mb-7">
+    <h2 class="font-semibold text-2xl text-gray-100 text-center">Cadastre-<Cadastre-se></Cadastre-se></h2>
+  </div>
+
+  <div class="space-y-6">
+    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= f.error_notification %>
+
+      <div class="mb-5">
+        <%= f.label :first_name, class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.input :first_name,
+                    required: true,
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5"
+                    },
+                    label: false %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :last_name, class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.input :last_name,
+                    required: true,
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5"
+                    },
+                    label: false %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :email, class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.input :email,
+                    required: true,
+                    autofocus: true,
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                      autocomplete: "email" 
+                    },
+                    label: false %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :phone, class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.input :phone,
+                    required: true,
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5"
+                    },
+                    label: false %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :cpf, class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.input :cpf,
+                    required: true,
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5"
+                    },
+                    label: false %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :password, class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.input :password,
+                    required: true,
+                    hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                      autocomplete: "new-password" 
+                    },
+                    label: false,
+                    hint_html: { class: "mt-1 text-sm text-gray-300" } %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :password_confirmation, class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.input :password_confirmation,
+                    required: true,
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                      autocomplete: "new-password" 
+                    },
+                    label: false %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :perfil_id, "Perfil", class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.association :perfil,
+                    required: true,
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5"
+                    },
+                    label: false %>
+      </div>
+
+      <div class="mt-7">
+        <%= f.button :submit, "Cadastrar", class: "w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500" %>
+      </div>
+    <% end %>
+
+    <div class="mt-7 text-sm text-center text-gray-100">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>

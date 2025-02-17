@@ -1,0 +1,24 @@
+class <%= class_name %>Service
+  def initialize(user)
+    @user = user
+  end
+
+  def execute(params = {})
+    return ServiceResult.error('Usuário não autorizado') unless authorized?
+    
+    ActiveRecord::Base.transaction do
+      # Lógica do serviço aqui
+    end
+    
+    ServiceResult.success
+  rescue StandardError => e
+    ServiceResult.error(e.message)
+  end
+
+  private
+
+  def authorized?
+    # Verificação de autorização baseada em perfil
+    @user.profiles.any? { |profile| ['admin', 'gerente'].include?(profile.name) }
+  end
+end

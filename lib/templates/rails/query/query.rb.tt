@@ -1,0 +1,70 @@
+class <%= class_name %>Query
+  def initialize(relation = <%= class_name.demodulize %>.all)
+    @relation = relation
+  end
+
+  def call(params = {})
+    scope = @relation
+    scope = filter_by_status(scope, params[:status]) if params[:status].present?
+    scope = filter_by_date_range(scope, params[:start_date], params[:end_date])
+    scope = filter_by_search(scope, params[:search]) if params[:search].present?
+    scope = apply_user_permissions(scope, params[:user])
+    scope = apply_ordering(scope, params[:order_by], params[:direction])
+    scope
+  end
+
+  private
+
+  def filter_by_status(scope, status)
+    scope.where(status: status)
+  end
+
+  def filter_by_date_range(scope, start_date, end_date)
+    return scope unless start_date && end_date
+    scope.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+  end
+
+  def filter_by_search(scope, term)
+    return scope if term.blank?
+    
+    scope.where("LOWER(name) LIKE :term OR LOWER(description) LIKE :term", 
+                term: "%#{term.downcase}%")
+  end
+
+  def apply_user_permissions(scope, user)
+    return scope if user&.admin?
+    scope.accessible_by(user)
+  end
+
+  def apply_ordering(scope, order_by, direction)
+    return scope.order(created_at: :desc) unless order_by.present?
+    
+    direction = %w[asc desc].include?(direction) ? direction : :asc
+    scope.order(order_by => direction)
+  end
+end
+
+"type": "other",
+    "description": "1. Open your Gemfile and add the following line:",
+    "details": {
+        "text": "gem 'sqlite3'"
+    }
+},
+{
+    "type": "command",
+    "description": "2. Run the **Terminal: Create New Terminal** command to open a new terminal",
+    "details": {
+        "key": "workbench.action.terminal.new"
+    }
+},
+{
+    "type": "other",
+    "description": "3. Run bundle install in the terminal:",
+    "details": {
+        "text": "bundle install"
+    }
+},
+{
+    "type": "other",
+    "description": "4. After the installation completes, try running your rails generate command again."
+}

@@ -1,0 +1,48 @@
+<%%= simple_form_for(@<%= singular_table_name %>, html: { class: "w-full" }) do |form| %>
+  <%%= form.error_notification %>
+  <%%= form.error_notification message: form.object.errors[:base].to_sentence if form.object.errors[:base].present? %>
+
+  <div class="space-y-6">
+    <%- attributes.each do |attribute| -%>
+    <div class="flex flex-col">
+      <label for="<%= singular_table_name %>_<%= attribute.column_name %>" class="block mb-2 text-sm font-medium text-gray-100">
+        <%= attribute.human_name %>
+      </label>
+      <%- if attribute.password_digest? -%>
+      <%%= form.input :password,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+      <%%= form.input :password_confirmation,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+      <%- elsif attribute.attachments? -%>
+      <%%= form.<%= attribute.field_type %> :<%= attribute.column_name %>, multiple: true,
+          class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      %>
+      <%- else -%>
+      <%%= form.input :<%= attribute.column_name %>,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+      <%- end -%>
+    </div>
+    <%- end -%>
+
+    <div class="flex justify-center">
+      <%%= form.submit 'Salvar',
+          class: "bg-blue-600 hover:bg-blue-700 text-gray-100 px-8 py-2.5 rounded-lg font-medium text-sm transition duration-300 ease-in-out w-full"
+      %>
+    </div>
+  </div>
+<%% end %>

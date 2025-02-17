@@ -1,0 +1,80 @@
+<% module_namespacing do -%>
+class <%= controller_class_name %>Controller < ApplicationController
+  before_action :set_<%= singular_table_name %>, only: %i[ show edit update destroy discard undiscard ]
+
+  def index
+    add_breadcrumb "<%= human_name %>", root_path
+    @q = <%= class_name %>.ransack(params[:q])
+    @<%= plural_table_name %> = @q.result.page(params[:page]).per(10)
+    @page = params[:page].to_i || 1
+  end
+
+  def show
+    add_breadcrumb "<%= human_name.pluralize %>", <%= index_helper %>_path
+    add_breadcrumb "Visualizar <%= human_name.downcase %>", <%= singular_table_name %>_path(@<%= singular_table_name %>)
+  end
+
+  def new
+    add_breadcrumb "<%= human_name.pluralize %>", <%= index_helper %>_path
+    add_breadcrumb "Novo", new_<%= singular_table_name %>_path
+    @<%= singular_table_name %> = <%= orm_class.build(class_name) %>
+  end
+
+  def edit
+    add_breadcrumb "<%= human_name.pluralize %>", <%= index_helper %>_path
+    add_breadcrumb "Editar <%= human_name.downcase %>", edit_<%= singular_table_name %>_path(@<%= singular_table_name %>)
+  end
+
+  def create
+    @<%= singular_table_name %> = <%= orm_class.build(class_name, "#{singular_table_name}_params") %>
+
+    if @<%= orm_instance.save %>
+      redirect_to <%= redirect_resource_name %>, notice: <%= %("#{human_name} foi criado com sucesso.") %>
+    else
+      add_breadcrumb "Novo <%= human_name.downcase %>", new_<%= singular_table_name %>_path
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @<%= orm_instance.update("#{singular_table_name}_params") %>
+      redirect_to <%= redirect_resource_name %>, notice: <%= %("#{human_name} foi atualizado com sucesso.") %>
+    else
+      add_breadcrumb "Editar <%= human_name.downcase %>", edit_<%= singular_table_name %>_path(@<%= singular_table_name %>)
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @<%= orm_instance.destroy %>
+    redirect_to <%= index_helper %>_url, notice: <%= %("#{human_name} foi apagado com sucesso.") %>, status: :see_other
+  end
+
+  def discard
+    @<%= singular_table_name %>.discard
+    redirect_to <%= index_helper %>_path, notice: <%= %("#{human_name} desativado com sucesso.") %>
+  end
+
+  def undiscard
+    @<%= singular_table_name %>.undiscard
+    redirect_to <%= index_helper %>_path, notice: <%= %("#{human_name} reativado com sucesso.") %>
+  end
+
+  private
+    def set_<%= singular_table_name %>
+      @<%= singular_table_name %> = <%= orm_class.find(class_name, "params[:id]") %>
+    end
+
+    def page_params
+      params[:page]
+    end
+
+    def <%= "#{singular_table_name}_params" %>
+      <%- if attributes_names.empty? -%>
+      params.fetch(:<%= singular_table_name %>, {})
+      <%- else -%>
+      params.require(:<%= singular_table_name %>).permit(<%= permitted_params %>)
+      <%- end -%>
+    end
+end
+<% end -%>

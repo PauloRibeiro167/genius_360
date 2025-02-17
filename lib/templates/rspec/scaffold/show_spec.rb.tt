@@ -1,0 +1,24 @@
+require 'rails_helper'
+
+RSpec.describe "<%= ns_table_name %>/show", <%= type_metatag(:view) %> do
+  let(:<%= singular_table_name %>) { create(:<%= singular_table_name %>) }
+
+  before(:each) do
+    assign(:<%= singular_table_name %>, <%= singular_table_name %>)
+  end
+
+  it "exibe os atributos do <%= singular_table_name %>" do
+    render
+    expect(rendered).to have_selector(".card-title", text: "<%= human_name.capitalize %>")
+<% attributes.reject(&:password_digest?).each do |attribute| -%>
+    expect(rendered).to have_content("<%= attribute.human_name %>")
+<% end -%>
+  end
+
+  it "exibe os botões de ação" do
+    render
+    expect(rendered).to have_link("Editar <%= human_name.downcase %>")
+    expect(rendered).to have_link("Voltar para <%= human_name.pluralize.downcase %>")
+    expect(rendered).to have_link("Desativar <%= human_name.downcase %>")
+  end
+end

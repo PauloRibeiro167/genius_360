@@ -1,0 +1,14 @@
+<div class="p-12 bg-purple-900 mt-6 mx-auto rounded-3xl w-96">
+  <div class="mb-7">
+    <h3 class="font-semibold text-2xl text-gray-100">Novo action permission</h3>
+  </div>
+
+  <div class="space-y-6">
+    <%= render "form", action_permission: @action_permission %>
+    
+    <div class="mt-7">
+      <%= link_to "Voltar para action permissions", action_permissions_path, 
+          class: 'w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500' %>
+    </div>
+  </div>
+</div>

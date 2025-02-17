@@ -1,0 +1,54 @@
+<div class="p-12 bg-purple-900 mt-6 mx-auto rounded-3xl w-96">
+  <div class="mb-7">
+    <h2 class="font-semibold text-2xl text-gray-100 text-center">Log in</h2>
+  </div>
+
+  <div class="space-y-6">
+    <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="mb-5">
+        <%= f.label :email, class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.input :email,
+                    required: false,
+                    autofocus: true,
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                      autocomplete: "email" 
+                    },
+                    label: false %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :password, class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.input :password,
+                    required: false,
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                      autocomplete: "current-password" 
+                    },
+                    label: false %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :perfil_id, "Perfil", class: "block mb-2 text-sm font-medium text-gray-100" %>
+        <%= f.select :perfil_id,
+                    Perfil.kept.pluck(:name, :id),
+                    { prompt: "Selecione um perfil" },
+                    { class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5" } %>
+      </div>
+
+      <div class="mb-5 text-center">
+        <%= f.input :remember_me, as: :boolean, 
+            input_html: { class: "w-4 h-4 text-purple-600 bg-purple-800 border-purple-700 rounded focus:ring-purple-500" },
+            label_html: { class: "ml-2 text-sm font-medium text-gray-100" } %>
+      </div>
+
+      <div class="mt-7">
+        <%= f.button :submit, "Log in", class: "w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500" %>
+      </div>
+    <% end %>
+
+    <div class="mt-7 text-sm text-center text-gray-100">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>
