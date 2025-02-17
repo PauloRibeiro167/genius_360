@@ -22,8 +22,12 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
-
   <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <% if user_signed_in? %>
+      <div class="w-screen bg-green-500 text-white py-2 text-center">
+        Welcome back, <%= current_user.email %>!
+      </div>
+    <% end %>
     <header class="w-full bg-white dark:bg-purple-950 shadow">
       <%= render "layouts/navbar", class: "inline-flex items-center" %>
     </header>

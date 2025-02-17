@@ -1,6 +1,6 @@
 <div class="p-12 bg-purple-900 mt-6 mx-auto rounded-3xl w-96">
   <div class="mb-7">
-    <h2 class="font-semibold text-2xl text-gray-100 text-center">Log in</h2>
+    <h2 class="font-semibold text-2xl text-gray-100 text-center">Login</h2>
   </div>
 
   <div class="space-y-6">
@@ -25,15 +25,7 @@
                       class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
                       autocomplete: "current-password" 
                     },
-                    label: false %>
-      </div>
-
-      <div class="mb-5">
-        <%= f.label :perfil_id, "Perfil", class: "block mb-2 text-sm font-medium text-gray-100" %>
-        <%= f.select :perfil_id,
-                    Perfil.kept.pluck(:name, :id),
-                    { prompt: "Selecione um perfil" },
-                    { class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5" } %>
+                    label: false %> 
       </div>
 
       <div class="mb-5 text-center">
