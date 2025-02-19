@@ -1,46 +1,71 @@
-<div class="p-12 bg-purple-900 mt-6 mx-auto rounded-3xl w-96">
-  <div class="mb-7">
-    <h2 class="font-semibold text-2xl text-gray-100 text-center">Login</h2>
-  </div>
+<div class="p-12 bg-purple-900 mt-0 mx-auto rounded-3xl w-96 flex min-h-[40vh] flex-col justify-center px-6 py-2 lg:px-2" data-controller="login">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-100">
+      Login
+    </h2>
 
-  <div class="space-y-6">
-    <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="mb-5">
-        <%= f.label :email, class: "block mb-2 text-sm font-medium text-gray-100" %>
-        <%= f.input :email,
-                    required: false,
-                    autofocus: true,
-                    input_html: { 
-                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
-                      autocomplete: "email" 
-                    },
-                    label: false %>
-      </div>
-
-      <div class="mb-5">
-        <%= f.label :password, class: "block mb-2 text-sm font-medium text-gray-100" %>
-        <%= f.input :password,
-                    required: false,
-                    input_html: { 
-                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
-                      autocomplete: "current-password" 
-                    },
-                    label: false %> 
-      </div>
-
-      <div class="mb-5 text-center">
-        <%= f.input :remember_me, as: :boolean, 
-            input_html: { class: "w-4 h-4 text-purple-600 bg-purple-800 border-purple-700 rounded focus:ring-purple-500" },
-            label_html: { class: "ml-2 text-sm font-medium text-gray-100" } %>
-      </div>
-
-      <div class="mt-7">
-        <%= f.button :submit, "Log in", class: "w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500" %>
+    <%# Flash messages consolidated %>
+    <% flash.each do |name, msg| %>
+      <div class="mt-4 text-center text-red-400">
+        <%= msg %>
       </div>
     <% end %>
 
-    <div class="mt-7 text-sm text-center text-gray-100">
-      <%= render "devise/shared/links" %>
-    </div>
+    <%# Resource errors %>
+    <% if resource.errors.any? %>
+      <div class="mt-4 text-center text-red-400">
+        <%= resource.errors.full_messages.join(", ") %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), 
+                html: { method: :post, data: { controller: "login" } }) do |f| %>
+      <div class="space-y-6">
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium text-gray-100" %>
+          <div class="mt-2">
+            <%= f.email_field :email, required: true, autofocus: true, 
+                autocomplete: "email", 
+                class: "block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" %>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :password, class: "block text-sm font-medium text-gray-100" %>
+          <div class="mt-2">
+            <%= f.password_field :password, required: true, 
+                autocomplete: "current-password", 
+                class: "block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" %>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <%= f.check_box :remember_me, class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
+            <%= f.label :remember_me, "Lembre-se de mim", class: "ml-2 block text-sm text-gray-100" %>
+          </div>
+
+          <div class="text-sm">
+            <%= link_to "Esqueceu sua senha?", new_password_path(resource_name), 
+                class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+          </div>
+        </div>
+
+        <div>
+          <%= f.submit "Entrar", 
+              class: "flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" %>
+        </div>
+
+        <div data-login-target="error" class="error hidden mt-4 text-center text-red-400"></div>
+      </div>
+    <% end %>
+
+    <p class="mt-10 text-center text-sm text-gray-400">
+      Não tem uma conta?
+      <%= link_to "Registre-se", new_registration_path(resource_name), 
+          class: "font-semibold leading-6 text-purple-400 hover:text-purple-300" %>
+    </p>
   </div>
 </div>

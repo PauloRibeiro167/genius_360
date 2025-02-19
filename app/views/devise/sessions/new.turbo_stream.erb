@@ -1,0 +1,7 @@
+<%= turbo_stream.update "modal" do %>
+  <%= render "devise/sessions/new" %>
+<% end %>
+
+<%= turbo_stream.update "flash" do %>
+  <%= render "shared/flash" %>
+<% end %>

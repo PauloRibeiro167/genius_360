@@ -1,5 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  before_action :require_admin
+  # Remover ou ajustar esta linha se existir
+  # before_action :require_admin
 
   private
 

@@ -2,14 +2,18 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         :trackable
   include Discard::Model
 
-  belongs_to :perfil
+  belongs_to :perfil, optional: true
 
   # Escopo padrão para mostrar apenas registros ativos
   default_scope -> { kept }
 
+  def admin?
+    perfil&.name == "super"
+  end
 
   # Adicione perfil aos atributos pesquisáveis
   def self.ransackable_attributes(auth_object = nil)

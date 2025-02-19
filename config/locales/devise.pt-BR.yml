@@ -1,0 +1,9 @@
+pt-BR:
+  devise:
+    failure:
+      invalid: 'Email ou senha inválidos.'
+      not_found_in_database: 'Email não encontrado.'
+      unauthenticated: 'Você precisa fazer login para continuar.'
+    sessions:
+      signed_in: 'Login realizado com sucesso.'
+      signed_out: 'Logout realizado com sucesso.'

@@ -1,65 +1,38 @@
 <div>
   <div id="webcrumbs">
     <div class="flex justify-center items-center">
-      <div class="max-w-[1280px] w-full p-8">
-        <div class="bg-gradient-to-br h-[40vh] from-indigo-900 via-purple-800 to-pink-700 min-h-screen relative font-[&#x27;Inter&#x27;] rounded-3xl">
-          <main class="container mx-auto p-12 grid grid-cols-2 gap-12">
+      <div class="w-full p-12">
+        <div class="bg-gradient-to-br m-0 from-indigo-900 via-purple-800 to-pink-700 max-h-auto  relative font-[&#x27;Inter&#x27;] rounded-3xl overflow-hidden">
+         <main class="container h-[calc(100vh-4rem)] mx-auto p-2 grid grid-cols-2 gap-4 place-items-center">
             
             <%# Primeira coluna - Card principal %>
-            <div class="flex items-center justify-center min-h-screen">
-              <section class="bg-purple-900 p-10 backdrop-blur-xl rounded-3xl shadow-2xl hover:shadow-pink-500/30 transition-all duration-500 transform hover:rotate-1">
-                <h1 class="h-full text-center w-80 bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl transition-all duration-500 flex items-center justify-center text-white text-3xl font-bold tracking-wider shadow-lg hover:shadow-purple-500/30 transform hover:scale-105">
-                  <span class="material-symbols-outlined mr-3 text-3xl">
+            <div class="flex items-center justify-center h-full w-full">
+              <section class="bg-purple-900 p-4 backdrop-blur-xl rounded-3xl shadow-2xl hover:shadow-pink-500/30 transition-all duration-500 transform hover:rotate-1 overflow-hidden flex flex-col justify-center">
+                <h1 class="h-full text-center bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl transition-all duration-500 flex items-center justify-center text-white text-3xl font-bold tracking-wider shadow-lg hover:shadow-purple-500/30 transform hover:scale-105">
+                  <span class="material-symbols-outlined mr-0 text-3xl">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15v4m6-6v6m6-4v4m6-6v6M3 11l6-5 6 5 5.5-5.5"/>
                     </svg>
                   </span>
                   Análise Premium
                 </h1>
-                
                 <ul class="space-y-4 my-10">
-                  <%# Lista de recursos %>
+                  <% features = [
+                  { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V6m0 8h.01M12 3c4.596 0 7.904 4.641 6.336 9.678-.72 2.312-2.035 4.311-3.88 5.641a2.442 2.442 0 0 1-4.912 0c-1.845-1.33-3.16-3.329-3.88-5.641C4.096 7.641 7.404 3 12 3z"/></svg>', text: 'Análise Avançada de Métricas' },
+                  { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.2c0-.663.597-1.2 1.333-1.2h3.334C17.403 6 18 6.537 18 7.2v3.6c0 .663-.597 1.2-1.333 1.2H13.5L12 13.5 10.5 12H7.333C6.597 12 6 11.463 6 10.8V7.2C6 6.537 6.597 6 7.333 6h3.334C11.403 6 12 6.537 12 7.2z"/></svg>', text: 'Insights Personalizados' },
+                  { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.997.744"/></svg>', text: 'Personalização na Captação' },
+                  { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>', text: 'Redução de Custo com Prospecção' },
+                  { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"/></svg>', text: 'Análise de Dados e Relatórios Detalhados' }
+                  ] %>
+                  
+                  <% features.each do |feature| %>
                   <li class="h-10 w-full rounded-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-start text-white px-6 text-lg font-medium tracking-wide transform hover:translate-x-2">
                     <span class="material-symbols-outlined mr-3">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                        <path fill-rule="evenodd" d="M11.644 3.066a1 1 0 0 1 .712 0l7 2.666A1 1 0 0 1 20 6.68a17.694 17.694 0 0 1-2.023 7.98 17.406 17.406 0 0 1-5.402 6.158 1 1 0 0 1-1.15 0 17.405 17.405 0 0 1-5.403-6.157A17.695 17.695 0 0 1 4 6.68a1 1 0 0 1 .644-.949l7-2.666Zm4.014 7.187a1 1 0 0 0-1.316-1.506l-3.296 2.884-.839-.838a1 1 0 0 0-1.414 1.414l1.5 1.5a1 1 0 0 0 1.366.046l4-3.5Z" clip-rule="evenodd"/>
-                      </svg>
+                    <%= feature[:icon].html_safe %>
                     </span>
-                    Análise Avançada de Métricas
+                    <%= feature[:text] %>
                   </li>
-                  <li class="h-10 w-full rounded-xl hover:bg-white/30 transition-all duration-300 flex items-center text-white px-6 text-lg font-medium transform hover:translate-x-2">
-                    <span class="material-symbols-outlined mr-3">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9a3 3 0 0 1 3-3m-2 15h4m0-3c0-4.1 4-4.9 4-9A6 6 0 1 0 6 9c0 4 4 5 4 9h4Z"/>
-                      </svg>
-                    </span>
-                    Insights Personalizados   
-                  </li>
-                  <li class="h-10 w-full rounded-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-start text-white px-6 text-lg font-medium tracking-wide transform hover:translate-x-2">
-                    <span class="material-symbols-outlined mr-3">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M3.69869 6.31701C2.56717 5.02384 3.48553 3 5.20384 3H18.7547c1.7316 0 2.6449 2.05088 1.4866 3.33793L17.47 9.34198s-.4632-.20588-.6184-.24042c-.1551-.03453-.488-.10604-.9206-.10604-.9034 0-2.138.66073-2.5716 1.73108-1.3256.8485-1.6921 1.8133-1.7929 2.0078-.1009.1944-.2618.5312-.3399 1.2148-.0781.6836 0 1.6055.5235 2.4688-.0721.0626-.2383.289-.3321.4375-.0937.1484-.5898.875-.3515 2.1445-.1993 0-.6387-.158-.92-.4393l-.70708-.7071c-.28131-.2814-.43934-.6629-.43934-1.0607v-4.4172L3.69869 6.31701Z"/>
-                        <path fill="currentColor" fill-rule="evenodd" d="M16.0604 11c.5523 0 1 .4477 1 1v.1013c.6366.1591 1.2184.4937 1.668.9715.3784.4022.3592 1.0351-.0431 1.4135-.4022.3785-1.0351.3592-1.4135-.043-.1902-.2021-.4506-.3504-.7488-.4139-.0363-.0077-.0722-.0174-.1074-.0292-.0543-.018-.1098-.0317-.1658-.041-.0614.0117-.1247.0179-.1894.0179-.063 0-.1245-.0058-.1843-.017-.0784.0136-.1554.0355-.2292.0658-.1976.0812-.3513.2132-.4504.3673.0006.002.0013.0042.002.0064.0138.0431.0516.1195.1396.2154.1806.1971.4983.3934.8907.4835.746.1712 1.4369.5572 1.9192 1.0838.476.5197.8461 1.3054.5891 2.1704-.0136.0459-.0305.0907-.0506.1342-.3123.6768-.8768 1.2008-1.5636 1.483-.0208.0085-.0416.0168-.0625.0248V20c0 .5523-.4477 1-1 1-.5271 0-.9589-.4077-.9973-.9249-.0154-.0046-.0308-.0093-.0462-.0141-.6707-.1541-1.2837-.502-1.7506-1.0062-.3752-.4053-.3509-1.038.0544-1.4132.4052-.3752 1.0379-.3508 1.4131.0544.1903.2055.4527.3566.754.4209.0359.0077.0713.0173.1061.0289.0754.025.1531.0416.2315.0499.0753-.0181.154-.0277.235-.0277.0421 0 .0836.0026.1244.0076.0608-.0134.1204-.032.1781-.0557.1979-.0813.3518-.2135.451-.368l-.001-.0032c-.0136-.0424-.0513-.1189-.1398-.2156-.1817-.1984-.5007-.3955-.8919-.4854-.7448-.171-1.4351-.5549-1.9176-1.0814-.4776-.5211-.8432-1.304-.5924-2.167.0138-.0477.0312-.0943.052-.1394.312-.6773.8766-1.2017 1.5637-1.4839.0573-.0236.1151-.0453.1735-.0653V12c0-.5523.4477-1 1-1Z" clip-rule="evenodd"/>
-                      </svg>
-                    </span>
-                    Personalização na Captação
-                  </li> 
-                  <li class="h-10 w-full rounded-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-start text-white px-6 text-lg font-medium tracking-wide transform hover:translate-x-2">
-                    <span class="material-symbols-outlined mr-3">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                        <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z" clip-rule="evenodd"/>
-                      </svg>
-                    </span>
-                    Redução de Custo com Prospecção
-                  </li>
-                  <li class="h-10 w-full rounded-xl hover:bg-white/30 transition-all duration-300 flex items-center text-white px-6 text-lg font-medium transform hover:translate-x-2">
-                    <span class="material-symbols-outlined mr-3">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1v6M5 19v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1M10 3v4a1 1 0 0 1-1 1H5m14 9.006h-.335a1.647 1.647 0 0 1-1.647-1.647v-1.706a1.647 1.647 0 0 1 1.647-1.647L19 12M5 12v5h1.375A1.626 1.626 0 0 0 8 15.375v-1.75A1.626 1.626 0 0 0 6.375 12H5Zm9 1.5v2a1.5 1.5 0 0 1-1.5 1.5v0a1.5 1.5 0 0 1-1.5-1.5v-2a1.5 1.5 0 0 1 1.5-1.5v0a1.5 1.5 0 0 1 1.5 1.5Z"/>
-                      </svg>
-                    </span>
-                    Análise de Dados e Relatórios Detalhados  
-                  </li>
+                  <% end %>
                 </ul>
                 
                 <div class="flex gap-4">
@@ -84,8 +57,8 @@
             </div>
 
             <%# Segunda coluna - Cards empilhados %>
-            <div class="space-y-12 p-4">
-              <section class="bg-purple-900 backdrop-blur-xl p-10 rounded-3xl shadow-2xl hover:shadow-purple-500/30 transform hover:scale-105 hover:rotate-3 transition-all duration-500">
+            <div class="flex flex-col justify-center items-center h-full w-full space-y-12">
+              <section class="bg-purple-900 backdrop-blur-xl p-6 rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 transform hover:scale-[1.02] hover:rotate-1 overflow-hidden w-full">
                 <div class="flex items-center justify-center flex-col mb-4">
                   <div class="h-8 w-48 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-medium mb-4">
                     <span class="material-symbols-outlined mr-2">
@@ -100,49 +73,34 @@
                     4.9/5.0
                   </div>
                 </div>
+                <% metrics = [
+                  { icon: '<svg class="w-6 h-6 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v13m0-13 4 4m-4-4-4 4"/></svg>', 
+                  text: 'Aumento de Vendas' },
+                  { icon: '<svg class="w-6 h-6 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M5.575 13.729C4.501 15.033 5.43 17 7.12 17h9.762c1.69 0 2.618-1.967 1.544-3.271l-4.881-5.927a2 2 0 0 0-3.088 0l-4.88 5.927Z" clip-rule="evenodd"/></svg>',
+                  text: 'Otimização de Custos' },
+                  { icon: '<svg class="w-6 h-6 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207"/></svg>',
+                  text: 'Crescimento Sustentável' }
+                ] %>
+
                 <ul class="space-y-4 my-6 text-white">
+                  <% metrics.each do |metric| %>
                   <li class="flex items-center">
                     <span class="material-symbols-outlined mr-2">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v13m0-13 4 4m-4-4-4 4"/>
-                      </svg>
+                    <%= metric[:icon].html_safe %>
                     </span>
-                    Aumento de Vendas
+                    <%= metric[:text] %>
                   </li>
-                  <li class="flex items-center">
-                    <span class="material-symbols-outlined mr-2">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                        <path fill-rule="evenodd" d="M5.575 13.729C4.501 15.033 5.43 17 7.12 17h9.762c1.69 0 2.618-1.967 1.544-3.271l-4.881-5.927a2 2 0 0 0-3.088 0l-4.88 5.927Z" clip-rule="evenodd"/>
-                      </svg>
-                    </span>
-                    Otimização de Custos
-                  </li>
-                  <li class="flex items-center">
-                    <span class="material-symbols-outlined mr-2">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207"/>
-                      </svg>
-                    </span>
-                    Crescimento Sustentável
-                  </li>
+                  <% end %>
                 </ul>
                 <div class="h-2 bg-white/20 rounded-full overflow-hidden">
                   <div class="w-4/5 h-full bg-gradient-to-r from-pink-500 to-purple-500 animate-pulse"></div>
                 </div>
               </section>
-
-              <section class="bg-purple-900 backdrop-blur-xl p-10 rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500">
-                <div class="bg-white/5 p-6 rounded-xl">
-                  <figure class="h-[180px] flex items-end gap-3">
-                    <div class="flex-1 bg-gradient-to-t from-pink-500 to-purple-500 rounded-t-xl hover:bg-white/30 transition-all duration-500 cursor-pointer transform hover:scale-y-110" style="height: 40%"></div>
-                    <div class="flex-1 bg-gradient-to-t from-pink-500 to-purple-500 rounded-t-xl hover:bg-white/30 transition-all duration-500 cursor-pointer transform hover:scale-y-110" style="height: 60%"></div>
-                    <div class="flex-1 bg-gradient-to-t from-pink-500 to-purple-500 rounded-t-xl hover:bg-white/30 transition-all duration-500 cursor-pointer transform hover:scale-y-110" style="height: 80%"></div>
-                    <div class="flex-1 bg-gradient-to-t from-pink-500 to-purple-500 rounded-t-xl hover:bg-white/30 transition-all duration-500 cursor-pointer transform hover:scale-y-110" style="height: 95%"></div>
-                  </figure>
-                </div>
+              
+              <section class="bg-purple-900 backdrop-blur-xl p-6 rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 transform hover:scale-[1.02] hover:rotate-1 overflow-hidden w-full">
+                <%= render "public/pages/chart" %>
               </section>
             </div>
-            
           </main>
         </div>
       </div>

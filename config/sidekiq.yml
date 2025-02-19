@@ -1,0 +1,15 @@
+:concurrency: 5
+:queues:
+  - default
+  - mailers
+
+# Configurações adicionais
+:logfile: ./log/sidekiq.log
+:pidfile: ./tmp/pids/sidekiq.pid
+:timeout: 30
+:retry: true
+
+# Configuração de Redis
+:redis:
+  :url: redis://localhost:6379/0
+  :namespace: sidekiq

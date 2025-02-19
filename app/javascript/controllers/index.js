@@ -4,8 +4,17 @@
 
 import { application } from "./application"
 
+import AlertController from "./alert_controller"
+application.register("alert", AlertController)
+
+import ChartController from "./chart_controller"
+application.register("chart", ChartController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import LoginController from "./login_controller"
+application.register("login", LoginController)
 
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)

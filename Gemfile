@@ -4,8 +4,6 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.1"
 # Pipeline de ativos moderna para Rails
 gem "propshaft"
-# Use sqlite3 como banco de dados para Active Record
-gem "sqlite3", ">= 2.1"
 # Use o servidor web Puma
 gem "puma", ">= 5.0"
 # Gem consultas no banco dedados
@@ -59,6 +57,22 @@ gem "stringio", "~> 3.1.3"
 # gem "bcrypt", "~> 3.1.7"           # Senhas seguras
 # gem "image_processing", "~> 1.2"    # Transformação de imagens
 
+# Banco de dados PostgreSQL
+gem "pg"
+
+# Redis para caching e Sidekiq
+gem "redis", "~> 4.0"
+
+# Sidekiq para background jobs
+gem "sidekiq"
+
+# Ferramentas de monitoramento (opcional)
+gem "newrelic_rpm"
+gem "skylight"
+
+# Armazenamento de arquivos (exemplo com Amazon S3)
+gem "aws-sdk-s3", require: false
+
 group :development, :test do
   # Desenvolvimento e Testes
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -80,6 +94,11 @@ group :development do
   gem "spring"
   gem "ruby-lsp", require: false
   gem "solargraph", require: false
+end
+
+group :production do
+  # Gems específicas para produção
+  gem "rails_12factor"
 end
 
 group :test do

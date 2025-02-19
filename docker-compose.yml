@@ -1,0 +1,8 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: genius360_db
+      POSTGRES_USER: vscode
+      POSTGRES_PASSWORD: sua_senha_aqui

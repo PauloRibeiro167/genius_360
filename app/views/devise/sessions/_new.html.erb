@@ -1,0 +1,25 @@
+<div id="modal">
+  <%= render "devise/sessions/error_messages", resource: resource %>
+  
+  <%= form_for(resource, 
+               as: resource_name, 
+               url: session_path(resource_name),
+               data: { turbo: true }) do |f| %>
+    <div class="mb-5">
+      <%= f.label :email, class: "block mb-2 text-sm font-medium text-gray-100" %>
+      <%= f.email_field :email, 
+                       class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                       autofocus: true,
+                       autocomplete: "email" %>
+    </div>
+
+    <div class="mb-5">
+      <%= f.label :password, class: "block mb-2 text-sm font-medium text-gray-100" %>
+      <%= f.password_field :password,
+                          class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                          autocomplete: "current-password" %>
+    </div>
+
+    <%= f.submit "Log in", class: "w-full bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg" %>
+  <% end %>
+</div>

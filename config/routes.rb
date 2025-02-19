@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+    sessions: "users/sessions",
+    registrations: "users/registrations"
+  }
+
   resources :create_perfil_permissions do
     member do
       patch :discard
@@ -32,11 +37,6 @@ Rails.application.routes.draw do
       patch :undiscard
     end
   end
-
-  devise_for :users, controllers: {
-    sessions: "users/sessions",
-    registrations: "users/registrations"
-  }
 
   # PWA routes
   get "pwa/manifest", to: "pwa#manifest", format: "json", as: "pwa_manifest"
