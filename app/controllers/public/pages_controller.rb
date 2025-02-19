@@ -12,5 +12,6 @@ class Public::PagesController < ApplicationController
   end
 
   def contato
+    @contact_message = ContactMessage.new
   end
 end
