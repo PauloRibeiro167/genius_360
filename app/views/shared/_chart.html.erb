@@ -1,0 +1,10 @@
+<canvas 
+  data-controller="chart"
+  data-chart-data="<%= {
+    type: type,
+    labels: labels,
+    datasets: datasets,
+    options: options
+  }.to_json.html_safe %>"
+  style="width: 100%; height: 300px;">
+</canvas>

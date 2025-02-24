@@ -26,12 +26,12 @@ class ContactMessagesController < ApplicationController
 
   def create
     @contact_message = ContactMessage.new(contact_message_params)
+    @contact_message.status = :solicitacao_contato  # Usando o símbolo correto do enum
 
     if @contact_message.save
-      redirect_to @contact_message, notice: "Contact message foi criado com sucesso."
+      redirect_to root_path, notice: 'Mensagem enviada com sucesso!'
     else
-      add_breadcrumb "Novo contact message", new_contact_message_path
-      render :new, status: :unprocessable_entity
+      redirect_to contato_path, alert: 'Erro ao enviar mensagem.'
     end
   end
 
@@ -69,6 +69,6 @@ class ContactMessagesController < ApplicationController
     end
 
     def contact_message_params
-      params.require(:contact_message).permit(:name, :email, :message, :status)
+      params.require(:contact_message).permit(:name, :email, :phone, :message, :request_type)
     end
 end

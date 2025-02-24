@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CreatePerfilPermissionsHelper, type: :helper do
+RSpec.describe PerfilPermissionsHelper, type: :helper do
   let(:create_perfil_permission) { create(:create_perfil_permission) }
   
   describe "#create_perfil_permission_status_badge" do

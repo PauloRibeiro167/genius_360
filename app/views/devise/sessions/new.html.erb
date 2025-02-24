@@ -1,27 +1,29 @@
 <div class="p-12 bg-purple-900 mt-0 mx-auto rounded-3xl w-96 flex min-h-[40vh] flex-col justify-center px-6 py-2 lg:px-2" data-controller="login">
+    <%= render "devise/shared/error_messages", resource: resource %>
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-    <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-100">
+    <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-100">
       Login
     </h2>
 
     <%# Flash messages consolidated %>
     <% flash.each do |name, msg| %>
-      <div class="mt-4 text-center text-red-400">
+      <div class="text-center text-red-400">
         <%= msg %>
       </div>
     <% end %>
 
     <%# Resource errors %>
     <% if resource.errors.any? %>
-      <div class="mt-4 text-center text-red-400">
+      <div class="text-center text-red-400">
         <%= resource.errors.full_messages.join(", ") %>
       </div>
     <% end %>
   </div>
 
-  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+  <div class="mt-2 p-6 sm:mx-auto sm:w-full sm:max-w-sm">
     <%= form_for(resource, as: resource_name, url: session_path(resource_name), 
-                html: { method: :post, data: { controller: "login" } }) do |f| %>
+                html: { data: { controller: "login", turbo: false }, 
+                remote: true }) do |f| %>
       <div class="space-y-6">
         <div>
           <%= f.label :email, class: "block text-sm font-medium text-gray-100" %>
@@ -65,7 +67,7 @@
     <p class="mt-10 text-center text-sm text-gray-400">
       Não tem uma conta?
       <%= link_to "Registre-se", new_registration_path(resource_name), 
-          class: "font-semibold leading-6 text-purple-400 hover:text-purple-300" %>
+        class: "font-semibold leading-6 text-purple-400 hover:text-purple-300" %>
     </p>
   </div>
 </div>

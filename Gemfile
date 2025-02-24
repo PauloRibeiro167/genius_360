@@ -112,3 +112,5 @@ group :test do
   gem "rubocop-rails", require: false
   gem "debase", "~> 0.2.4", require: false
 end
+
+gem "chartkick", "~> 5.1"

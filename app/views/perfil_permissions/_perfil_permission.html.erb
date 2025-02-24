@@ -1,0 +1,15 @@
+<div id="<%= dom_id perfil_permission %>" class="bg-purple-950 border border-purple-800 rounded-lg p-4 mb-4">
+  <div class="space-y-4">
+    <h5 class="text-lg font-medium text-gray-100">Perfil Permission</h5>
+    
+    <div class="flex flex-col">
+      <span class="block mb-2 text-sm font-medium text-gray-100">Perfil:</span>
+      <span class="text-center text-gray-100"><%= perfil_permission.perfil.name %></span>
+    </div>
+
+    <div class="flex flex-col">
+      <span class="block mb-2 text-sm font-medium text-gray-100">Permission:</span>
+      <span class="text-center  text-gray-100"><%= perfil_permission.permission.name %></span>
+    </div>
+  </div>
+</div>

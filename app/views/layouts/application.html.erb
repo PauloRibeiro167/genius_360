@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <title><%= content_for(:title) || "Genius360" %></title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta http-equiv="Content-Language" content="pt-BR">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -24,15 +26,24 @@
   </head>
   <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
     <% if user_signed_in? %>
-      <div class="w-screen bg-green-500 text-white py-2 text-center">
-        Welcome back, <%= current_user.email %>!
+      <div class="w-full bg-green-500 text-white py-2 text-center fixed top-0 z-50 transition-opacity duration-500" 
+           data-controller="message-login"
+           data-message-login-target="message"
+           x-data="{ show: true }" 
+           x-init="setTimeout(() => show = false, 5000)"
+           x-show="show">
+        <% if current_user.sign_in_count == 1 %>
+          Bem-vindo ao sistema, <%= current_user.first_name %>!
+        <% else %>
+          Bem-vindo de volta, <%= current_user.first_name %>!
+        <% end %>
       </div>
     <% end %>
     <header class="w-full bg-white dark:bg-purple-950 shadow">
       <%= render "layouts/navbar", class: "inline-flex items-center" %>
     </header>
     <%= render "layouts/breadcrumbs"%>
-    <main class="w-full h-[calc(100vh-8rem)]">
+    <main class="w-full h-auto">
       <%= yield %>
     </main>
   </body>

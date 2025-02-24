@@ -40,17 +40,9 @@ class Users::SessionsController < Devise::SessionsController
   def create
     begin
       self.resource = warden.authenticate!(auth_options)
-      set_flash_message!(:notice, :signed_in)
-      sign_in(resource_name, resource)
-      yield resource if block_given?
-      respond_to do |format|
-        format.html { redirect_to after_sign_in_path_for(resource) }
-        format.json { render json: { message: "Logado com sucesso" }, status: :ok }
-      end
+      # Se falhar aqui, significa credenciais inválidas
     rescue Warden::Errors::AuthenticationError => e
       handle_authentication_error(e)
-    rescue StandardError => e
-      handle_standard_error(e)
     end
   end
 
@@ -58,7 +50,12 @@ class Users::SessionsController < Devise::SessionsController
     Rails.logger.info "==== Logout ===="
     Rails.logger.info "Usuário: #{current_user&.email}"
     Rails.logger.info "Timestamp: #{Time.current}"
-    super
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    set_flash_message! :notice, :signed_out if signed_out
+    respond_to do |format|
+      format.html { redirect_to public_path }
+      format.json { head :no_content }
+    end
   end
 
   protected
@@ -72,7 +69,7 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def after_sign_in_path_for(resource)
-    stored_location_for(resource) || root_path
+    admin_root_path # ou '/admin' dependendo da sua configuração de rotas
   end
 
   def sign_in_params

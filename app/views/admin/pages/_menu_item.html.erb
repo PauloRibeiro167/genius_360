@@ -1,0 +1,8 @@
+<li>
+  <%= link_to item[:path], class: "flex items-center rounded-lg group hover:bg-white p-3 transition-colors duration-300" do %>
+    <span class="material-symbols-outlined text-2xl text-black shrink-0"><%= item[:icon] %></span>
+    <span class="ml-3 font-medium whitespace-nowrap text-black group-hover:text-gray-800 transition-colors duration-300 sidebar-inactive:hidden">
+      <%= item[:text] %>
+    </span>
+  <% end %>
+</li>

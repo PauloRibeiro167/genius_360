@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
+  resources :perfil_users
+  namespace :concerns do
+    get "authorization/check_permissions"
+    get "authorization/user_has_permission"
+  end
   devise_for :users, controllers: {
     sessions: "users/sessions",
     registrations: "users/registrations"
   }
 
-  resources :create_perfil_permissions do
+  resources :perfil_permissions do
     member do
       patch :discard
     end
@@ -38,6 +43,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :contact_messages, only: [:create]
+
   # PWA routes
   get "pwa/manifest", to: "pwa#manifest", format: "json", as: "pwa_manifest"
   get "pwa/pwa"
@@ -58,6 +65,7 @@ Rails.application.routes.draw do
   namespace :admin do
     get "dashboard/index"
     get "pages/index"
+    root to: "dashboard#index"
   end
 
   # Test resources

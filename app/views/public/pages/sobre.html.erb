@@ -2,36 +2,65 @@
   <div id="webcrumbs">
     <div class="flex justify-center items-center">
       <div class="w-full p-12">
-        <div class="max-h-auto relative font-[&#x27;Inter&#x27;] rounded-3xl overflow-hidden">
-          <main class="container h-[calc(100vh-4rem)] mx-auto grid grid-cols-1 gap-4 place-items-center">
-            <div class="flex flex-col items-center justify-center h-full w-full space-y-12">
-              <section class="bg-gradient-to-br m-0  via-purple-800 to-pink-700 p-6 backdrop-blur-xl rounded-3xl shadow-2xl transition-all duration-500 transform hover:rotate-1 overflow-hidden w-full">
+        <div class="relative font-[&#x27;Inter&#x27;] rounded-3xl overflow-hidden">
+          <main class="container mx-auto grid grid-cols-1 gap-4">
+            <div class="flex flex-col items-center justify-center w-full space-y-12">
+              <section class="bg-gradient-to-br m-0 via-purple-800 to-pink-700 p-6 backdrop-blur-xl rounded-3xl shadow-2xl transition-all duration-500 transform overflow-hidden w-full">
                 <h1 class="text-3xl font-bold text-white mb-4 text-center">Sobre o Genius 360</h1>
                 <p class="text-gray-200 mb-6 text-center">
                   O <strong>Genius 360</strong> é uma plataforma inovadora que auxilia empresas na gestão eficiente de seus processos,
                   otimizando o fluxo de trabalho e melhorando a produtividade.
                 </p>
-                <div class="grid md:grid-cols-2 gap-6">
-                  <%# História %>
-                  <div class="bg-white/10 p-6 rounded-lg">
-                    <h2 class="text-2xl font-semibold text-white mb-4">Nossa História</h2>
-                    <p class="text-gray-200">
-                      Desde nossa fundação, temos trabalhado incansavelmente para desenvolver soluções
-                      que transformam a maneira como as empresas gerenciam seus processos.
-                    </p>
-                  </div>
-                  <%# Recursos %>
-                  <div class="p-6 rounded-lg">
-                    <h2 class="text-2xl font-semibold text-white mb-4">Principais Recursos</h2>
-                    <ul class="list-disc pl-5 text-gray-200 space-y-2">
-                      <li>Gestão de usuários e perfis</li>
-                      <li>Controle de equipes e empresas</li>
-                      <li>Gerenciamento de leads e ligações</li>
-                      <li>Cadastro e administração de bancos</li>
-                      <li>Automação de tarefas e cronogramas</li>
-                    </ul>
+                
+                <div class="container mx-auto py-8" data-controller="service-alert-controller">
+                  <div class="grid grid-cols-3 md:grid-cols-3 gap-6">
+                    <%# Tecnologia Card %>
+                    <div class="bg-purple-900 p-6 rounded-lg shadow-lg flex flex-col items-center">
+                      <div class="flex items-center space-x-2">
+                        <i class="fas fa-certificate text-6xl text-white mb-4"></i>
+                        <i class="fas fa-microchip text-4xl text-yellow-400 mb-4"></i>
+                      </div>
+                      <h2 class="text-2xl font-semibold text-white mb-4">Nossa Tecnologia</h2>
+                      <p class="text-gray-200 mb-6 text-center">
+                        Utilizamos tecnologias de ponta para garantir a melhor experiência e segurança
+                      </p>
+                      <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300" data-action="click->service-alert-controller#showAlert" data-alert-title="Tecnologia" data-alert-text="Nossa tecnologia de ponta garante excelência.">
+                        Ver mais
+                      </button>
+                    </div>
+
+                    <%# Recursos Card %>
+                    <div class="bg-purple-900 p-6 rounded-lg shadow-lg flex flex-col items-center">
+                      <div class="flex items-center space-x-2">
+                        <i class="fas fa-award text-6xl text-yellow-400 mb-4"></i>
+                        <i class="fas fa-star text-4xl text-white mb-4"></i>
+                      </div>
+                      <h2 class="text-2xl font-semibold text-white mb-4">Principais Recursos</h2>
+                      <p class="text-gray-200 mb-6 text-center">
+                        Sistema completo com automação e integração de processos
+                      </p>
+                      <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300" data-action="click->service-alert-controller#showAlert" data-alert-title="Recursos" data-alert-text="Recursos completos para sua gestão empresarial.">
+                        Ver mais
+                      </button>
+                    </div>
+
+                    <%# Suporte Card %>
+                    <div class="bg-purple-900 p-6 rounded-lg shadow-lg flex flex-col items-center">
+                      <div class="flex items-center space-x-2">
+                        <i class="fas fa-medal text-6xl text-white mb-4"></i>
+                        <i class="fas fa-check-circle text-4xl text-yellow-400 mb-4"></i>
+                      </div>
+                      <h2 class="text-2xl font-semibold text-white mb-4">Nosso Suporte</h2>
+                      <p class="text-gray-200 mb-6 text-center">
+                        Equipe especializada disponível 24/7
+                      </p>
+                      <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300" data-action="click->service-alert-controller#showAlert" data-alert-title="Suporte" data-alert-text="Suporte especializado 24/7 à sua disposição.">
+                        Ver mais
+                      </button>
+                    </div>
                   </div>
                 </div>
+
                 <%# Missão %>
                 <div class="mt-6 bg-white/10 p-6 rounded-lg">
                   <h2 class="text-2xl font-semibold text-white mb-4 text-center">Nossa Missão</h2>
@@ -40,11 +69,25 @@
                     um controle total dos processos e uma visão estratégica para o crescimento sustentável.
                   </p>
                 </div>
+
                 <%# Call to Action %>
                 <div class="mt-8 text-center">
                   <%= link_to "Saiba mais sobre nós", public_servico_path, 
                       class: "px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg 
                              shadow-md hover:bg-blue-700 transition-colors duration-300" %>
+                </div>
+
+                <%# Chart %>
+                <div data-controller="chart"
+                     data-chart-type="line"
+                     data-labels='["Jan", "Fev", "Mar"]'
+                     data-datasets='[{
+                       "label": "Vendas",
+                       "data": [12, 19, 3],
+                       "borderColor": "rgb(75, 192, 192)",
+                       "tension": 0.1
+                     }]'>
+                  <canvas data-chart-target="canvas"></canvas>
                 </div>
               </section>
             </div>

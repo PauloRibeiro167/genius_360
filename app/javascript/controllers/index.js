@@ -16,11 +16,23 @@ application.register("hello", HelloController)
 import LoginController from "./login_controller"
 application.register("login", LoginController)
 
+import LoginMessageTimeController from "./login_message_time_controller"
+application.register("login-message-time", LoginMessageTimeController)
+
+import MessageLoginController from "./message_login_controller"
+application.register("message-login", MessageLoginController)
+
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
 
 import NavDropdownController from "./nav_dropdown_controller"
 application.register("nav-dropdown", NavDropdownController)
+
+import ServiceAlertController from "./service_alert_controller"
+application.register("service-alert", ServiceAlertController)
+
+import SidebarController from "./sidebar_controller"
+application.register("sidebar", SidebarController)
 
 import SweetAlertController from "./sweet_alert_controller"
 application.register("sweet-alert", SweetAlertController)

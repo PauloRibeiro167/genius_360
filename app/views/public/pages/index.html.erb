@@ -1,109 +1,138 @@
-<div>
-  <div id="webcrumbs">
-    <div class="flex justify-center items-center">
-      <div class="w-full p-12">
-        <div class="bg-gradient-to-br m-0 from-indigo-900 via-purple-800 to-pink-700 max-h-auto  relative font-[&#x27;Inter&#x27;] rounded-3xl overflow-hidden">
-         <main class="container h-[calc(100vh-4rem)] mx-auto p-2 grid grid-cols-2 gap-4 place-items-center">
-            
-            <%# Primeira coluna - Card principal %>
-            <div class="flex items-center justify-center h-full w-full">
-              <section class="bg-purple-900 p-4 backdrop-blur-xl rounded-3xl shadow-2xl hover:shadow-pink-500/30 transition-all duration-500 transform hover:rotate-1 overflow-hidden flex flex-col justify-center">
-                <h1 class="h-full text-center bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl transition-all duration-500 flex items-center justify-center text-white text-3xl font-bold tracking-wider shadow-lg hover:shadow-purple-500/30 transform hover:scale-105">
-                  <span class="material-symbols-outlined mr-0 text-3xl">
-                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15v4m6-6v6m6-4v4m6-6v6M3 11l6-5 6 5 5.5-5.5"/>
-                    </svg>
-                  </span>
-                  Análise Premium
-                </h1>
-                <ul class="space-y-4 my-10">
-                  <% features = [
-                  { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V6m0 8h.01M12 3c4.596 0 7.904 4.641 6.336 9.678-.72 2.312-2.035 4.311-3.88 5.641a2.442 2.442 0 0 1-4.912 0c-1.845-1.33-3.16-3.329-3.88-5.641C4.096 7.641 7.404 3 12 3z"/></svg>', text: 'Análise Avançada de Métricas' },
-                  { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.2c0-.663.597-1.2 1.333-1.2h3.334C17.403 6 18 6.537 18 7.2v3.6c0 .663-.597 1.2-1.333 1.2H13.5L12 13.5 10.5 12H7.333C6.597 12 6 11.463 6 10.8V7.2C6 6.537 6.597 6 7.333 6h3.334C11.403 6 12 6.537 12 7.2z"/></svg>', text: 'Insights Personalizados' },
-                  { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.997.744"/></svg>', text: 'Personalização na Captação' },
-                  { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>', text: 'Redução de Custo com Prospecção' },
-                  { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"/></svg>', text: 'Análise de Dados e Relatórios Detalhados' }
-                  ] %>
-                  
-                  <% features.each do |feature| %>
-                  <li class="h-10 w-full rounded-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-start text-white px-6 text-lg font-medium tracking-wide transform hover:translate-x-2">
-                    <span class="material-symbols-outlined mr-3">
-                    <%= feature[:icon].html_safe %>
-                    </span>
-                    <%= feature[:text] %>
-                  </li>
-                  <% end %>
-                </ul>
-                
-                <div class="flex gap-4">
-                  <button class="h-14 w-48 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full hover:opacity-90 transition-all duration-500 transform hover:scale-105 flex items-center justify-center text-white font-medium text-lg">
-                    <span class="material-symbols-outlined mr-2 text-2xl">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
-                      </svg>
-                    </span>
-                    Comprar Agora
-                  </button>
-                  <button class="h-14 w-44 bg-white/20 rounded-full hover:bg-white/30 transition-all duration-500 transform hover:scale-105 flex items-center justify-center text-white font-medium text-lg">
-                    <span class="material-symbols-outlined mr-2 text-2xl">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 18V6l8 6-8 6Z"/>
-                      </svg>
-                    </span>
-                    Ver Demo
-                  </button>
-                </div>
-              </section>
-            </div>
-
-            <%# Segunda coluna - Cards empilhados %>
-            <div class="flex flex-col justify-center items-center h-full w-full space-y-12">
-              <section class="bg-purple-900 backdrop-blur-xl p-6 rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 transform hover:scale-[1.02] hover:rotate-1 overflow-hidden w-full">
-                <div class="flex items-center justify-center flex-col mb-4">
-                  <div class="h-8 w-48 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-medium mb-4">
-                    <span class="material-symbols-outlined mr-2">
-                      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207"/>
-                      </svg>
-                    </span>
-                    ROI Garantido
-                  </div>
-                  <div class="h-8 w-32 bg-white/20 rounded-xl flex items-center justify-center text-white font-medium">
-                    <span class="material-symbols-outlined mr-2">star</span>
-                    4.9/5.0
-                  </div>
-                </div>
-                <% metrics = [
-                  { icon: '<svg class="w-6 h-6 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v13m0-13 4 4m-4-4-4 4"/></svg>', 
-                  text: 'Aumento de Vendas' },
-                  { icon: '<svg class="w-6 h-6 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M5.575 13.729C4.501 15.033 5.43 17 7.12 17h9.762c1.69 0 2.618-1.967 1.544-3.271l-4.881-5.927a2 2 0 0 0-3.088 0l-4.88 5.927Z" clip-rule="evenodd"/></svg>',
-                  text: 'Otimização de Custos' },
-                  { icon: '<svg class="w-6 h-6 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207"/></svg>',
-                  text: 'Crescimento Sustentável' }
-                ] %>
-
-                <ul class="space-y-4 my-6 text-white">
-                  <% metrics.each do |metric| %>
-                  <li class="flex items-center">
-                    <span class="material-symbols-outlined mr-2">
-                    <%= metric[:icon].html_safe %>
-                    </span>
-                    <%= metric[:text] %>
-                  </li>
-                  <% end %>
-                </ul>
-                <div class="h-2 bg-white/20 rounded-full overflow-hidden">
-                  <div class="w-4/5 h-full bg-gradient-to-r from-pink-500 to-purple-500 animate-pulse"></div>
-                </div>
-              </section>
+<main class="container h-[calc(100vh-4rem)] mx-auto place-items-center">
+  <div class="bg-gradient-to-br m-0 from-indigo-900 via-purple-800 to-pink-700 max-h-auto  relative font-[&#x27;Inter&#x27;] rounded-3xl overflow-hidden">
+    <div class="flex justify-center items-center">  
+      <div class="w-full p-16 grid grid-cols-2 gap-6">
+      <%# Primeira coluna - Card principal %>
+        <div class="flex items-center justify-center h-3/4 w-3/4">
+          <section class="bg-purple-900 p-4 rounded-3xl shadow-2xl hover:shadow-pink-500/30 transition-all duration-500 transform hover:rotate-1 overflow-hidden flex flex-col justify-center">
+            <h1 class="h-full text-center bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl transition-all duration-500 flex items-center justify-center text-white text-3xl font-bold tracking-wider shadow-lg hover:shadow-purple-500/30 transform hover:scale-105">
+              <span class="material-symbols-outlined mr-0 text-3xl">
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15v4m6-6v6m6-4v4m6-6v6M3 11l6-5 6 5 5.5-5.5"/>
+                </svg>
+              </span>
+              Análise Premium
+            </h1>
+            <ul class="space-y-4 my-10">
+              <% features = [
+              { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V6m0 8h.01M12 3c4.596 0 7.904 4.641 6.336 9.678-.72 2.312-2.035 4.311-3.88 5.641a2.442 2.442 0 0 1-4.912 0c-1.845-1.33-3.16-3.329-3.88-5.641C4.096 7.641 7.404 3 12 3z"/></svg>', text: 'Análise Avançada de Métricas' },
+              { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.2c0-.663.597-1.2 1.333-1.2h3.334C17.403 6 18 6.537 18 7.2v3.6c0 .663-.597 1.2-1.333 1.2H13.5L12 13.5 10.5 12H7.333C6.597 12 6 11.463 6 10.8V7.2C6 6.537 6.597 6 7.333 6h3.334C11.403 6 12 6.537 12 7.2z"/></svg>', text: 'Insights Personalizados' },
+              { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.997.744"/></svg>', text: 'Personalização na Captação' },
+              { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>', text: 'Redução de Custo com Prospecção' },
+              { icon: '<svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"/></svg>', text: 'Análise de Dados e Relatórios Detalhados' }
+              ] %>
               
-              <section class="bg-purple-900 backdrop-blur-xl p-6 rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 transform hover:scale-[1.02] hover:rotate-1 overflow-hidden w-full">
-                <%= render "public/pages/chart" %>
-              </section>
+              <% features.each do |feature| %>
+              <li class="h-10 w-full rounded-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-start text-white px-6 text-lg font-medium tracking-wide transform hover:translate-x-2">
+                <span class="material-symbols-outlined mr-3">
+                <%= feature[:icon].html_safe %>
+                </span>
+                <%= feature[:text] %>
+              </li>
+              <% end %>
+            </ul>
+            
+            <div class="flex gap-4">
+              <button class="h-14 w-48 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full hover:opacity-90 transition-all duration-500 transform hover:scale-105 flex items-center justify-center text-white font-medium text-lg">
+                <span class="material-symbols-outlined mr-2 text-2xl">
+                  <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+                  </svg>
+                </span>
+                Comprar Agora
+              </button>
+              <button class="h-14 w-44 bg-white/20 rounded-full hover:bg-white/30 transition-all duration-500 transform hover:scale-105 flex items-center justify-center text-white font-medium text-lg">
+                <span class="material-symbols-outlined mr-2 text-2xl">
+                  <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 18V6l8 6-8 6Z"/>
+                  </svg>
+                </span>
+                Ver Demo
+              </button>
             </div>
-          </main>
+          </section>
+        </div>
+        <%# Segunda coluna - Cards empilhados %>
+        <div class="flex flex-col justify-center items-center h-full w-full space-y-4">
+          <%# Primeiro card %>
+          <div class="bg-purple-900 backdrop-blur-xl p-3 rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 transform hover:scale-[1.02] hover:rotate-1 overflow-hidden w-full">
+            <div class="flex items-center justify-center flex-col mb-1">
+              <div class="h-8 w-50 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-medium mb-4">
+          <span class="material-symbols-outlined mr-2">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207"/>
+            </svg>
+          </span>
+          ROI Garantido
+              </div>
+              <div class="h-8 w-32 bg-white/20 rounded-xl flex items-center justify-center text-white font-medium">
+          <span class="material-symbols-outlined mr-2">star</span>
+          4.9/5.0
+              </div>
+            </div>
+            <% metrics = [
+              { icon: '<svg class="w-6 h-6 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v13m0-13 4 4m-4-4-4 4"/></svg>', 
+              text: 'Aumento de Vendas' },
+              { icon: '<svg class="w-6 h-6 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M5.575 13.729C4.501 15.033 5.43 17 7.12 17h9.762c1.69 0 2.618-1.967 1.544-3.271l-4.881-5.927a2 2 0 0 0-3.088 0l-4.88 5.927Z" clip-rule="evenodd"/></svg>',
+              text: 'Otimização de Custos' },
+              { icon: '<svg class="w-6 h-6 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207"/></svg>',
+              text: 'Crescimento Sustentável' }
+            ] %>
+
+            <ul class="space-y-4 my-6 text-white">
+              <% metrics.each do |metric| %>
+              <li class="flex items-center">
+          <span class="material-symbols-outlined mr-2">
+          <%= metric[:icon].html_safe %>
+          </span>
+          <%= metric[:text] %>
+              </li>
+              <% end %>
+            </ul>
+            <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+              <div class="w-4/5 h-full bg-gradient-to-r from-pink-500 to-purple-500 animate-pulse"></div>
+            </div>
+          </div>
+
+          <%# Segundo card %>
+            <div class="bg-purple-900 backdrop-blur-xl p-6 rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 transform hover:scale-[1.02] hover:rotate-1 overflow-hidden w-full">
+            <h3 class="text-white text-xl font-semibold mb-4 text-center">Desempenho Mensal</h3>
+            <%= line_chart [
+              {
+              name: "Vendas (R$ mil)",
+              data: {
+                "Jan" => 45, "Fev" => 59, "Mar" => 65, "Abr" => 72,
+                "Mai" => 78, "Jun" => 85, "Jul" => 89, "Ago" => 95,
+                "Set" => 98, "Out" => 102, "Nov" => 108, "Dez" => 115
+              }
+              },
+              {
+              name: "Leads Qualificados",
+              data: {
+                "Jan" => 120, "Fev" => 145, "Mar" => 160, "Abr" => 175,
+                "Mai" => 190, "Jun" => 210, "Jul" => 230, "Ago" => 245,
+                "Set" => 260, "Out" => 280, "Nov" => 295, "Dez" => 310
+              }
+              }
+            ], 
+            colors: ["#ec4899", "#9333ea"],
+            legend: true,
+            height: "200px",
+            library: {
+              plugins: {
+              legend: {
+                labels: { color: '#ffffff' }
+              }
+              },
+              scales: {
+              y: { ticks: { color: '#ffffff' } },
+              x: { ticks: { color: '#ffffff' } }
+              }
+            } %>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </div> 
   </div>
-</div>
+</main>

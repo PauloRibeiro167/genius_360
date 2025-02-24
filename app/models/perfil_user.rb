@@ -1,29 +1,20 @@
-class CreatePerfilPermission < ApplicationRecord
+class PerfilUser < ApplicationRecord
   include Discard::Model
-
+  
   # Escopo padrão para mostrar apenas registros ativos
   default_scope -> { kept }
 
   # Definição dos atributos pesquisáveis
   def self.ransackable_attributes(auth_object = nil)
-    %w[id created_at updated_at discarded_at perfil_id permission_id]
+    %w[id user perfil created_at updated_at discarded_at]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    %w[perfil permission]
+    []
   end
 
-  # Define os aliases para busca
-  ransacker :perfil_name do
-    Arel.sql("perfils.name")
-  end
-
-  ransacker :permission_name do
-    Arel.sql("permissions.name")
-  end
-
+  belongs_to :user, required: true
   belongs_to :perfil, required: true
-  belongs_to :permission, required: true
 
   # Callbacks para quando o registro é descartado/restaurado
   before_discard do

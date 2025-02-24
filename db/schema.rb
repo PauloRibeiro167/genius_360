@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_19_012650) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_23_015256) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,30 +25,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_012650) do
   create_table "contact_messages", force: :cascade do |t|
     t.string "name"
     t.string "email"
+    t.string "phone"
     t.text "message"
+    t.string "request_type"
     t.string "status"
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_contact_messages_on_discarded_at"
   end
 
   create_table "controller_permissions", force: :cascade do |t|
-    t.string "name"
+    t.string "controller_name", null: false
+    t.string "action_name", null: false
+    t.string "description"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_controller_permissions_on_discarded_at"
-  end
-
-  create_table "create_perfil_permissions", force: :cascade do |t|
-    t.bigint "perfil_id", null: false
-    t.bigint "permission_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "discarded_at"
-    t.index ["discarded_at"], name: "index_create_perfil_permissions_on_discarded_at"
-    t.index ["perfil_id"], name: "index_create_perfil_permissions_on_perfil_id"
-    t.index ["permission_id"], name: "index_create_perfil_permissions_on_permission_id"
   end
 
   create_table "perfil_permissions", force: :cascade do |t|
@@ -56,9 +51,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_012650) do
     t.bigint "permission_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_perfil_permissions_on_discarded_at"
     t.index ["perfil_id", "permission_id"], name: "index_perfil_permissions_on_perfil_id_and_permission_id", unique: true
     t.index ["perfil_id"], name: "index_perfil_permissions_on_perfil_id"
     t.index ["permission_id"], name: "index_perfil_permissions_on_permission_id"
+  end
+
+  create_table "perfil_users", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "perfil_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_perfil_users_on_discarded_at"
+    t.index ["perfil_id"], name: "index_perfil_users_on_perfil_id"
+    t.index ["user_id"], name: "index_perfil_users_on_user_id"
   end
 
   create_table "perfils", force: :cascade do |t|
@@ -83,6 +91,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_012650) do
     t.string "first_name"
     t.string "last_name"
     t.string "username"
+    t.string "phone"
+    t.string "string"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -108,9 +118,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_012650) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "create_perfil_permissions", "perfils"
-  add_foreign_key "create_perfil_permissions", "permissions"
   add_foreign_key "perfil_permissions", "perfils"
   add_foreign_key "perfil_permissions", "permissions"
+  add_foreign_key "perfil_users", "perfils"
+  add_foreign_key "perfil_users", "users"
   add_foreign_key "users", "perfils"
 end

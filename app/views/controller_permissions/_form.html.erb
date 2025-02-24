@@ -4,16 +4,60 @@
 
   <div class="space-y-6">
     <div class="flex flex-col">
-      <label for="controller_permission_name" class="block mb-2 text-sm font-medium text-gray-100">
-        Name
+      <label for="controller_permission_controller_name" class="block mb-2 text-sm font-medium text-gray-100">
+        Controller Name
       </label>
-      <%= form.input :name,
+      <%= form.input :controller_name,
           wrapper: false,
           label: false,
           input_html: {
             class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           }
       %>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="controller_permission_action_name" class="block mb-2 text-sm font-medium text-gray-100">
+        Action Name
+      </label>
+      <%= form.input :action_name,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="controller_permission_description" class="block mb-2 text-sm font-medium text-gray-100">
+        Description
+      </label>
+      <%= form.input :description,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="controller_permission_active" class="block mb-2 text-sm font-medium text-gray-100">
+      Active
+      </label>
+      <label class="relative inline-flex items-center cursor-pointer">
+      <%= form.input :active,
+        as: :boolean,
+        wrapper: false,
+        label: false,
+        input_html: {
+          class: "sr-only peer",
+          id: "controller_permission_active_switch"
+        }
+      %>
+      <div class="peer h-6 w-11 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+      </label>
     </div>
 
     <div class="flex justify-center">

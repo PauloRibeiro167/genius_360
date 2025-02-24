@@ -7,8 +7,13 @@
     <%= render "form", permission: @permission, data: {controller: "sweetalert", action: "click->sweetalert#confirmAlertEdit", sweetalert_confirm: "Tem Certeza ?", turbo_method: :patch} %>
     
     <div class="mt-7">
-      <%= link_to "Voltar para permissions", permissions_path, 
-          class: 'w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500' %>
+      <%= link_to permissions_path, 
+      class: 'w-full flex items-center justify-center gap-2 bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500' do %>
+      <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
+      </svg>
+      Voltar
+      <% end %>
     </div>
   </div>
 </div>

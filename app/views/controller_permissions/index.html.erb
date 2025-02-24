@@ -1,16 +1,12 @@
-<%= content_for :head do %>
-  <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
-<% end %>
-
 <div class="flex items-center justify-center min-h-screen bg-gray-900">
   <div class="col-span-12">
     <div class="relative overflow-x-auto sm:rounded-lg md:p-8">
       <div class="flex justify-end mb-2">
-        <%= link_to new_controller_permission_path, class: "bg-purple-900 font-medium text-black dark:text-gray-500 hover:underline rounded-lg bg-purple-200 px-2 py-1", title: "Criar Novo" do %>
-          <i class="material-icons font-normal text-gray-600">
-            <span class="text-lg text-white">add</span>
-          </i>
-          <span class="text-white">Novo Controller permission</span>
+        <%= link_to new_controller_permission_path, class: "flex items-center bg-purple-900 hover:bg-purple-800 text-white font-medium rounded-lg px-4 py-2 gap-2", title: "Criar Novo" do %>
+          <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+          </svg>
+            <span>nova permissão de controller</span>
         <% end %>
       </div>
 
@@ -50,25 +46,33 @@
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     <%= controller_permission.id %>
                   </th>
-                                    <td class="px-6 py-4"><%= controller_permission.name %></td>
-                                    <td class="px-6 py-4">
-                    <%= link_to controller_permission, class: "text-blue-600 dark:text-blue-500 hover:underline material-icons text-xl", :aria => {:label => "Visualizar"} do %>
-                      visibility
+                    <td class="px-6 py-4"><%= controller_permission.name %></td>
+                    <td class="px-6 py-4">
+                    <div class="flex items-center space-x-4">
+                    <%= link_to controller_permission, class: "text-blue-600 dark:text-blue-500 hover:underline", :aria => {:label => "Visualizar"} do %>
+                      <svg class="w-6 h-6 text-blue-500 dark:text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                      <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                      </svg>
                     <% end %>
                     
-                    <%= link_to edit_controller_permission_path(controller_permission), class: "font-medium text-gray-600 dark:text-gray-500 hover:underline material-icons text-xl", :aria => {:label => "Editar"} do %>
-                      edit
+                    <%= link_to edit_controller_permission_path(controller_permission), class: "font-medium text-gray-600 dark:text-gray-500 hover:underline", :aria => {:label => "Editar"} do %>
+                      <svg class="w-6 h-6 text-yellow-500 dark:text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                      </svg>
                     <% end %>
 
                     <button data-modal-target="popup-modal-<%= controller_permission.id %>" 
                             data-modal-toggle="popup-modal-<%= controller_permission.id %>"
                             type="button"
-                            class="font-medium text-red-600 dark:text-red-500 hover:underline material-icons text-xl">
-                      delete_outline
+                            class="font-medium text-red-600 dark:text-red-500 hover:underline">
+                      <svg class="w-6 h-6 text-red-500 dark:text-red-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                      </svg>
                     </button>
 
                     <%= link_to discard_controller_permission_path(controller_permission), 
-                        class: "font-medium text-gray-600 dark:text-gray-500 hover:underline material-icons text-xl",
+                        class: "font-medium text-gray-600 dark:text-gray-500 hover:underline",
                         data: {
                           controller: "sweet-alert",
                           action: "click->sweet-alert#confirmAlert",
@@ -76,8 +80,11 @@
                           sweet_alert_method: "patch",
                           sweet_alert_url: discard_controller_permission_path(controller_permission)
                         }, :aria => {:label => "Desativar"} do %>
-                      archive
+                      <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M10 12v1h4v-1m4 7H6a1 1 0 0 1-1-1V9h14v9a1 1 0 0 1-1 1ZM4 5h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+                      </svg>
                     <% end %>
+                    </div>
                   </td>
                 </tr>
 

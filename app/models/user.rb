@@ -6,13 +6,23 @@ class User < ApplicationRecord
          :trackable
   include Discard::Model
 
-  belongs_to :perfil, optional: true
+  belongs_to :perfil
+  has_many :perfil_permissions, through: :perfil
+  has_many :permissions, through: :perfil_permissions
 
   # Escopo padrão para mostrar apenas registros ativos
   default_scope -> { kept }
 
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :email, presence: true, uniqueness: true
+  validates :perfil_id, presence: true
+
+  validate :validate_cpf_format
+  validate :validate_phone_format
+
   def admin?
-    perfil&.name == "super"
+    perfil == 'admin'
   end
 
   # Adicione perfil aos atributos pesquisáveis
@@ -39,5 +49,31 @@ class User < ApplicationRecord
 
   after_undiscard do
     # Adicione ações a serem executadas após restaurar
+  end
+
+  private
+
+  def validate_cpf_format
+    return if cpf.blank?
+    formatted_cpf = cpf.to_s.gsub(/[^\d]/, '')
+    
+    unless formatted_cpf.match?(/\A\d{11}\z/)
+      errors.add(:cpf, "deve conter exatamente 11 dígitos")
+      return
+    end
+    
+    self.cpf = formatted_cpf
+  end
+
+  def validate_phone_format
+    return if phone.blank?
+    formatted_phone = phone.to_s.gsub(/[^\d]/, '')
+    
+    unless formatted_phone.match?(/\A\d{10,11}\z/)
+      errors.add(:phone, "deve conter 10 ou 11 dígitos")
+      return
+    end
+    
+    self.phone = formatted_phone
   end
 end

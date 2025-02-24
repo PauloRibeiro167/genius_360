@@ -1,14 +1,19 @@
 <div class="p-12 bg-purple-900 mx-auto rounded-3xl w-96">
-  <div class="mb-7">
-    <h3 class="font-semibold text-2xl text-gray-100">Editar perfil</h3>
+  <div class="mb-7 text-center">
+    <h4 class="font-semibold text-xl text-gray-100">Editar perfil</h4>
   </div>
 
   <div class="space-y-6">
-    <%= render "form", perfil: @perfil, data: {controller: "sweetalert", action: "click->sweetalert#confirmAlertEdit", sweetalert_confirm: "Tem Certeza ?", turbo_method: :patch} %>
+    <%= render "form", controller_permission: @controller_permission, data: {controller: "sweetalert", action: "click->sweetalert#confirmAlertEdit", sweetalert_confirm: "Tem Certeza ?", turbo_method: :patch} %>
     
     <div class="mt-7">
-      <%= link_to "Voltar para perfils", perfils_path, 
-          class: 'w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500' %>
+      <%= link_to controller_permissions_path, 
+      class: 'w-full flex items-center justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500' do %>
+      <svg class="w-6 h-6 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
+      </svg>
+      Voltar
+      <% end %>
     </div>
   </div>
 </div>

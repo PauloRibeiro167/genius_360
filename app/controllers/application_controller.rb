@@ -1,11 +1,14 @@
 require "ostruct"
 
 class ApplicationController < ActionController::Base
+  # include AuthorizationConcern  
+  
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :log_authentication_status
+  before_action :set_content_security_policy
 
   protected
 
@@ -20,7 +23,7 @@ class ApplicationController < ActionController::Base
   helper_method :breadcrumbs
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [ :first_name, :last_name, :phone, :cpf, :perfil_id ])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :phone, :cpf, :perfil_id])
   end
 
   private
@@ -45,5 +48,9 @@ class ApplicationController < ActionController::Base
     Rails.logger.info "Logado?: #{user_signed_in?}"
     Rails.logger.info "Admin?: #{current_user&.admin?}" if user_signed_in?
     Rails.logger.info "================================="
+  end
+
+  def set_content_security_policy
+    response.headers['Content-Security-Policy'] = "default-src 'self'; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:;"
   end
 end

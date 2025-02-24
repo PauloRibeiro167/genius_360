@@ -1,25 +1,25 @@
-module CreatePerfilPermissionsHelper
-  def create_perfil_permission_status_badge(create_perfil_permission)
-    if create_perfil_permission.discarded?
+module PerfilUsersHelper
+  def perfil_user_status_badge(perfil_user)
+    if perfil_user.discarded?
       content_tag(:span, "Inativo", class: "badge bg-danger")
     else
       content_tag(:span, "Ativo", class: "badge bg-success")
     end
   end
 
-  def create_perfil_permission_actions(create_perfil_permission)
+  def perfil_user_actions(perfil_user)
     links = []
     
-    links << link_to(create_perfil_permission, class: "text-dark") do
+    links << link_to(perfil_user, class: "text-dark") do
       content_tag(:i, "", class: "fa-regular fa-eye")
     end
 
-    links << link_to(edit_create_perfil_permission_path(create_perfil_permission), class: "text-warning") do
+    links << link_to(edit_perfil_user_path(perfil_user), class: "text-warning") do
       content_tag(:i, "", class: "fa-regular fa-edit")
     end
 
-    if create_perfil_permission.discarded?
-      links << link_to(undiscard_create_perfil_permission_path(create_perfil_permission),
+    if perfil_user.discarded?
+      links << link_to(undiscard_perfil_user_path(perfil_user),
         class: "text-success",
         data: {
           controller: "sweetalert",
@@ -30,7 +30,7 @@ module CreatePerfilPermissionsHelper
         content_tag(:i, "", class: "fa-regular fa-trash-restore")
       end
     else
-      links << link_to(discard_create_perfil_permission_path(create_perfil_permission),
+      links << link_to(discard_perfil_user_path(perfil_user),
         class: "text-danger",
         data: {
           controller: "sweetalert",

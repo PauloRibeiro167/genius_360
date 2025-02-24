@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="page-title mb-4">Configurações do Sistema</h1>
+      
+      <div class="card">
+        <div class="card-body">
+          <div class="settings-wrapper">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="nav flex-column nav-pills">
+                  <a class="nav-link active" href="#geral" data-toggle="tab">Geral</a>
+                  <a class="nav-link" href="#email" data-toggle="tab">Email</a>
+                  <a class="nav-link" href="#seguranca" data-toggle="tab">Segurança</a>
+                </div>
+              </div>
+              
+              <div class="col-md-9">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="geral">
+                    <%= form_tag admin_update_settings_path, method: :post, class: 'settings-form' do %>
+                      <div class="form-group">
+                        <label>Nome da Empresa</label>
+                        <%= text_field_tag 'settings[company_name]', @settings.try(:[], 'company_name'), class: 'form-control' %>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label>Endereço</label>
+                        <%= text_area_tag 'settings[address]', @settings.try(:[], 'address'), class: 'form-control' %>
+                      </div>
+                      
+                      <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

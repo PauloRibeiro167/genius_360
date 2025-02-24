@@ -1,0 +1,66 @@
+pt-BR:
+  errors:
+    messages:
+      not_saved:
+        one: '1 erro impediu que %{resource} fosse salvo:'
+        other: '%{count} erros impediram que %{resource} fosse salvo:'
+      confirmation: 'não é igual à confirmação'
+      too_short: 'é muito curto (mínimo: %{count} caracteres)'
+      too_long: 'é muito longo (máximo: %{count} caracteres)'
+      taken: 'já está em uso'
+      invalid: 'não é válido'
+      inclusion: 'não está incluído na lista'
+      exclusion: 'é reservado'
+      required: 'deve ser preenchido'
+      empty: 'não pode ficar vazio'
+      equal_to: 'deve ser igual a %{count}'
+      even: 'deve ser par'
+      odd: 'deve ser ímpar'
+      present: 'deve ficar em branco'
+      accepted: 'deve ser aceito'
+      wrong_length: 'não possui o tamanho esperado (%{count} caracteres)'
+      greater_than_or_equal_to: 'deve ser maior ou igual a %{count}'
+      less_than_or_equal_to: 'deve ser menor ou igual a %{count}'
+      in: 'deve estar em %{count}'
+      format: 'possui formato inválido'
+      wrong_format: 'está em formato incorreto'
+      after: 'deve ser uma data posterior a %{restriction}'
+      before: 'deve ser uma data anterior a %{restriction}'
+      invalid_date: 'não é uma data válida'
+  activerecord:
+    errors:
+      template:
+        header:
+          one: "1 erro impediu que %{model} fosse salvo"
+          other: "%{count} erros impediram que %{model} fosse salvo"
+      messages:
+        blank: 'não pode ficar em branco'
+        record_invalid: 'A validação falhou: %{errors}'
+        greater_than: 'deve ser maior que %{count}'
+        less_than: 'deve ser menor que %{count}'
+        not_a_number: 'não é um número'
+        not_an_integer: 'não é um número inteiro'
+      models:
+        user:
+          attributes:
+            email:
+              blank: "Este campo é obrigatório"
+              taken: "já está cadastrado"
+            password:
+              blank: "é obrigatória"
+            first_name:
+              blank: "Este campo é obrigatório"
+            last_name:
+              blank: "Este campo é obrigatório"
+            perfil:
+              blank: "Este campo é obrigatório"
+              required: "Este campo é obrigatório"
+    models:
+      user: 'usuário'
+    attributes:
+      user:
+        email: 'E-mail'
+        password: 'Senha'
+        first_name: 'Nome'
+        last_name: 'Sobrenome'
+        perfil: 'Perfil'
