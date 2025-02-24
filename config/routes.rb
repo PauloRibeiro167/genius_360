@@ -65,7 +65,11 @@ Rails.application.routes.draw do
   namespace :admin do
     get "dashboard/index"
     get "pages/index"
+    get "pages/settings"
     root to: "dashboard#index"
+    post 'profile/update', to: 'profile#update', as: :update_profile
+    post 'profile/update_contacts', to: 'profile#update_contacts', as: :update_profile_contacts
+    post 'profile/update_password', to: 'profile#update_password', as: :update_password
   end
 
   # Test resources

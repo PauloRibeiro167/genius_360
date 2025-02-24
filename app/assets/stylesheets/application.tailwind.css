@@ -18,6 +18,10 @@
   nav.w-64 .sidebar-inactive\:hidden {
     @apply inline;
   }
+
+  .avatar-upload-button {
+    @apply absolute bottom-0 right-0 bg-blue-700 text-white rounded-full p-2 cursor-pointer hover:bg-blue-800 transition-colors duration-200;
+  }
 }
 
 .table {

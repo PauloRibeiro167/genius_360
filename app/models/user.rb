@@ -9,6 +9,7 @@ class User < ApplicationRecord
   belongs_to :perfil
   has_many :perfil_permissions, through: :perfil
   has_many :permissions, through: :perfil_permissions
+  has_one_attached :avatar
 
   # Escopo padrão para mostrar apenas registros ativos
   default_scope -> { kept }
@@ -17,6 +18,8 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :email, presence: true, uniqueness: true
   validates :perfil_id, presence: true
+  validates :avatar, content_type: ['image/png', 'image/jpg', 'image/jpeg'],
+                    size: { less_than: 5.megabytes }
 
   validate :validate_cpf_format
   validate :validate_phone_format
@@ -49,6 +52,12 @@ class User < ApplicationRecord
 
   after_undiscard do
     # Adicione ações a serem executadas após restaurar
+  end
+
+  def avatar_thumbnail
+    avatar.variant(resize_to_fill: [100, 100]).processed
+  rescue StandardError
+    nil
   end
 
   private

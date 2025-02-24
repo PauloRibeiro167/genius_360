@@ -10,6 +10,9 @@ application.register("alert", AlertController)
 import ChartController from "./chart_controller"
 application.register("chart", ChartController)
 
+import FormController from "./form_controller"
+application.register("form", FormController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 

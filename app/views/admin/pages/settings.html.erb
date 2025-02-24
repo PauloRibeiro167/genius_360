@@ -1,41 +1,117 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
-      <h1 class="page-title mb-4">Configurações do Sistema</h1>
-      
-      <div class="card">
-        <div class="card-body">
-          <div class="settings-wrapper">
-            <div class="row">
-              <div class="col-md-3">
-                <div class="nav flex-column nav-pills">
-                  <a class="nav-link active" href="#geral" data-toggle="tab">Geral</a>
-                  <a class="nav-link" href="#email" data-toggle="tab">Email</a>
-                  <a class="nav-link" href="#seguranca" data-toggle="tab">Segurança</a>
-                </div>
+<div class="container mx-auto px-4 py-8">
+  <div class="w-full max-w-4xl mx-auto">
+    <div class="flex gap-8">
+      <!-- Card do Perfil -->
+      <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div class="flex flex-col items-center pb-10 pt-8">
+          <div class="relative group">
+            <% if current_user.avatar.attached? %>
+              <%= image_tag current_user.avatar_thumbnail, class: "w-24 h-24 mb-3 rounded-full shadow-lg" %>
+            <% else %>
+              <div class="w-24 h-24 mb-3 rounded-full shadow-lg bg-gray-300 flex items-center justify-center">
+                <span class="text-2xl text-gray-600"><%= current_user.first_name[0] %></span>
               </div>
-              
-              <div class="col-md-9">
-                <div class="tab-content">
-                  <div class="tab-pane fade show active" id="geral">
-                    <%= form_tag admin_update_settings_path, method: :post, class: 'settings-form' do %>
-                      <div class="form-group">
-                        <label>Nome da Empresa</label>
-                        <%= text_field_tag 'settings[company_name]', @settings.try(:[], 'company_name'), class: 'form-control' %>
-                      </div>
-                      
-                      <div class="form-group">
-                        <label>Endereço</label>
-                        <%= text_area_tag 'settings[address]', @settings.try(:[], 'address'), class: 'form-control' %>
-                      </div>
-                      
-                      <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                      </div>
-                    <% end %>
+            <% end %>
+            
+            <label for="avatar-upload" class="absolute bottom-0 right-0 bg-blue-700 text-white rounded-full p-2 cursor-pointer hover:bg-blue-800">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              </svg>
+            </label>
+          </div>
+
+          <%= form_tag admin_update_profile_path, method: :post, multipart: true, class: 'hidden' do %>
+            <%= file_field_tag 'user[avatar]', id: 'avatar-upload', 
+                class: 'hidden',
+                accept: 'image/png,image/jpg,image/jpeg',
+                data: { 
+                  action: 'change->form#submit'
+                } %>
+          <% end %>
+          
+          <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white"><%= current_user.full_name %></h5>
+          <span class="text-sm text-gray-500 dark:text-gray-400"><%= current_user.perfil.name %></span>
+          
+          <div class="flex mt-4 space-x-3">
+            <%= link_to "Editar Perfil", "#dados-pessoais", 
+                class: "inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300",
+                data: { tab: "dados-pessoais" } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulários -->
+      <div class="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-6">
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="dados-pessoais">
+              <%= form_tag admin_update_profile_path, method: :post, class: 'space-y-4' do %>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome</label>
+                    <%= text_field_tag 'user[first_name]', current_user.first_name, 
+                        class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sobrenome</label>
+                    <%= text_field_tag 'user[last_name]', current_user.last_name, 
+                        class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
                   </div>
                 </div>
-              </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome de Usuário</label>
+                  <%= text_field_tag 'user[username]', current_user.username, 
+                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                  <%= email_field_tag 'user[email]', current_user.email, 
+                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Telefone</label>
+                  <%= telephone_field_tag 'user[phone]', current_user.phone, 
+                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
+                </div>
+
+                <div class="flex justify-end">
+                  <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+                    Atualizar Perfil
+                  </button>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="tab-pane fade" id="senha">
+              <%= form_tag admin_update_password_path, method: :post, class: 'space-y-4' do %>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Senha Atual</label>
+                  <%= password_field_tag 'user[current_password]', nil, 
+                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nova Senha</label>
+                  <%= password_field_tag 'user[password]', nil, 
+                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirmar Nova Senha</label>
+                  <%= password_field_tag 'user[password_confirmation]', nil, 
+                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
+                </div>
+
+                <div class="flex justify-end">
+                  <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+                    Alterar Senha
+                  </button>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
