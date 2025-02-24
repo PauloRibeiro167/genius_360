@@ -5,7 +5,7 @@ class Perfil < ApplicationRecord
   has_many :permissions, through: :perfil_permissions
   has_many :users
 
-  validates :perfil_permissions, presence: true
+  # validates :perfil_permissions, presence: true
 
   # Escopo padrão para mostrar apenas registros ativos
   default_scope -> { kept }

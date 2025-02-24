@@ -1,0 +1,33 @@
+<h1>Resultados da Filtragem</h1>
+
+<p>
+  <%= link_to "Exportar para CSV", admin_pages_results_path(format: :csv) %>
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Email</th>
+      <!-- Adicione mais colunas conforme necessário -->
+    </tr>
+  </thead>
+  <tbody>
+    <% @results.each do |result| %>
+      <tr>
+        <td><%= result.nome %></td>
+        <td><%= result.email %></td>
+        <!-- Adicione mais colunas conforme necessário -->
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Importar CSV</h2>
+
+<%= form_tag import_csv_admin_pages_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Importar CSV" %>
+<% end %>
+
+<%= link_to "Voltar ao filtro", admin_pages_filter_path %>

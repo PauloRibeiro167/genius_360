@@ -74,6 +74,7 @@ gem "skylight"
 gem "aws-sdk-s3", require: false
 
 gem "active_storage_validations"
+gem 'csv'
 
 
 group :development, :test do
@@ -97,6 +98,8 @@ group :development do
   gem "spring"
   gem "ruby-lsp", require: false
   gem "solargraph", require: false
+  gem 'memory_profiler'
+  gem 'get_process_mem'
 end
 
 group :production do

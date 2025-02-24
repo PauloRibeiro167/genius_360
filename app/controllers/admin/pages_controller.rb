@@ -1,5 +1,6 @@
 class Admin::PagesController < ApplicationController
   before_action :authenticate_user!
+
   def index
   end
 
@@ -8,10 +9,28 @@ class Admin::PagesController < ApplicationController
 
   def update_profile
     if current_user.update(user_params)
-      redirect_to admin_settings_path, notice: 'Perfil atualizado com sucesso!'
+      redirect_to admin_pages_settings_path, notice: 'Perfil atualizado com sucesso!'
     else
-      redirect_to admin_settings_path, alert: 'Erro ao atualizar perfil.'
+      redirect_to admin_pages_settings_path, alert: 'Erro ao atualizar perfil.'
     end
+  end
+
+  def filter
+  end
+
+  def results
+    @filters = params[:filters] || {}
+    @results = Lead.where(@filters) # Adapte a consulta conforme necessário
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data @results.to_csv, filename: "leads-#{Date.today}.csv" }
+    end
+  end
+
+  def import_csv
+    DynamicCsvImportService.new(params[:file]).import
+    redirect_to admin_pages_results_path, notice: "CSV importado com sucesso!"
   end
 
   private

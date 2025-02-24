@@ -62,15 +62,27 @@ Rails.application.routes.draw do
   root "public/pages#index"
 
   # Admin routes
-  namespace :admin do
-    get "dashboard/index"
-    get "pages/index"
-    get "pages/settings"
-    root to: "dashboard#index"
-    post 'profile/update', to: 'profile#update', as: :update_profile
-    post 'profile/update_contacts', to: 'profile#update_contacts', as: :update_profile_contacts
-    post 'profile/update_password', to: 'profile#update_password', as: :update_password
-  end
+    namespace :admin do
+      root to: "dashboard#index"
+      
+      resources :dashboard, only: [:index]
+      resources :pages, only: [:index] do
+        collection do
+          post :update_profile
+          post 'import_csv', to: 'pages#import_csv'
+          get :filter
+          get :results
+        end
+      end
+      
+      resources :profile, only: [] do
+        collection do
+          post :update
+          post :update_contacts
+          post :update_password
+        end
+      end
+    end
 
   # Test resources
   resources :tests do

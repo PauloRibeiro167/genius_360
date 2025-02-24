@@ -1,0 +1,12 @@
+<h1>Filtro de Leads</h1>
+<%= form_tag admin_pages_results_path, method: :get do %>
+  <div>
+    <%= label_tag :nome, "Nome:" %>
+    <%= text_field_tag 'filters[nome]' %>
+  </div>
+  <div>
+    <%= label_tag :email, "Email:" %>
+    <%= text_field_tag 'filters[email]' %>
+  </div>
+  <%= submit_tag "Filtrar" %>
+<% end %>
