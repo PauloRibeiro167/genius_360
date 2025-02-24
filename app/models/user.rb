@@ -18,11 +18,19 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :email, presence: true, uniqueness: true
   validates :perfil_id, presence: true
-  validates :avatar, content_type: ['image/png', 'image/jpg', 'image/jpeg'],
-                    size: { less_than: 5.megabytes }
+
+  # Validações do avatar
+  # validates :avatar,
+  #          content_type: { in: ['image/png', 'image/jpg', 'image/jpeg'], message: 'deve ser uma imagem PNG ou JPEG' },
+  #          size: { less_than: 5.megabytes, message: 'deve ser menor que 5MB' },
+  #          if: :avatar_attached?
 
   validate :validate_cpf_format
   validate :validate_phone_format
+  
+  def avatar_attached?
+    avatar.attached?
+  end
 
   def admin?
     perfil == 'admin'
@@ -55,9 +63,15 @@ class User < ApplicationRecord
   end
 
   def avatar_thumbnail
+    return nil unless avatar.attached?
+    
     avatar.variant(resize_to_fill: [100, 100]).processed
   rescue StandardError
     nil
+  end
+
+  def full_name
+    [first_name, last_name].compact.join(' ')
   end
 
   private

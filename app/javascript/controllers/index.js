@@ -31,6 +31,9 @@ application.register("modal", ModalController)
 import NavDropdownController from "./nav_dropdown_controller"
 application.register("nav-dropdown", NavDropdownController)
 
+import ProfileFormController from "./profile_form_controller"
+application.register("profile-form", ProfileFormController)
+
 import ServiceAlertController from "./service_alert_controller"
 application.register("service-alert", ServiceAlertController)
 

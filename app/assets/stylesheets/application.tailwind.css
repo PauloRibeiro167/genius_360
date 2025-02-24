@@ -4,23 +4,76 @@
 
 @layer components {
   .sidebar-inactive\:hidden {
-    @apply hidden;
+    display: none;
   }
 
   nav.w-20 .sidebar-inactive\:hidden {
-    @apply hidden;
+    display: none;
   }
 
   nav:not(.w-64) .sidebar-inactive\:hidden {
-    @apply hidden;
+    display: none;
   }
 
   nav.w-64 .sidebar-inactive\:hidden {
-    @apply inline;
+    display: inline;
   }
 
   .avatar-upload-button {
-    @apply absolute bottom-0 right-0 bg-blue-700 text-white rounded-full p-2 cursor-pointer hover:bg-blue-800 transition-colors duration-200;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    border-radius: 9999px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition-property: color, background-color, border-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+    color: white;
+    background-color: #1d4ed8;
+  }
+  
+  .avatar-upload-button:hover {
+    background-color: #1e40af;
+  }
+
+  .editing .editing\:block {
+    display: block;
+  }
+
+  form:not(.editing) [data-profile-form-target="field"] {
+    display: none;
+  }
+
+  form.editing [data-profile-form-target="display"] {
+    display: none;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem; /* substituindo px-4 py-2 */
+    font-size: 0.875rem; /* substituindo text-sm */
+    font-weight: 500; /* substituindo font-medium */
+    color: white;
+    border-radius: 0.5rem; /* substituindo rounded-lg */
+    transition: color 0.2s, background-color 0.2s; /* substituindo transition-colors duration-200 */
+    outline: none;
+  }
+
+  .btn-primary {
+    background-color: #1d4ed8;
+  }
+  
+  .btn-primary:hover {
+    background-color: #1e40af;
+  }
+
+  .btn-success {
+    background-color: #16a34a;
+  }
+  
+  .btn-success:hover {
+    background-color: #15803d;
   }
 }
 

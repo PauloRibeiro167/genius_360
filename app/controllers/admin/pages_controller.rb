@@ -1,4 +1,5 @@
-class Admin::PagesController < AdminController
+class Admin::PagesController < ApplicationController
+  before_action :authenticate_user!
   def index
   end
 

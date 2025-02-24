@@ -73,6 +73,9 @@ gem "skylight"
 # Armazenamento de arquivos (exemplo com Amazon S3)
 gem "aws-sdk-s3", require: false
 
+gem "active_storage_validations"
+
+
 group :development, :test do
   # Desenvolvimento e Testes
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
