@@ -5,14 +5,17 @@
 # https://guides.rubyonrails.org/security.html#content-security-policy-header
 
 Rails.application.config.content_security_policy do |policy|
-  policy.default_src :self
-  policy.font_src    :self, :data, :unsafe_inline, "data:"  # Adicionado "data:" explicitamente
-  policy.img_src     :self, :data
-  policy.style_src   :self, :unsafe_inline
-  policy.script_src  :self, :unsafe_inline
-  policy.connect_src :self
+  policy.default_src :self, :https
+  policy.font_src    :self, :https, :data
+  policy.img_src     :self, :https, :data
   policy.object_src  :none
+  policy.script_src  :self, :https, :unsafe_inline, :unsafe_eval
+  policy.style_src   :self, :https, :unsafe_inline
+
+  # Para desenvolvimento, permitir conexão com webpack-dev-server
+  policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035" if Rails.env.development?
 end
 
-Rails.application.config.content_security_policy_nonce_generator = -> request { SecureRandom.base64(16) }
-Rails.application.config.content_security_policy_nonce_directives = %w(style-src)
+# Gerar nonce para scripts inline
+Rails.application.config.content_security_policy_nonce_generator = ->(request) { SecureRandom.base64(16) }
+Rails.application.config.content_security_policy_nonce_directives = %w[style-src]
