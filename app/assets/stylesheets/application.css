@@ -1,3 +1,7 @@
+@import '@fullcalendar/common/main.css';
+@import '@fullcalendar/daygrid/main.css';
+@import '@fullcalendar/timegrid/main.css';
+
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);

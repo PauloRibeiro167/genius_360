@@ -1,0 +1,95 @@
+<section class="ml-6 p-12 md:p-8 lg:p-12 overflow-auto bg-gray-900 min-h-screen">
+  <h2 class="mb-8 text-white text-center font-bold text-2xl">Nova Proposta</h2>
+
+  <div class="p-12 max-w-6xl mx-auto bg-indigo-900 rounded-xl backdrop-blur border-transparent bg-clip-padding">
+    <%= form_with(model: [:admin, @proposta], local: true, class: "space-y-8") do |f| %>
+      <%# Informações Básicas %>
+      <div class="bg-indigo-800/50 p-6 rounded-lg">
+        <h3 class="text-white text-xl mb-4">Informações Básicas</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <%= f.label :numero, "Número da Proposta", class: "block text-sm font-medium text-white" %>
+            <%= f.text_field :numero, class: "mt-1 block w-full rounded-md border-gray-300 bg-purple-400 text-black" %>
+          </div>
+
+          <div>
+            <%= f.label :status, class: "block text-sm font-medium text-white" %>
+            <%= f.select :status, 
+                ['Em análise', 'Aprovada', 'Recusada'], 
+                {}, 
+                class: "mt-1 block w-full rounded-md border-gray-300 bg-purple-400 text-black" %>
+          </div>
+        </div>
+      </div>
+
+      <%# Informações do Cliente %>
+      <div class="bg-indigo-800/50 p-6 rounded-lg">
+        <h3 class="text-white text-xl mb-4">Informações do Lead</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <%= f.label :lead_id, "Cliente", class: "block text-sm font-medium text-white" %>
+            <%= f.collection_select :lead_id, Lead.all, :id, :instituicao_id, 
+                {prompt: "Selecione um cliente"}, 
+                class: "mt-1 block w-full rounded-md border-gray-300 bg-purple-400 text-black" %>
+          </div>
+
+          <div>
+            <%= f.label :instituicao_id, "Instituição", class: "block text-sm font-medium text-white" %>
+            <%= f.collection_select :instituicao_id, Instituicao.all, :id, :nome, 
+                {prompt: "Selecione uma instituição"}, 
+                class: "mt-1 block w-full rounded-md border-gray-300 bg-purple-400 text-black" %>
+          </div>
+        </div>
+      </div>
+
+      <%# Informações Financeiras %>
+      <div class="bg-indigo-800/50 p-6 rounded-lg">
+        <h3 class="text-white text-xl mb-4">Informações Financeiras</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <%= f.label :valor_venda, "Valor da Venda", class: "block text-sm font-medium text-white" %>
+            <%= f.number_field :valor_venda, step: '0.01', class: "mt-1 block w-full rounded-md border-gray-300 bg-purple-400 text-black" %>
+          </div>
+
+          <div>
+            <%= f.label :data_venda, "Data da Venda", class: "block text-sm font-medium text-white" %>
+            <%= f.date_field :data_venda, class: "mt-1 block w-full rounded-md border-gray-300 bg-purple-400 text-black" %>
+          </div>
+
+          <div>
+            <%= f.label :data_contratacao, "Data de Contratação", class: "block text-sm font-medium text-white" %>
+            <%= f.date_field :data_contratacao, class: "mt-1 block w-full rounded-md border-gray-300 bg-purple-400 text-black" %>
+          </div>
+        </div>
+      </div>
+
+      <%# Informações Bancárias %>
+      <div class="bg-indigo-800/50 p-6 rounded-lg">
+        <h3 class="text-white text-xl mb-4">Informações Bancárias</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <%= f.label :banco_id, "Banco", class: "block text-sm font-medium text-white" %>
+            <%= f.collection_select :banco_id, Banco.all, :id, :nome, 
+                {prompt: "Selecione um banco"}, 
+                class: "mt-1 block w-full rounded-md border-gray-300 bg-purple-400 text-black" %>
+          </div>
+
+          <div>
+            <%= f.label :parceiro_id, "Parceiro", class: "block text-sm font-medium text-white" %>
+            <%= f.collection_select :parceiro_id, Parceiro.all, :id, :usuario_id, 
+                {prompt: "Selecione um parceiro"}, 
+                class: "mt-1 block w-full rounded-md border-gray-300 bg-purple-400 text-black" %>
+          </div>
+        </div>
+      </div>
+
+      <%# Botões de Ação %>
+      <div class="flex justify-end space-x-4 mt-8">
+        <%= link_to 'Cancelar', admin_propostas_path, 
+            class: "px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700" %>
+        <%= f.submit "Salvar Proposta", 
+            class: "px-6 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-md hover:from-purple-600 hover:to-blue-600" %>
+      </div>
+    <% end %>
+  </div>
+</section>

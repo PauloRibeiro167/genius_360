@@ -1,24 +1,25 @@
-<div class="container mx-auto px-4 py-8">
+<main class="p-12 bg-gray-900 h-[calc(100vh-2rem)]">
+<div class="container mx-auto max-w-6xl">
   <div class="w-full max-w-4xl mx-auto">
     <!-- Container para mensagens -->
-    <div id="flash-messages" class="mb-4">
+    <div id="flash-messages" >
       <% if flash[:notice] %>
-        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+        <div class="p-0 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
           <%= flash[:notice] %>
         </div>
       <% end %>
     </div>
 
-    <div class="flex gap-8">
+    <div class="flex gap-6">
       <!-- Card do Perfil -->
       <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-        <div class="flex flex-col items-center pb-10 pt-8">
+        <div class="p-6 flex flex-col items-center">
           <div class="relative group w-full max-w-md">
             <% if current_user.avatar.attached? %>
-              <%= image_tag current_user.avatar_thumbnail, class: "w-24 h-24 mb-3 mx-auto rounded-full shadow-lg" %>
+              <%= image_tag current_user.avatar_thumbnail, class: "w-24 h-24 mb-1 mx-auto rounded-full shadow-lg" %>
             <% else %>
-              <div class="w-24 h-24 mb-3 mx-auto rounded-full shadow-lg bg-gray-300 flex items-center justify-center">
-                <span class="text-2xl text-gray-600"><%= current_user.full_name %></span>
+              <div class="w-24 h-24 mb-2 mx-auto rounded-full shadow-lg bg-gray-300 flex items-center justify-center">
+                <span class="text-lg text-gray-600"><%= current_user.full_name %></span>
               </div>
             <% end %>
 
@@ -35,7 +36,7 @@
             </div>
           </div>
 
-          <%= form_tag admin_update_profile_path, method: :post, multipart: true, class: 'hidden' do %>
+          <%= form_tag admin_profile_update_path, method: :post, multipart: true, class: 'hidden' do %>
             <%= file_field_tag 'user[avatar]', 
                 id: 'avatar-upload', 
                 class: 'hidden',
@@ -45,7 +46,7 @@
                 } %>
           <% end %>
           
-          <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white mt-4"><%= current_user.full_name %></h5>
+          <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white mt-2"><%= current_user.full_name %></h5>
           <span class="text-sm text-gray-500 dark:text-gray-400"><%= current_user.perfil.name %></span>
           
           <div class="flex mt-4 space-x-3">
@@ -61,73 +62,69 @@
         <div class="p-6">
           <div class="tab-content" data-controller="profile-form">
             <div class="tab-pane fade show active" id="dados-pessoais">
-              <%= form_tag admin_update_profile_path, method: :post, class: 'space-y-4', data: { profile_form_target: "form" } do %>
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="relative">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome</label>
-                    <div data-profile-form-target="display" class="py-2.5 px-2 text-gray-700 dark:text-gray-300">
+              <%= form_tag admin_profile_update_path, method: :post, class: 'space-y-6', data: { profile_form_target: "form" } do %>
+                <div class="grid grid-cols-2 gap-6">
+                  <div class="relative space-y-2">
+                    <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Nome</label>
+                    <div data-profile-form-target="display" class="py-3 px-4 text-gray-700 dark:text-gray-300 font-medium bg-gray-50 dark:bg-gray-700 rounded-lg">
                       <%= current_user.first_name %>
                     </div>
                     <%= text_field_tag 'user[first_name]', current_user.first_name, 
-                        class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500',
+                        class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500 font-medium',
                         disabled: true,
                         data: { profile_form_target: "field" } %>
                   </div>
 
-                  <div class="relative">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sobrenome</label>
-                    <div data-profile-form-target="display" class="py-2.5 px-2 text-gray-700 dark:text-gray-300">
+                  <div class="relative space-y-2">
+                    <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Sobrenome</label>
+                    <div data-profile-form-target="display" class="py-3 px-4 text-gray-700 dark:text-gray-300 font-medium bg-gray-50 dark:bg-gray-700 rounded-lg">
                       <%= current_user.last_name %>
                     </div>
                     <%= text_field_tag 'user[last_name]', current_user.last_name, 
-                        class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500',
+                        class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500 font-medium',
                         disabled: true,
                         data: { profile_form_target: "field" } %>
                   </div>
                 </div>
 
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome de Usuário</label>
-                  <div data-profile-form-target="display" class="py-2.5 px-2 text-gray-700 dark:text-gray-300">
-                    <%= current_user.username %>
-                  </div>
+                <div class="space-y-1">
                   <%= text_field_tag 'user[username]', current_user.username, 
-                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500',
+                      class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500 font-medium',
                       disabled: true,
                       data: { profile_form_target: "field" } %>
                 </div>
 
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
-                  <div data-profile-form-target="display" class="py-2.5 px-2 text-gray-700 dark:text-gray-300">
+                <div class="space-y-2">
+                  <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Email</label>
+                  <div data-profile-form-target="display" class="py-3 px-4 text-gray-700 dark:text-gray-300 font-medium bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <%= current_user.email %>
                   </div>
                   <%= email_field_tag 'user[email]', current_user.email, 
-                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500',
+                      class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500 font-medium',
                       disabled: true,
                       data: { profile_form_target: "field" } %>
                 </div>
 
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Telefone</label>
-                  <div data-profile-form-target="display" class="py-2.5 px-2 text-gray-700 dark:text-gray-300">
+                <div class="space-y-2">
+                  <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Telefone</label>
+                  <div data-profile-form-target="display" class="py-3 px-4 text-gray-700 dark:text-gray-300 font-medium bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <%= current_user.phone %>
                   </div>
                   <%= telephone_field_tag 'user[phone]', current_user.phone, 
-                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500',
+                      class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500 font-medium',
                       disabled: true,
                       data: { profile_form_target: "field" } %>
                 </div>
 
-                <div class="flex justify-end space-x-3">
+                <div class="flex justify-end space-x-3 pt-4">
                   <button type="button" 
                           data-profile-form-target="editButton"
                           data-action="click->profile-form#toggleEdit"
-                          class="btn btn-primary">
+                          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
                     Editar Perfil
                   </button>
                   <button type="submit" 
-                          class="btn btn-success hidden editing:block">
+                          class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 hidden editing:block">
                     Salvar Alterações
                   </button>
                 </div>
@@ -135,28 +132,28 @@
             </div>
 
             <div class="tab-pane fade" id="senha">
-              <%= form_tag admin_update_password_path, method: :post, class: 'space-y-4' do %>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Senha Atual</label>
+              <%= form_tag admin_profile_update_password_path, method: :post, class: 'space-y-6' do %>
+                <div class="space-y-2">
+                  <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Senha Atual</label>
                   <%= password_field_tag 'user[current_password]', nil, 
-                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
+                      class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500' %>
                 </div>
 
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nova Senha</label>
+                <div class="space-y-2">
+                  <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Nova Senha</label>
                   <%= password_field_tag 'user[password]', nil, 
-                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
+                      class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500' %>
                 </div>
 
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirmar Nova Senha</label>
+                <div class="space-y-2">
+                  <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Confirmar Nova Senha</label>
                   <%= password_field_tag 'user[password_confirmation]', nil, 
-                      class: 'w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500' %>
+                      class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500' %>
                 </div>
 
-                <div class="flex justify-end">
-                  <button type="submit" class="btn btn-primary">
-                    Alterar Senha
+                <div class="flex items-center justify-center">
+                  <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                  Alterar Senha
                   </button>
                 </div>
               <% end %>
@@ -167,3 +164,4 @@
     </div>
   </div>
 </div>
+</main>

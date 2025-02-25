@@ -7,6 +7,9 @@ import { application } from "./application"
 import AlertController from "./alert_controller"
 application.register("alert", AlertController)
 
+import CalendarioController from "./calendario_controller"
+application.register("calendario", CalendarioController)
+
 import ChartController from "./chart_controller"
 application.register("chart", ChartController)
 
@@ -36,6 +39,12 @@ application.register("modal", ModalController)
 
 import NavDropdownController from "./nav_dropdown_controller"
 application.register("nav-dropdown", NavDropdownController)
+
+import NotificationController from "./notification_controller"
+application.register("notification", NotificationController)
+
+import NotificationsController from "./notifications_controller"
+application.register("notifications", NotificationsController)
 
 import ProfileFormController from "./profile_form_controller"
 application.register("profile-form", ProfileFormController)

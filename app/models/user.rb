@@ -16,6 +16,7 @@ class User < ApplicationRecord
   # Mensagens recebidas
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id'
   has_many :notifications, dependent: :destroy
+  has_and_belongs_to_many :avisos
 
   # Escopo padrão para mostrar apenas registros ativos
   default_scope -> { kept }

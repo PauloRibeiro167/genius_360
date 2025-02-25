@@ -65,18 +65,19 @@ Rails.application.routes.draw do
     resources :dashboard, only: [:index]
     resources :pages do
       collection do
-        post :update_profile
-        post :import_csv
-        get :filter
-        get :results
+        get :index
         get :settings
         get :proposta
         get :mensagens
-        get :notificacoes
+        get :comunicados
+        get :filter
+        get :results
+        post :import_csv
+        patch :update_profile
       end
     end
     
-    resources :profile, only: [] do
+    resource :profile, only: [], controller: 'profile' do
       collection do
         post :update
         post :update_contacts
@@ -95,6 +96,40 @@ Rails.application.routes.draw do
 
     get 'notificacoes', to: 'pages#notificacoes'
     resources :messages, only: [:create, :index]
+    get 'comunicados', to: 'pages#comunicados'
+    resources :avisos, only: [:create, :destroy]
+    resources :reunioes, only: [:create, :destroy, :index]
+    resources :reunioes, only: [:index]
+    get 'users/search', to: 'users#search', as: :search_users
+
+    post 'profile/update', to: 'profile#update'
+    post 'profile/update_password', to: 'profile#update_password', as: :profile_update_password
+
+    # API Manager routes
+    resources :api_manager, only: [] do
+      collection do
+        get :start
+        get :status
+      end
+    end
+    get '/admin/api_manager/start'
+
+    resources :propostas do
+      collection do
+        get :consulta_servidor
+        post :buscar_servidor
+        get :selecionar_consulta
+        post :redirecionar_consulta
+        get :consulta_servidores_federais
+        get :consulta_servidores_pi
+        get :consulta_servidores_ce
+        get :consulta_beneficios
+        post :buscar_servidores_federais
+        post :buscar_servidores_pi
+        post :buscar_servidores_ce
+        post :buscar_beneficios
+      end
+    end
   end
 
   # Test resources

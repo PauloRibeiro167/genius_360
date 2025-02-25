@@ -34,5 +34,11 @@ module Genius360
     config.eager_load_paths << Rails.root.join('app/middleware')
     config.autoload_paths << Rails.root.join('app/middleware')
     config.autoload_paths += %W[#{config.root}/app/notifications]
+
+    # Configurar MIME types para fontes
+    config.middleware.insert_before 0, Rack::Sendfile
+    config.middleware.use Rack::Static,
+      urls: ['/fonts'],
+      root: 'app/assets'
   end
 end

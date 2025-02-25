@@ -1,0 +1,28 @@
+<div class="container mt-4">
+  <h2>Consulta de Servidor Federal</h2>
+
+  <%= form_tag buscar_servidor_admin_propostas_path, method: :post do %>
+    <div class="form-group">
+      <%= label_tag :cpf, "CPF do Servidor" %>
+      <%= text_field_tag :cpf, params[:cpf], class: "form-control", 
+                        placeholder: "Digite o CPF (apenas números)" %>
+    </div>
+
+    <div class="form-group mt-3">
+      <%= submit_tag "Consultar", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <% if @resultado %>
+    <div class="mt-4">
+      <h3>Resultados da Consulta</h3>
+      <pre><%= JSON.pretty_generate(@resultado) %></pre>
+    </div>
+  <% end %>
+
+  <% if flash[:error] %>
+    <div class="alert alert-danger mt-3">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
+</div>

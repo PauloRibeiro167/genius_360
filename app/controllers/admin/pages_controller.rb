@@ -47,8 +47,12 @@ class Admin::PagesController < ApplicationController
                       .order(created_at: :asc) if @recipient
   end
 
-  def notificacoes
-    @messages = Message.includes(:user).order(created_at: :asc)
+  def comunicados
+    @avisos = Aviso.order(created_at: :desc)
+    @reunioes = Reuniao.order(data: :desc)
+    @aviso = Aviso.new
+    @reuniao = Reuniao.new
+    @users = User.order(:name) # Adicione esta linha para carregar os usuários ordenados por nome
   end
 
   def results
