@@ -1,40 +1,45 @@
-<nav class="fixed left-0 top-0 h-screen flex flex-col bg-gradient-to-br from-slate-900 via-purple-600 to-fuchsia-900
-      transition-[width] duration-300 ease-in-out
-      shadow-lg z-50 overflow-hidden w-20" data-controller="sidebar" data-sidebar-target="sidebar">
+<nav class="fixed left-0 top-0 h-screen flex flex-col bg-purple-950
+  transition-[width] duration-300 ease-in-out
+  shadow-lg z-50 overflow-hidden w-20 group" data-controller="sidebar" data-sidebar-target="sidebar">
   <header class="flex items-center py-3 px-2">
-    <%= link_to root_path, class: "ml-3 transform translate-x-0 transition-all duration-300" do %>
-    <figure class="flex items-center shrink-0">
+    <%= link_to root_path, class: "flex items-center rounded-lg group/title hover:bg-white p-3 transition-colors duration-300" do %>
+      <figure class="flex items-center shrink-0">
       <div class="relative w-10 h-10 flex items-center justify-center">
         <svg class="w-6 h-6 text-amber-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.477.859h4z"/>
+        <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.477.859h4z"/>
         </svg>
-        <div class="absolute inset-0 bg-amber-300/20 rounded-full blur-md"></div>
       </div>
-    </figure>
-      <h1 class="text-xl font-bold text-white tracking-wide opacity-0 group-hover/sidebar:opacity-100 sidebar-inactive:hidden">GeniusDI</h1>
+      </figure>
+      <h1 class="text-xl font-bold text-white tracking-wide ml-3 font-medium whitespace-nowrap group-hover/title:text-gray-800 transition-colors duration-300 sidebar-inactive:hidden" data-sidebar-target="title">GeniusDI 360°</h1>
     <% end %>
   </header>
 
   <menu class="flex-grow flex flex-col gap-1 mt-4 px-2">
     <% menu_items = [
-      { icon: raw('<svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/></svg>'), text: "Início", path: root_path },
-      { icon: raw('<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg>'), text: "Dashboard", path: "#" },
-      { icon: raw('<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>'), text: "Análises", path: "#" },
-      { icon: raw('<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>'), text: "Configurações", path: "#" },
+      { icon: raw('<svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z" clip-rule="evenodd"/></svg>'), text: "Início", path: admin_pages_path },
+      { icon: raw('<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg>'), text: "Dashboard", path: admin_dashboard_index_path },
+      { icon: raw('<svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/></svg>'), text: "Propostas", path: "#" },
       { icon: raw('<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg>'), text: "Notificações", path: "#" },
       { icon: raw('<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/><path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/></svg>'), text: "Mensagens", path: "#" }
     ] %>
     <%= render partial: "admin/pages/menu_item", collection: menu_items, as: :item %>
   </menu>
 
-  <footer class="mt-auto px-2 pb-4">
-    <%= link_to destroy_user_session_path, class: "flex items-center rounded-lg 
-          group/logout hover:bg-red-500/20 p-3 transition-colors duration-300", data: { turbo_method: :delete } do %>
-      <svg class="w-6 h-6 text-black shrink-0 group-hover/logout:rotate-180 transition-transform duration-500" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
+  <div class="mt-auto px-2 pb-4">
+    <%= link_to "#", class: "w-full flex items-center justify-center gap-3 rounded-lg 
+      group/settings hover:bg-white p-3 transition-colors duration-300 mb-2" do %>
+      <svg class="w-6 h-6 text-black group-hover/settings:text-black" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
       </svg>
-      <span class="ml-3 text-white font-medium opacity-0 group-hover:opacity-100 
-             transition-all duration-300 whitespace-nowrap">Sair</span>
+      <span class="text-Black group-hover/settings:text-black sidebar-inactive:hidden">Configurações</span>
     <% end %>
-  </footer>
+
+    <%= link_to destroy_user_session_path, method: :delete, class: "w-full flex items-center justify-center gap-3 rounded-lg 
+      group/logout hover:bg-white p-3 transition-colors duration-300" do %>
+      <svg class="w-6 h-6 text-red-500 group-hover/logout:text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
+      </svg>
+      <span class="text-black group-hover/logout:text-gray-800 sidebar-inactive:hidden">Sair</span>
+    <% end %>
+  </div>
 </nav>

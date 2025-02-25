@@ -2,16 +2,19 @@ class Devise::SessionsController < ApplicationController
   include Devise::Controllers::Helpers
 
   def create
-    self.resource = warden.authenticate!(auth_options)
+    Rails.logger.info "==== Iniciando processo de login ===="
+    Rails.logger.info "Parâmetros recebidos: #{params.inspect}"
 
-    if resource.persisted?
-      Rails.logger.info "Usuário autenticado com sucesso: #{resource.email}"
-      set_flash_message!(:notice, :signed_in)
-      sign_in(resource_name, resource)
+    user = User.find_by(email: params[:user][:email])
+
+    if user && user.valid_password?(params[:user][:password])
+      Rails.logger.info "Usuário autenticado com sucesso: #{user.email}"
+      flash[:notice] = "Login efetuado com sucesso."
+      sign_in(resource_name, user)
 
       respond_to do |format|
-        format.turbo_stream { redirect_to after_sign_in_path_for(resource) }
-        format.html { redirect_to after_sign_in_path_for(resource) }
+        format.turbo_stream { redirect_to admin_root_path }
+        format.html { redirect_to admin_root_path }
         format.json { render json: { success: true }, status: :ok }
       end
     else

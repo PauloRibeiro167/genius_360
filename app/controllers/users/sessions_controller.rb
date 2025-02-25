@@ -1,5 +1,4 @@
 class Users::SessionsController < Devise::SessionsController
-  include DeviseHelper
   before_action :configure_sign_in_params, only: [ :create ]
   before_action :verify_signed_out_user, only: [ :new, :create ]
   before_action :log_request_info
@@ -38,11 +37,13 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def create
+    Rails.logger.info "==== Tentando autenticar usuário ===="
     begin
-      self.resource = warden.authenticate!(auth_options)
-      # Se falhar aqui, significa credenciais inválidas
-    rescue Warden::Errors::AuthenticationError => e
-      handle_authentication_error(e)
+      super # Chama o método create do Devise::SessionsController
+    rescue => e
+      Rails.logger.error "==== Erro ao tentar logar ===="
+      Rails.logger.error "Mensagem: #{e.message}"
+      handle_standard_error(e)
     end
   end
 
@@ -51,9 +52,9 @@ class Users::SessionsController < Devise::SessionsController
     Rails.logger.info "Usuário: #{current_user&.email}"
     Rails.logger.info "Timestamp: #{Time.current}"
     signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
-    set_flash_message! :notice, :signed_out if signed_out
+    flash[:notice] = t('devise.sessions.signed_out') if signed_out
     respond_to do |format|
-      format.html { redirect_to public_path }
+      format.html { redirect_to root_path }
       format.json { head :no_content }
     end
   end
@@ -64,12 +65,12 @@ class Users::SessionsController < Devise::SessionsController
     devise_parameter_sanitizer.permit(:sign_in, keys: [ :email, :password, :remember_me ])
   end
 
-  def auth_options
-    { scope: resource_name, recall: "#{controller_path}#new" }
-  end
-
   def after_sign_in_path_for(resource)
     admin_root_path # ou '/admin' dependendo da sua configuração de rotas
+  end
+
+  def after_sign_out_path_for(resource_or_scope)
+    root_path
   end
 
   def sign_in_params
@@ -88,6 +89,9 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def handle_authentication_error(error)
+    Rails.logger.error "==== Erro de autenticação DETALHADO ===="
+    Rails.logger.error "Mensagem: #{error.message}"
+    Rails.logger.error "Backtrace: #{error.backtrace.join("\n")}"
     respond_to do |format|
       format.html do
         flash[:alert] = "Email ou senha inválidos."

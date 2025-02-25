@@ -1,7 +1,9 @@
 class Admin::PagesController < ApplicationController
+  layout "kanban"
   before_action :authenticate_user!
 
   def index
+
   end
 
   def settings
@@ -18,9 +20,12 @@ class Admin::PagesController < ApplicationController
   def filter
   end
 
+  def proposta
+  end
+
   def results
     @filters = params[:filters] || {}
-    @results = Lead.where(@filters) # Adapte a consulta conforme necessário
+    @results = Lead.where(@filters)
 
     respond_to do |format|
       format.html

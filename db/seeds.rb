@@ -8,10 +8,10 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 puts "Limpeza do banco de dados..."
-Perfil.destroy_all
-User.destroy_all
-Permission.destroy_all
 PerfilPermission.destroy_all
+Permission.destroy_all
+User.destroy_all
+Perfil.destroy_all
 puts "Banco de dados limpo."
 
 # Seeds para os Perfis
@@ -27,6 +27,18 @@ perfis = [
   },
   {
     name: "Diretor Executivo"
+  },
+  {
+    name: "Operador"
+  },
+  {
+    name: "Marketing"
+  },
+  {
+    name: "Supervisor"
+  },
+  {
+    name: "Monitor de Fraudes"
   }
 ]
 
@@ -35,7 +47,7 @@ perfis.each do |perfil|
 end
 
 # Criar usuário admin
-super_admin_perfil = Perfil.find_by(name: "Super Admin") # Encontra o perfil de Super Admin
+super_admin_perfil = Perfil.find_by(name: "Super Admin")
 User.create!(
   email: 'admin@teste.com',
   password: '123456',

@@ -278,7 +278,6 @@ Devise.setup do |config|
   # change the failure app, you can configure them inside the config.warden block.
   #
   config.warden do |manager|
-    manager.failure_app = Devise::FailureApp
     manager.default_strategies(scope: :user).unshift :database_authenticatable
   end
 

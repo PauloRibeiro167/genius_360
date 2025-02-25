@@ -100,6 +100,7 @@ group :development do
   gem "solargraph", require: false
   gem 'memory_profiler'
   gem 'get_process_mem'
+  gem 'benchmark-http'  # Adicione esta linha
 end
 
 group :production do

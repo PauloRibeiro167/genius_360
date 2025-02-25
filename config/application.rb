@@ -28,6 +28,8 @@ module Genius360
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # require 'memory_profiler_middleware' # Removed explicit require
+
     config.middleware.use MemoryProfilerMiddleware if Rails.env.development?
     config.eager_load_paths << Rails.root.join('app/middleware')
     config.autoload_paths << Rails.root.join('app/middleware')
