@@ -24,20 +24,25 @@ class Admin::PagesController < ApplicationController
   end
 
   def mensagens
-    # Carregar todos os usuários, exceto o usuário atual, para o seletor
-    @users = User.kept.where.not(id: current_user.id).order(:name)
-    
-    # Verificar se um destinatário foi selecionado
+    @users = if params[:search].present?
+      User.where("name ILIKE ? OR email ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
+          .where.not(id: current_user.id)
+    end
+
+    @all_conversations = Message.select('DISTINCT ON (LEAST(user_id, recipient_id), GREATEST(user_id, recipient_id)) *')
+                              .where('user_id = ? OR recipient_id = ?', current_user.id, current_user.id)
+                              .order('LEAST(user_id, recipient_id), GREATEST(user_id, recipient_id), created_at DESC')
+                              .map { |m| m.user_id == current_user.id ? m.recipient : m.user }
+                              .uniq
+
     if params[:recipient_id].present?
       @recipient = User.find(params[:recipient_id])
-      
-      # Obter mensagens entre o usuário atual e o destinatário
-      @messages = Message.kept
-                        .between_users(current_user.id, @recipient.id)
+      @messages = Message.conversation_between(current_user, @recipient)
                         .order(created_at: :asc)
-    else
-      # Nenhum destinatário selecionado ainda
-      @messages = Message.none
+      
+      # Marcar mensagens como lidas
+      Message.where(user_id: @recipient.id, recipient_id: current_user.id, read_at: nil)
+            .update_all(read_at: Time.current)
     end
   end
 

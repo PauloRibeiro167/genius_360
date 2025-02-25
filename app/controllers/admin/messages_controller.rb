@@ -1,34 +1,23 @@
-class Admin::MessagesController < ApplicationController
+class Admin::MessagesController < AdminController
   def create
-    @message = current_user.sent_messages.build(message_params)
+    @message = current_user.messages.build(message_params)
     
     if @message.save
-      # Notificar o destinatário usando noticed
-      MessageNotification.with(message: @message).deliver(@message.recipient)
-      
-      # Broadcast em tempo real
-      html = ApplicationController.render(
-        partial: 'admin/messages/message',
-        locals: { message: @message }
-      )
-      ActionCable.server.broadcast("chat_#{@message.recipient_id}", html)
-      
-      # Resposta para o remetente
+      MessageNotification.with(message: @message).deliver_later(@message.recipient)
       respond_to do |format|
-        format.turbo_stream
-        format.html { 
-          redirect_to mensagens_admin_pages_path(recipient_id: @message.recipient_id) 
-        }
+        format.html { redirect_to mensagens_admin_pages_path(recipient_id: @message.recipient_id) }
+        format.json { render json: @message, status: :created }
       end
     else
-      # Tratamento de erro
-      redirect_to mensagens_admin_pages_path(recipient_id: params[:message][:recipient_id]), 
-                  alert: "Erro ao enviar mensagem"
+      respond_to do |format|
+        format.html { redirect_to mensagens_admin_pages_path(recipient_id: @message.recipient_id), alert: 'Erro ao enviar mensagem.' }
+        format.json { render json: @message.errors, status: :unprocessable_entity }
+      end
     end
   end
-  
+
   private
-  
+
   def message_params
     params.require(:message).permit(:content, :recipient_id)
   end

@@ -76,7 +76,7 @@ gem "aws-sdk-s3", require: false
 
 gem "active_storage_validations"
 gem 'csv'
-gem 'noticed'
+gem 'noticed', '~> 1.6'
 
 group :development, :test do
   # Desenvolvimento e Testes

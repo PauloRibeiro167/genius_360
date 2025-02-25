@@ -24,6 +24,8 @@ class Message < ApplicationRecord
           user_id, recipient_id, recipient_id, user_id)
   }
 
+  has_noticed_notifications
+
   # Callbacks para quando o registro é descartado/restaurado
   before_discard do
     # Adicione ações a serem executadas antes de descartar
@@ -39,5 +41,22 @@ class Message < ApplicationRecord
 
   after_undiscard do
     # Adicione ações a serem executadas após restaurar
+  end
+
+  after_create_commit :broadcast_message
+
+  private
+
+  def broadcast_message
+    message_data = {
+      content: content,
+      sender_name: user.name,
+      sender_id: user_id,
+      created_at: created_at.strftime("%H:%M"),
+      recipient_id: recipient_id
+    }
+
+    ActionCable.server.broadcast "chat_#{recipient_id}", message_data
+    ActionCable.server.broadcast "chat_#{user_id}", message_data
   end
 end

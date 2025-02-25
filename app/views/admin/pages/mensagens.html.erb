@@ -19,51 +19,7 @@
       
       <!-- Lista de conversas -->
       <div class="flex-1 overflow-y-auto">
-        <!-- Opção para nova mensagem -->
-        <%= link_to mensagens_admin_pages_path(new_message: true) do %>
-          <div class="px-4 py-3 border-b border-gray-700 hover:bg-gray-700 transition cursor-pointer">
-            <div class="flex items-center">
-              <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-              </div>
-              <div class="ml-3">
-                <h3 class="text-white font-semibold">Nova mensagem</h3>
-              </div>
-            </div>
-          </div>
-        <% end %>
-        
-        <!-- Exibir usuários quando "Nova mensagem" foi clicado -->
-        <% if params[:new_message].present? %>
-          <div class="px-4 py-2 bg-gray-700 text-white text-sm">
-            Selecione um usuário:
-          </div>
-          <% if @users&.any? %>
-            <% @users.each do |user| %>
-              <%= link_to mensagens_admin_pages_path(recipient_id: user.id) do %>
-                <div class="px-4 py-3 border-b border-gray-700 hover:bg-gray-700 transition">
-                  <div class="flex items-center">
-                    <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                      <%= (user.name.present? ? user.name[0] : "?") %>
-                    </div>
-                    <div class="ml-3">
-                      <h3 class="text-white font-semibold"><%= user.name %></h3>
-                      <p class="text-gray-400 text-xs"><%= user.email %></p>
-                    </div>
-                  </div>
-                </div>
-              <% end %>
-            <% end %>
-          <% else %>
-            <div class="text-center text-gray-400 py-4">
-              Nenhum usuário encontrado
-            </div>
-          <% end %>
-        <% end %>
-        
-        <!-- Resultados da pesquisa -->
+        <!-- Resultados da pesquisa ou conversas existentes -->
         <% if params[:search].present? %>
           <div class="px-4 py-2 bg-gray-700 text-white text-sm">
             Resultados da busca:
@@ -89,15 +45,13 @@
               Nenhum resultado encontrado
             </div>
           <% end %>
-        <% end %>
-        
-        <!-- Contatos com conversas existentes (exibido apenas quando não está pesquisando ou em nova mensagem) -->
-        <% if !params[:search].present? && !params[:new_message].present? %>
-          <% if @recent_conversations&.any? %>
+        <% else %>
+          <!-- Lista de todas as conversas -->
+          <% if @all_conversations&.any? %>
             <div class="px-4 py-2 bg-gray-700 text-white text-sm">
-              Conversas recentes:
+              Conversas:
             </div>
-            <% @recent_conversations.each do |user| %>
+            <% @all_conversations.each do |user| %>
               <%= link_to mensagens_admin_pages_path(recipient_id: user.id) do %>
                 <div class="px-4 py-3 border-b border-gray-700 hover:bg-gray-700 transition <%= 'bg-gray-700' if @recipient&.id == user.id %>">
                   <div class="flex items-center">
@@ -105,8 +59,17 @@
                       <%= (user.name.present? ? user.name[0] : "?") %>
                     </div>
                     <div class="ml-3">
-                      <h3 class="text-white font-semibold"><%= user.name %></h3>
-                      <p class="text-gray-400 text-xs truncate max-w-[150px]"><%= user.last_message_with(current_user)&.content || "Sem mensagens" %></p>
+                      <div class="flex items-center justify-between">
+                        <h3 class="text-white font-semibold"><%= user.name %></h3>
+                        <% if user.unread_messages_count_for(current_user) > 0 %>
+                          <span class="bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                            <%= user.unread_messages_count_for(current_user) %>
+                          </span>
+                        <% end %>
+                      </div>
+                      <p class="text-gray-400 text-xs truncate max-w-[150px]">
+                        <%= user.last_message_with(current_user)&.content || "Sem mensagens" %>
+                      </p>
                     </div>
                   </div>
                 </div>
