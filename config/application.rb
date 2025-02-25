@@ -1,5 +1,5 @@
 require_relative "boot"
-require_relative '../app/middleware/memory_profiler_middleware'
+require_relative "../app/middleware/memory_profiler_middleware"
 
 require "rails/all"
 
@@ -18,7 +18,7 @@ module Genius360
     config.autoload_lib(ignore: %w[assets tasks])
 
     config.i18n.default_locale = :'pt-BR'
-    config.i18n.available_locales = [:'pt-BR', :en]
+    config.i18n.available_locales = [ :'pt-BR', :en ]
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -31,14 +31,22 @@ module Genius360
     # require 'memory_profiler_middleware' # Removed explicit require
 
     config.middleware.use MemoryProfilerMiddleware if Rails.env.development?
-    config.eager_load_paths << Rails.root.join('app/middleware')
-    config.autoload_paths << Rails.root.join('app/middleware')
-    config.autoload_paths += %W[#{config.root}/app/notifications]
+    config.eager_load_paths << Rails.root.join("app/middleware")
+    config.autoload_paths << Rails.root.join("app/middleware")
+    config.autoload_paths += %W[
+      #{config.root}/app/controllers
+      #{config.root}/app/notifications
+    ]
+
+    # Remover configuração duplicada de API
+    # config.autoload_paths += %W[
+    #   #{config.root}/app/controllers/api
+    # ]
 
     # Configurar MIME types para fontes
     config.middleware.insert_before 0, Rack::Sendfile
     config.middleware.use Rack::Static,
-      urls: ['/fonts'],
-      root: 'app/assets'
+      urls: [ "/fonts" ],
+      root: "app/assets"
   end
 end

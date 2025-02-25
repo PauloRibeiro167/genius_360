@@ -27,6 +27,9 @@ gem "cssbundling-rails"     # Empacota e processa CSS
 gem "tailwindcss-rails"     # Framework CSS
 gem "breadcrumbs_on_rails", "~> 4.1"  # Gerenciamento de breadcrumbs
 
+# Notificações
+gem "noticed", "~> 1.6"
+
 # API e JSON
 gem "jbuilder"              # Construa APIs JSON facilmente
 
@@ -36,7 +39,6 @@ gem "pundit"                # Autorização baseada em políticas
 gem "lockbox"               # Criptografia de dados
 gem "blind_index"           # Busca segura em dados criptografados
 gem "discard", "~> 1.2"     # Soft delete para modelos
-gem 'devise-i18n'
 
 # Cache e Performance
 gem "solid_cache"           # Cache baseado em banco de dados
@@ -74,13 +76,14 @@ gem "skylight"
 # Armazenamento de arquivos (exemplo com Amazon S3)
 gem "aws-sdk-s3", require: false
 
-gem "active_storage_validations"
-gem 'csv'
-gem 'noticed', '~> 1.6'
+gem "csv"
+
+gem "chartkick"
+gem "groupdate" # opcional, útil para agrupar dados por data
 
 group :development, :test do
   # Desenvolvimento e Testes
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "brakeman", require: false      # Análise de segurança
   gem "rubocop-rails-omakase", require: false  # Linting
   gem "shoulda-matchers", "~> 5.0"
@@ -99,14 +102,13 @@ group :development do
   gem "spring"
   gem "ruby-lsp", require: false
   gem "solargraph", require: false
-  gem 'memory_profiler'
-  gem 'get_process_mem'
-  gem 'benchmark-http'  # Adicione esta linha
+  gem "get_process_mem"
 end
 
 group :production do
   # Gems específicas para produção
   gem "rails_12factor"
+  gem "get_process_mem"
 end
 
 group :test do
@@ -120,5 +122,3 @@ group :test do
   gem "rubocop-rails", require: false
   gem "debase", "~> 0.2.4", require: false
 end
-
-gem "chartkick", "~> 5.1"

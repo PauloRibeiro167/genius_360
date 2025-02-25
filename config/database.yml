@@ -21,7 +21,26 @@ test:
   database: genius360_test
 
 production:
-  <<: *default
-  database: genius360_production
-  username: <%= ENV['GENIUS360_DATABASE_USERNAME'] %>
-  password: <%= ENV['GENIUS360_DATABASE_PASSWORD'] %>
+  primary: &primary
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    url: <%= ENV['DATABASE_URL'] %>
+    database: genius360_production
+    username: <%= ENV['GENIUS360_DATABASE_USERNAME'] %>
+    password: <%= ENV['GENIUS360_DATABASE_PASSWORD'] %>
+    
+  cable:
+    <<: *primary
+    url: <%= ENV.fetch('CABLE_DATABASE_URL') { ENV['DATABASE_URL'] } %>
+    database: <%= ENV.fetch('CABLE_DATABASE_NAME') { 'genius360_cable_production' } %>
+
+  queue:
+    <<: *primary
+    url: <%= ENV.fetch('QUEUE_DATABASE_URL') { ENV['DATABASE_URL'] } %>
+    database: <%= ENV.fetch('QUEUE_DATABASE_NAME') { 'genius360_queue_production' } %>
+
+  cache:
+    <<: *primary
+    url: <%= ENV.fetch('CACHE_DATABASE_URL') { ENV['DATABASE_URL'] } %>
+    database: <%= ENV.fetch('CACHE_DATABASE_NAME') { 'genius360_cache_production' } %>

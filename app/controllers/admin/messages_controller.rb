@@ -1,39 +1,45 @@
 class Admin::MessagesController < AdminController
+  def index
+    @messages = Message.all.order(created_at: :desc)
+  end
+
+  def show
+    @message = Message.find(params[:id])
+  end
+
+  def new
+    @message = Message.new
+  end
+
   def create
-    @message = current_user.messages.build(message_params)
-    
+    @message = Message.new(message_params)
+
     if @message.save
-      MessageNotification.with(message: @message).deliver_later(@message.recipient)
-      respond_to do |format|
-        format.html { redirect_to mensagens_admin_pages_path(recipient_id: @message.recipient_id) }
-        format.json { render json: @message, status: :created }
-      end
+      flash[:notice] = "Mensagem criada com sucesso!"
+      redirect_to admin_messages_path
     else
-      respond_to do |format|
-        format.html { redirect_to mensagens_admin_pages_path(recipient_id: @message.recipient_id), alert: 'Erro ao enviar mensagem.' }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
-      end
+      render :new, status: :unprocessable_entity
     end
   end
 
   private
 
   def message_params
-    params.require(:message).permit(:content, :recipient_id)
+    params.require(:message).permit(:title, :content, :status)
   end
 end
 
 class Message < ApplicationRecord
   include Discard::Model
-  
+
   belongs_to :user
-  belongs_to :recipient, class_name: 'User'
-  
+  belongs_to :recipient, class_name: "User"
+
   validates :content, presence: true
-  
+
   scope :unread, -> { where(read: false) }
-  scope :between_users, ->(user_id, recipient_id) { 
-    where("(user_id = ? AND recipient_id = ?) OR (user_id = ? AND recipient_id = ?)", 
+  scope :between_users, ->(user_id, recipient_id) {
+    where("(user_id = ? AND recipient_id = ?) OR (user_id = ? AND recipient_id = ?)",
           user_id, recipient_id, recipient_id, user_id)
   }
 end

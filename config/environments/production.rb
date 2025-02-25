@@ -87,4 +87,12 @@ Rails.application.configure do
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # Configura o middleware de memória apenas se a gem estiver disponível
+  begin
+    require "get_process_mem"
+    config.middleware.use MemoryProfilerMiddleware
+  rescue LoadError
+    Rails.logger.warn "MemoryProfilerMiddleware não foi carregado - gem get_process_mem não está disponível"
+  end
 end

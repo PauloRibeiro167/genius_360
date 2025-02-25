@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { sessions: 'users/sessions' }
+  devise_for :users, controllers: { sessions: "users/sessions" }
   resources :perfil_users
   namespace :concerns do
     get "authorization/check_permissions"
@@ -40,7 +40,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :contact_messages, only: [:create]
+  resources :contact_messages, only: [ :create ]
 
   # PWA routes
   get "pwa/manifest", to: "pwa#manifest", format: "json", as: "pwa_manifest"
@@ -61,8 +61,8 @@ Rails.application.routes.draw do
   # Admin routes
   namespace :admin do
     root to: "dashboard#index"
-    
-    resources :dashboard, only: [:index]
+
+    resources :dashboard, only: [ :index ]
     resources :pages do
       collection do
         get :index
@@ -76,8 +76,8 @@ Rails.application.routes.draw do
         patch :update_profile
       end
     end
-    
-    resource :profile, only: [], controller: 'profile' do
+
+    resource :profile, only: [], controller: "profile" do
       collection do
         post :update
         post :update_contacts
@@ -85,7 +85,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :notifications, only: [:index] do
+    resources :notifications, only: [ :index ] do
       collection do
         post :mark_all_as_read
       end
@@ -94,16 +94,16 @@ Rails.application.routes.draw do
       end
     end
 
-    get 'notificacoes', to: 'pages#notificacoes'
-    resources :messages, only: [:create, :index]
-    get 'comunicados', to: 'pages#comunicados'
-    resources :avisos, only: [:create, :destroy]
-    resources :reunioes, only: [:create, :destroy, :index]
-    resources :reunioes, only: [:index]
-    get 'users/search', to: 'users#search', as: :search_users
+    get "notificacoes", to: "pages#notificacoes"
+    resources :messages, only: [ :create, :index ]
+    get "comunicados", to: "pages#comunicados"
+    resources :avisos, only: [ :create, :destroy ]
+    resources :reunioes, only: [ :create, :destroy, :index ]
+    resources :reunioes, only: [ :index ]
+    get "users/search", to: "users#search", as: :search_users
 
-    post 'profile/update', to: 'profile#update'
-    post 'profile/update_password', to: 'profile#update_password', as: :profile_update_password
+    post "profile/update", to: "profile#update"
+    post "profile/update_password", to: "profile#update_password", as: :profile_update_password
 
     # API Manager routes
     resources :api_manager, only: [] do
@@ -112,7 +112,7 @@ Rails.application.routes.draw do
         get :status
       end
     end
-    get '/admin/api_manager/start'
+    get "/admin/api_manager/start"
 
     resources :propostas do
       collection do
@@ -128,6 +128,15 @@ Rails.application.routes.draw do
         post :buscar_servidores_pi
         post :buscar_servidores_ce
         post :buscar_beneficios
+      end
+    end
+  end
+
+  namespace :api do
+    resources :pbc, only: [ :index, :show ]
+    resources :serv_ce do
+      collection do
+        get :search
       end
     end
   end

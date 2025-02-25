@@ -1,5 +1,6 @@
 class MessageNotification < Noticed::Base
   deliver_by :database
+  deliver_by :email, mailer: "NotificationsMailer"
 
   param :message
 
@@ -8,6 +9,6 @@ class MessageNotification < Noticed::Base
   end
 
   def url
-    mensagens_admin_pages_path(recipient_id: params[:message].user_id)
+    message_path(params[:message])
   end
 end

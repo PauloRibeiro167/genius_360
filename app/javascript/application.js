@@ -2,4 +2,6 @@
 import "@hotwired/turbo-rails"
 import "./controllers"
 import "flowbite/dist/flowbite.turbo.js";
+import "chart.js"
+import "chartkick"
 import "./channels"
