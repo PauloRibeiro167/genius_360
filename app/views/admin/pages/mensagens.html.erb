@@ -4,7 +4,7 @@
     <div class="w-1/4 bg-gray-800 rounded-l-lg shadow-lg overflow-hidden flex flex-col">
       <!-- Área de pesquisa -->
       <div class="p-4 border-b border-gray-700">
-        <h2 class="text-lg font-semibold text-white mb-3">Mensagens</h2>
+        <h2 class="text-lg text-center font-semibold text-white mb-3">Mensagens</h2>
         <div class="relative">
           <%= form_with url: mensagens_admin_pages_path, method: :get, class: "mb-2", html: {onsubmit: "return true;"} do |f| %>
             <%= f.text_field :search, 
@@ -19,18 +19,42 @@
       
       <!-- Lista de conversas -->
       <div class="flex-1 overflow-y-auto">
-        <!-- Resultados da pesquisa ou conversas existentes -->
-        <% if params[:search].present? %>
+        <% if @all_conversations.any? %>
           <div class="px-4 py-2 bg-gray-700 text-white text-sm">
-            Resultados da busca:
+            <%= params[:search].present? ? "Resultados e Conversas:" : "Suas Conversas:" %>
           </div>
-          <% if @users&.any? %>
-            <% @users.each do |user| %>
+          
+          <% @all_conversations.each do |user| %>
+            <%= link_to mensagens_admin_pages_path(recipient_id: user.id) do %>
+              <div class="px-4 py-3 border-b border-gray-700 hover:bg-gray-700 transition <%= 'bg-gray-700' if @recipient&.id == user.id %>">
+                <div class="flex items-center">
+                  <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                    <%= user.name.first rescue "?" %>
+                  </div>
+                  <div class="ml-3 flex-grow">
+                    <div class="flex items-center justify-between">
+                      <h3 class="text-white font-semibold"><%= user.name %></h3>
+                      <% if user.unread_messages_count_for(current_user) > 0 %>
+                        <span class="bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                          <%= user.unread_messages_count_for(current_user) %>
+                        </span>
+                      <% end %>
+                    </div>
+                    <p class="text-gray-400 text-xs"><%= user.email %></p>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        
+          <!-- Mostrar resultados da busca separadamente se houver -->
+          <% if params[:search].present? && @users&.any? %>
+            <% @users.reject { |u| @all_conversations.include?(u) }.each do |user| %>
               <%= link_to mensagens_admin_pages_path(recipient_id: user.id) do %>
                 <div class="px-4 py-3 border-b border-gray-700 hover:bg-gray-700 transition">
                   <div class="flex items-center">
-                    <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                      <%= (user.name.present? ? user.name[0] : "?") %>
+                    <div class="h-10 w-10 rounded-full bg-gray-500 flex items-center justify-center text-white font-bold">
+                      <%= user.name.first rescue "?" %>
                     </div>
                     <div class="ml-3">
                       <h3 class="text-white font-semibold"><%= user.name %></h3>
@@ -40,46 +64,11 @@
                 </div>
               <% end %>
             <% end %>
-          <% else %>
-            <div class="text-center text-gray-400 py-4">
-              Nenhum resultado encontrado
-            </div>
           <% end %>
         <% else %>
-          <!-- Lista de todas as conversas -->
-          <% if @all_conversations&.any? %>
-            <div class="px-4 py-2 bg-gray-700 text-white text-sm">
-              Conversas:
-            </div>
-            <% @all_conversations.each do |user| %>
-              <%= link_to mensagens_admin_pages_path(recipient_id: user.id) do %>
-                <div class="px-4 py-3 border-b border-gray-700 hover:bg-gray-700 transition <%= 'bg-gray-700' if @recipient&.id == user.id %>">
-                  <div class="flex items-center">
-                    <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                      <%= (user.name.present? ? user.name[0] : "?") %>
-                    </div>
-                    <div class="ml-3">
-                      <div class="flex items-center justify-between">
-                        <h3 class="text-white font-semibold"><%= user.name %></h3>
-                        <% if user.unread_messages_count_for(current_user) > 0 %>
-                          <span class="bg-red-500 text-white text-xs rounded-full px-2 py-1">
-                            <%= user.unread_messages_count_for(current_user) %>
-                          </span>
-                        <% end %>
-                      </div>
-                      <p class="text-gray-400 text-xs truncate max-w-[150px]">
-                        <%= user.last_message_with(current_user)&.content || "Sem mensagens" %>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              <% end %>
-            <% end %>
-          <% else %>
-            <div class="text-center text-gray-400 py-4">
-              Nenhuma conversa encontrada
-            </div>
-          <% end %>
+          <div class="text-center text-gray-400 py-4">
+            Nenhuma conversa encontrada
+          </div>
         <% end %>
       </div>
     </div>
@@ -113,10 +102,10 @@
           </div>
         <% elsif @messages.present? %>
           <% @messages.each do |message| %>
-            <div class="flex <%= message.user_id == current_user.id ? 'justify-end' : 'justify-start' %>">
-              <div class="<%= message.user_id == current_user.id ? 'bg-blue-600' : 'bg-gray-700' %> rounded-lg px-4 py-2 max-w-[70%]">
+            <div class="flex <%= message.sender_id == current_user.id ? 'justify-end' : 'justify-start' %>">
+              <div class="<%= message.sender_id == current_user.id ? 'bg-blue-600' : 'bg-gray-700' %> rounded-lg px-4 py-2 max-w-[70%]">
                 <div class="text-xs text-gray-300 mb-1">
-                  <%= message.user.name %> • <%= message.created_at.strftime("%H:%M") %>
+                  <%= message.sender.name %> • <%= message.created_at.strftime("%H:%M") %>
                 </div>
                 <p class="text-sm text-gray-200"><%= message.content %></p>
               </div>

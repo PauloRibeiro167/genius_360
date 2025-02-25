@@ -1,0 +1,20 @@
+                                           Table "public.messages"
+    Column    |              Type              | Collation | Nullable |               Default                
+--------------+--------------------------------+-----------+----------+--------------------------------------
+ id           | bigint                         |           | not null | nextval('messages_id_seq'::regclass)
+ content      | text                           |           | not null | 
+ user_id      | bigint                         |           | not null | 
+ recipient_id | bigint                         |           | not null | 
+ read         | boolean                        |           |          | false
+ created_at   | timestamp(6) without time zone |           | not null | 
+ updated_at   | timestamp(6) without time zone |           | not null | 
+ discarded_at | timestamp(6) without time zone |           |          | 
+Indexes:
+    "messages_pkey" PRIMARY KEY, btree (id)
+    "index_messages_on_discarded_at" btree (discarded_at)
+    "index_messages_on_recipient_id" btree (recipient_id)
+    "index_messages_on_user_id" btree (user_id)
+Foreign-key constraints:
+    "fk_rails_12e9de2e48" FOREIGN KEY (recipient_id) REFERENCES users(id)
+    "fk_rails_273a25a7a6" FOREIGN KEY (user_id) REFERENCES users(id)
+

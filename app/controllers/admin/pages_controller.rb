@@ -24,26 +24,27 @@ class Admin::PagesController < ApplicationController
   end
 
   def mensagens
-    @users = if params[:search].present?
-      User.where("name ILIKE ? OR email ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
-          .where.not(id: current_user.id)
+    @recipient = User.find(params[:recipient_id]) if params[:recipient_id]
+    
+    if params[:search].present?
+      @users = User.where("name ILIKE ? OR email ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
+                  .where.not(id: current_user.id)
     end
 
-    @all_conversations = Message.select('DISTINCT ON (LEAST(user_id, recipient_id), GREATEST(user_id, recipient_id)) *')
-                              .where('user_id = ? OR recipient_id = ?', current_user.id, current_user.id)
-                              .order('LEAST(user_id, recipient_id), GREATEST(user_id, recipient_id), created_at DESC')
-                              .map { |m| m.user_id == current_user.id ? m.recipient : m.user }
-                              .uniq
+    # Busca todas as conversas do usuário
+    @all_conversations = User.joins(
+      "INNER JOIN messages ON messages.sender_id = users.id OR messages.recipient_id = users.id"
+    ).where(
+      "messages.sender_id = :user_id OR messages.recipient_id = :user_id", 
+      user_id: current_user.id
+    ).where.not(
+      id: current_user.id
+    ).distinct
 
-    if params[:recipient_id].present?
-      @recipient = User.find(params[:recipient_id])
-      @messages = Message.conversation_between(current_user, @recipient)
-                        .order(created_at: :asc)
-      
-      # Marcar mensagens como lidas
-      Message.where(user_id: @recipient.id, recipient_id: current_user.id, read_at: nil)
-            .update_all(read_at: Time.current)
-    end
+    # Se há um destinatário selecionado, busca as mensagens da conversa
+    @messages = Message.conversation_between(current_user.id, @recipient.id)
+                      .includes(:sender, :recipient)
+                      .order(created_at: :asc) if @recipient
   end
 
   def notificacoes

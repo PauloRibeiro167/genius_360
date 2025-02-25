@@ -11,7 +11,9 @@ class User < ApplicationRecord
   has_many :permissions, through: :perfil_permissions
   has_one_attached :avatar
 
-  has_many :sent_messages, class_name: 'Message', foreign_key: 'user_id'
+  # Mensagens enviadas
+  has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id'
+  # Mensagens recebidas
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id'
   has_many :notifications, dependent: :destroy
 
@@ -82,11 +84,23 @@ class User < ApplicationRecord
     received_messages.unread.count
   end
 
-  def last_message_with(user)
-    Message.kept
-          .between_users(self.id, user.id)
-          .order(created_at: :desc)
-          .first
+  def unread_messages_count_for(current_user)
+    received_messages.where(sender_id: current_user.id, read: false).count
+  end
+
+  def last_message_with(other_user)
+    Message.where("(sender_id = ? AND recipient_id = ?) OR (sender_id = ? AND recipient_id = ?)", 
+                  id, other_user.id, other_user.id, id)
+           .order(created_at: :desc)
+           .first
+  end
+
+  def conversations
+    Message.select("DISTINCT CASE 
+                    WHEN sender_id = #{id} THEN recipient_id 
+                    WHEN recipient_id = #{id} THEN sender_id 
+                   END as user_id")
+          .where("sender_id = ? OR recipient_id = ?", id, id)
   end
 
   private

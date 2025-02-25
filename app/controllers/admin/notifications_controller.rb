@@ -24,7 +24,7 @@ class Admin::NotificationsController < ApplicationController
 
   def check
     unread_notifications = current_user.notifications.unread.count
-    unread_messages = Message.where(recipient_id: current_user.id, read_at: nil).count
+    unread_messages = Message.where(recipient_id: current_user.id, read: false).count
 
     render json: {
       unread_count: unread_notifications,
