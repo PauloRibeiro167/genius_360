@@ -8,9 +8,9 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV["DATABASE_USERNAME"] %>
-  password: <%= ENV["DATABASE_PASSWORD"] %>
-  host: <%= ENV["DATABASE_HOST"] %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
+  username: <%= ENV.fetch("POSTGRES_USER", "postgres") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "postgres") %>
 
 development:
   <<: *default
@@ -23,5 +23,5 @@ test:
 production:
   <<: *default
   database: genius360_production
-  username: genius360
-  password: <%= ENV["GENIUS360_DATABASE_PASSWORD"] %>
+  username: <%= ENV['GENIUS360_DATABASE_USERNAME'] %>
+  password: <%= ENV['GENIUS360_DATABASE_PASSWORD'] %>
