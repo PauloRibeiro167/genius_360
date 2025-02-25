@@ -10,6 +10,9 @@ application.register("alert", AlertController)
 import ChartController from "./chart_controller"
 application.register("chart", ChartController)
 
+import ChatController from "./chat_controller"
+application.register("chat", ChatController)
+
 import DashboardController from "./dashboard_controller"
 application.register("dashboard", DashboardController)
 

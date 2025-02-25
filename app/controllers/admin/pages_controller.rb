@@ -23,6 +23,28 @@ class Admin::PagesController < ApplicationController
   def proposta
   end
 
+  def mensagens
+    # Carregar todos os usuários, exceto o usuário atual, para o seletor
+    @users = User.kept.where.not(id: current_user.id).order(:name)
+    
+    # Verificar se um destinatário foi selecionado
+    if params[:recipient_id].present?
+      @recipient = User.find(params[:recipient_id])
+      
+      # Obter mensagens entre o usuário atual e o destinatário
+      @messages = Message.kept
+                        .between_users(current_user.id, @recipient.id)
+                        .order(created_at: :asc)
+    else
+      # Nenhum destinatário selecionado ainda
+      @messages = Message.none
+    end
+  end
+
+  def notificacoes
+    @messages = Message.includes(:user).order(created_at: :asc)
+  end
+
   def results
     @filters = params[:filters] || {}
     @results = Lead.where(@filters)

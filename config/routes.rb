@@ -71,6 +71,8 @@ Rails.application.routes.draw do
         get :results
         get :settings
         get :proposta
+        get :mensagens
+        get :notificacoes
       end
     end
     
@@ -81,6 +83,18 @@ Rails.application.routes.draw do
         post :update_password
       end
     end
+
+    resources :notifications, only: [:index] do
+      collection do
+        post :mark_all_as_read
+      end
+      member do
+        post :mark_as_read
+      end
+    end
+
+    get 'notificacoes', to: 'pages#notificacoes'
+    resources :messages, only: [:create, :index]
   end
 
   # Test resources

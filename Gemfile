@@ -36,6 +36,7 @@ gem "pundit"                # Autorização baseada em políticas
 gem "lockbox"               # Criptografia de dados
 gem "blind_index"           # Busca segura em dados criptografados
 gem "discard", "~> 1.2"     # Soft delete para modelos
+gem 'devise-i18n'
 
 # Cache e Performance
 gem "solid_cache"           # Cache baseado em banco de dados
@@ -75,7 +76,7 @@ gem "aws-sdk-s3", require: false
 
 gem "active_storage_validations"
 gem 'csv'
-
+gem 'noticed'
 
 group :development, :test do
   # Desenvolvimento e Testes

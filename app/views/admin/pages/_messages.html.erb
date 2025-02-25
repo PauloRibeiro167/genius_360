@@ -1,0 +1,9 @@
+<!-- filepath: app/views/admin/messages/_message.html.erb -->
+<div class="flex <%= message.user_id == current_user.id ? 'justify-end' : 'justify-start' %>">
+  <div class="<%= message.user_id == current_user.id ? 'bg-blue-600' : 'bg-gray-700' %> rounded-lg px-4 py-2 max-w-[70%]">
+    <div class="text-xs text-gray-300 mb-1">
+      <%= message.user.name %> • <%= message.created_at.strftime("%H:%M") %>
+    </div>
+    <p class="text-sm text-gray-200"><%= message.content %></p>
+  </div>
+</div>

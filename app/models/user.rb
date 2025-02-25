@@ -11,6 +11,10 @@ class User < ApplicationRecord
   has_many :permissions, through: :perfil_permissions
   has_one_attached :avatar
 
+  has_many :sent_messages, class_name: 'Message', foreign_key: 'user_id'
+  has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id'
+  has_many :notifications, dependent: :destroy
+
   # Escopo padrão para mostrar apenas registros ativos
   default_scope -> { kept }
 
@@ -72,6 +76,17 @@ class User < ApplicationRecord
 
   def full_name
     [first_name, last_name].compact.join(' ')
+  end
+
+  def unread_messages_count
+    received_messages.unread.count
+  end
+
+  def last_message_with(user)
+    Message.kept
+          .between_users(self.id, user.id)
+          .order(created_at: :desc)
+          .first
   end
 
   private

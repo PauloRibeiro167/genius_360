@@ -33,5 +33,6 @@ module Genius360
     config.middleware.use MemoryProfilerMiddleware if Rails.env.development?
     config.eager_load_paths << Rails.root.join('app/middleware')
     config.autoload_paths << Rails.root.join('app/middleware')
+    config.autoload_paths += %W[#{config.root}/app/notifications]
   end
 end
