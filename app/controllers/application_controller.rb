@@ -4,7 +4,8 @@ class ApplicationController < ActionController::Base
   # include AuthorizationConcern  
   
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+  allow_browser versions: :modern, 
+                if: -> { browser.modern_browser?(browser) || browser.mobile? || Rails.env.development? }
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :log_authentication_status
@@ -52,6 +53,14 @@ class ApplicationController < ActionController::Base
   end
 
   def set_content_security_policy
-    response.headers['Content-Security-Policy'] = "default-src 'self'; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:;"
+    response.headers['Content-Security-Policy'] = [
+      "default-src 'self'",
+      "style-src 'self' 'unsafe-inline' https:",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:",
+      "img-src 'self' data: https:",
+      "font-src 'self' https:",
+      "connect-src 'self' https:",
+      "frame-src 'self'"
+    ].join('; ')
   end
 end

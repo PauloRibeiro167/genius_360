@@ -19,6 +19,9 @@ application.register("chat", ChatController)
 import DashboardController from "./dashboard_controller"
 application.register("dashboard", DashboardController)
 
+import DesktopNavController from "./desktop_nav_controller"
+application.register("desktop-nav", DesktopNavController)
+
 import FormController from "./form_controller"
 application.register("form", FormController)
 
@@ -33,6 +36,9 @@ application.register("login-message-time", LoginMessageTimeController)
 
 import MessageLoginController from "./message_login_controller"
 application.register("message-login", MessageLoginController)
+
+import MobileNavController from "./mobile_nav_controller"
+application.register("mobile-nav", MobileNavController)
 
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
@@ -49,6 +55,9 @@ application.register("notifications", NotificationsController)
 import ProfileFormController from "./profile_form_controller"
 application.register("profile-form", ProfileFormController)
 
+import Select2UsersController from "./select2_users_controller"
+application.register("select2-users", Select2UsersController)
+
 import ServiceAlertController from "./service_alert_controller"
 application.register("service-alert", ServiceAlertController)
 
@@ -57,3 +66,6 @@ application.register("sidebar", SidebarController)
 
 import SweetAlertController from "./sweet_alert_controller"
 application.register("sweet-alert", SweetAlertController)
+
+import ViewModeController from "./view_mode_controller"
+application.register("view-mode", ViewModeController)

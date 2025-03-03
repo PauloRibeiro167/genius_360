@@ -81,6 +81,8 @@ gem "csv"
 gem "chartkick"
 gem "groupdate" # opcional, útil para agrupar dados por data
 
+gem 'browser'
+
 group :development, :test do
   # Desenvolvimento e Testes
   gem "debug", platforms: %i[ mri mingw x64_mingw ]

@@ -92,57 +92,7 @@
           </article>
 
           <%# Card do gráfico %>
-          <article class="bg-purple-900 p-8 rounded-3xl shadow-2xl hover:shadow-purple-500 transition-all duration-500 transform hover:scale-[1.02]">
-            <header class="mb-4">
-              <h3 class="text-white text-xl font-semibold text-center">Desempenho Mensal</h3>
-            </header>
-            
-            <%= line_chart [
-              {
-                name: "Vendas (R$ mil)",
-                data: {
-                  "Jan" => 45, "Fev" => 59, "Mar" => 65, "Abr" => 72,
-                  "Mai" => 78, "Jun" => 85, "Jul" => 89, "Ago" => 95,
-                  "Set" => 98, "Out" => 102, "Nov" => 108, "Dez" => 115
-                }
-              },
-              {
-                name: "Leads Qualificados",
-                data: {
-                  "Jan" => 120, "Fev" => 145, "Mar" => 160, "Abr" => 175,
-                  "Mai" => 190, "Jun" => 210, "Jul" => 230, "Ago" => 245,
-                  "Set" => 260, "Out" => 280, "Nov" => 295, "Dez" => 310
-                }
-              }
-            ],
-            colors: ["#ec4899", "#9333ea"],
-            legend: true,
-            height: "250px",
-            points: false,
-            curve: true,
-            library: {
-              plugins: {
-                legend: {
-                  labels: { 
-                    color: '#ffffff',
-                    font: {
-                      size: 14
-                    }
-                  }
-                }
-              },
-              scales: {
-                y: {
-                  grid: { color: 'rgba(255,255,255,0.1)' },
-                  ticks: { color: '#ffffff' }
-                },
-                x: {
-                  grid: { color: 'rgba(255,255,255,0.1)' },
-                  ticks: { color: '#ffffff' }
-                }
-              }
-            } %>
-          </article>
+          <%= render 'performance_chart' %>
         </section>
       </div>
     </div>

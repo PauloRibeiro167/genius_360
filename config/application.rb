@@ -48,5 +48,10 @@ module Genius360
     config.middleware.use Rack::Static,
       urls: [ "/fonts" ],
       root: "app/assets"
+
+    # Desativar verificação de navegador no ambiente de desenvolvimento
+    if Rails.env.development?
+      config.middleware.delete Browser::Middleware
+    end
   end
 end

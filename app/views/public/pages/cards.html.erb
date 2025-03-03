@@ -6,7 +6,11 @@
         <p class="text-gray-200 mb-6">
           Descrição do card <%= i + 1 %>. Este é um exemplo de card com uma breve descrição.
         </p>
-        <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300" onclick="showAlert()">
+        <button 
+          data-controller="alert"
+          data-alert-title="Em breve"
+          data-alert-text="Esta funcionalidade estará disponível em breve."
+          class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300">
           Ver mais
         </button>
       </div>
@@ -14,14 +18,3 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-  function showAlert() {
-    Swal.fire({
-      title: 'Em breve',
-      text: 'Esta funcionalidade estará disponível em breve.',
-      icon: 'info',
-      confirmButtonText: 'OK'
-    });
-  }
-</script>

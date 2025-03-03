@@ -1,0 +1,48 @@
+<% 
+  mobile ||= false
+  flowbite_style ||= false
+  
+  # Configuração centralizada para ambos os estilos
+  menu_items = {
+    standard: [
+      { path: root_path, title: 'Início', icon: 'M3 12l2-2m0 0l7-7 7 7m-14 0l2 2m0 0l7 7 7-7m-14 0l2-2' },
+      { path: public_sobre_path, title: 'Sobre', icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+      { path: public_servico_path, title: 'Serviços', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+      { path: public_contato_path, title: 'Contato', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' }
+    ],
+    flowbite: [
+      { title: 'Home', path: root_path },
+      { title: 'Serviços', path: public_servico_path },
+      { title: 'Sobre', path: public_sobre_path },
+      { title: 'Preços', path: public_precos_path },
+      { title: 'Contato', path: public_contato_path }
+    ]
+  }
+%>
+
+<% if flowbite_style %>
+  <% if mobile %>
+    <% menu_items[:flowbite].each_with_index do |item, i| %>
+      <li><%= link_to item[:title], item[:path], class: "block py-2 px-3 text-white text-center font-medium text-lg #{i == 0 ? 'bg-purple-700' : ''} rounded-md hover:bg-purple-800" %></li>
+    <% end %>
+  <% else %>
+    <div class="flex justify-center items-center space-x-6 mx-auto">
+      <% menu_items[:flowbite].each do |item| %>
+        <a href="<%= item[:path] %>" class="block py-2 px-3 text-white hover:bg-purple-700/20 rounded-md text-center font-medium text-lg"><%= item[:title] %></a>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <ul class="<%= mobile ? 'space-y-2 py-2' : 'flex justify-center space-x-6 mx-auto' %> font-medium">
+    <% menu_items[:standard].each do |link| %>
+      <li class="<%= mobile ? 'block' : 'inline-block text-center' %>">
+        <%= link_to link[:path], class: "#{mobile ? 'block' : 'inline-flex'} py-2 px-3 text-white hover:bg-#{mobile ? 'purple-700/50' : 'white/10'} rounded-lg transition-colors duration-200 font-medium text-lg" do %>
+          <svg class="h-<%= mobile ? 5 : 5 %> w-<%= mobile ? 5 : 5 %> <%= mobile ? '' : 'mr-2' %>" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= link[:icon] %>" />
+          </svg>
+          <span><%= link[:title] %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

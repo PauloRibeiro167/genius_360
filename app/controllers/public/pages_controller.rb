@@ -1,4 +1,6 @@
 class Public::PagesController < ApplicationController
+  # Removido os skip_before_action que causavam erro
+  
   def index
   end
 

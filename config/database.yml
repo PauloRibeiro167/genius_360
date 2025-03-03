@@ -13,8 +13,13 @@ default: &default
   password: <%= ENV.fetch("POSTGRES_PASSWORD", "postgres") %>
 
 development:
-  <<: *default
+  adapter: postgresql
+  encoding: unicode
   database: genius360_development
+  pool: 5
+  username: Paulo
+  password: Paulo1lotusred
+  host: localhost
 
 test:
   <<: *default

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self' data: fonts.gstatic.com;">
     <title><%= content_for(:title) || "Genius360" %></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -20,11 +19,10 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", nonce: true %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", nonce: request.content_security_policy_nonce %>
   </head>
   <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
     <% if user_signed_in? %>

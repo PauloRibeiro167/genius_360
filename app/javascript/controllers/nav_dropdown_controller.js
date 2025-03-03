@@ -1,61 +1,50 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["menu", "userDropdown"]
-
-  initialize() {
-    this.boundClickHandler = this.handleClickOutside.bind(this)
-  }
+  static targets = ["mobileMenu", "userDropdown"]
 
   connect() {
-    console.log("Nav dropdown controller connected")
-    console.log("Dropdown element:", this.userDropdownTarget)
-    document.addEventListener('click', this.boundClickHandler)
+    // Fechar os dropdowns quando clicar fora deles
+    document.addEventListener('click', this.closeDropdownsOnClickOutside.bind(this))
   }
 
   disconnect() {
-    console.log("Nav dropdown controller disconnected")
-    document.removeEventListener('click', this.boundClickHandler)
+    document.removeEventListener('click', this.closeDropdownsOnClickOutside.bind(this))
   }
 
-  handleClickOutside(event) {
-    console.log("Close dropdown called")
-    console.log("Click target:", event.target)
-    console.log("Is click inside dropdown:", this.element.contains(event.target))
-    
-    const isDropdownButton = event.target.closest('[data-dropdown-toggle]')
-    if (!isDropdownButton && !this.element.contains(event.target)) {
-      this.closeAll()
-      console.log("Dropdown closed")
-    }
-  }
-
-  toggleMobileMenu() {
-    if (this.hasMenuTarget) {
-      this.menuTarget.classList.toggle('hidden')
+  toggleMobileMenu(event) {
+    event.stopPropagation()
+    if (this.hasMobileMenuTarget) {
+      this.mobileMenuTarget.classList.toggle('hidden')
     }
   }
 
   toggleUserDropdown(event) {
-    console.log("Toggle dropdown called")
-    console.log("Current dropdown state:", this.userDropdownTarget.classList.contains('hidden'))
-    event.preventDefault()
+    event.stopPropagation()
     if (this.hasUserDropdownTarget) {
       this.userDropdownTarget.classList.toggle('hidden')
-      console.log("New dropdown state:", this.userDropdownTarget.classList.contains('hidden'))
-      // Fecha o menu mobile se estiver aberto
-      if (this.hasMenuTarget && !this.menuTarget.classList.contains('hidden')) {
-        this.menuTarget.classList.add('hidden')
-      }
     }
   }
 
-  closeAll() {
-    if (this.hasMenuTarget) {
-      this.menuTarget.classList.add('hidden')
-    }
-    if (this.hasUserDropdownTarget) {
-      this.userDropdownTarget.classList.add('hidden')
+  closeDropdownsOnClickOutside(event) {
+    // Não fechar se o clique foi dentro de elementos do controlador
+    if (this.element.contains(event.target)) {
+      const isToggleButton = 
+        event.target.hasAttribute('data-action') && 
+        (event.target.getAttribute('data-action').includes('toggleMobileMenu') || 
+         event.target.getAttribute('data-action').includes('toggleUserDropdown'))
+      
+      // Se clicou em um botão de toggle, não fazemos nada
+      if (isToggleButton) return
+    } else {
+      // Fechar os dropdowns se o clique foi fora
+      if (this.hasUserDropdownTarget) {
+        this.userDropdownTarget.classList.add('hidden')
+      }
+      
+      if (this.hasMobileMenuTarget) {
+        this.mobileMenuTarget.classList.add('hidden')
+      }
     }
   }
 }
