@@ -1,54 +1,42 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["menu"]
-  
+  static targets = ["mobileMenu", "desktopMenu"]
+
   connect() {
-    console.log("MobileNavController conectado")
-    this.applyResponsiveLayout()
-    window.addEventListener("resize", this.applyResponsiveLayout.bind(this))
+    // Configuração inicial baseada no tamanho da tela
+    this.checkScreenSize()
+    // Adicionar listener com debounce para resize
+    this.resizeTimer = null
+    window.addEventListener('resize', () => {
+      clearTimeout(this.resizeTimer)
+      this.resizeTimer = setTimeout(() => this.checkScreenSize(), 250)
+    })
   }
-  
+
   disconnect() {
-    console.log("MobileNavController desconectado")
-    window.removeEventListener("resize", this.applyResponsiveLayout.bind(this))
+    window.removeEventListener('resize', this.checkScreenSize.bind(this))
+    clearTimeout(this.resizeTimer)
   }
-  
+
   toggleMenu(event) {
-    console.log("Botão de menu mobile clicado")
     event.preventDefault()
-    event.stopPropagation()
-    this.menuTarget.classList.toggle("hidden")
-    const expanded = this.menuTarget.classList.contains("hidden") ? "false" : "true"
-    this.element.querySelector("[aria-expanded]").setAttribute("aria-expanded", expanded)
-    console.log(`Menu mobile ${expanded === "true" ? "aberto" : "fechado"}`)
+    const mobileMenu = this.mobileMenuTarget
+    mobileMenu.classList.toggle('hidden')
   }
-  
-  applyResponsiveLayout() {
+
+  checkScreenSize() {
     const isMobile = window.innerWidth < 768 // breakpoint md do Tailwind
-    console.log(`Verificando tamanho da tela: ${window.innerWidth}px, isMobile: ${isMobile}`)
     
-    const mobileButton = document.getElementById('mobile-menu-button')
-    const desktopMenu = document.getElementById('desktop-menu')
-    
-    if (mobileButton && desktopMenu) {
-      if (isMobile) {
-        console.log("Aplicando layout mobile")
-        mobileButton.style.display = "inline-flex"
-        desktopMenu.style.display = "none"
-      } else {
-        console.log("Aplicando layout desktop")
-        mobileButton.style.display = "none"
-        desktopMenu.style.display = "flex"
-        
-        // Se estiver em desktop, garantir que o menu mobile esteja fechado
-        if (this.hasMenuTarget && !this.menuTarget.classList.contains("hidden")) {
-          console.log("Fechando menu mobile ao redimensionar para desktop")
-          this.menuTarget.classList.add("hidden")
-        }
-      }
+    // Menu Desktop
+    if (isMobile) {
+      this.desktopMenuTarget.classList.add('hidden')
+      this.desktopMenuTarget.classList.remove('md:flex')
     } else {
-      console.error("Elementos necessários não encontrados")
+      this.desktopMenuTarget.classList.remove('hidden')
+      this.desktopMenuTarget.classList.add('md:flex')
+      // Sempre esconde o menu mobile em desktop
+      this.mobileMenuTarget.classList.add('hidden')
     }
   }
 }

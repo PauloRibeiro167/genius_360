@@ -23,24 +23,35 @@
 <% if flowbite_style %>
   <% if mobile %>
     <% menu_items[:flowbite].each_with_index do |item, i| %>
-      <li><%= link_to item[:title], item[:path], class: "block py-2 px-3 text-white text-center font-medium text-lg #{i == 0 ? 'bg-purple-700' : ''} rounded-md hover:bg-purple-800" %></li>
+      <li class="p-2">
+        <%= link_to item[:title], 
+            item[:path], 
+            class: "block py-2.5 px-4 text-white text-center font-medium text-lg
+                   #{i == 0 ? 'bg-purple-700' : ''}
+                   rounded-lg transition-all duration-200 ease-in-out
+                   hover:bg-purple-600 hover:scale-105 hover:shadow-lg" %>
+      </li>
     <% end %>
   <% else %>
-    <div class="flex justify-center items-center space-x-6 mx-auto">
+    <div class="flex justify-center items-center space-x-4 mx-auto p-2 space-around">
       <% menu_items[:flowbite].each do |item| %>
-        <a href="<%= item[:path] %>" class="block py-2 px-3 text-white hover:bg-purple-700/20 rounded-md text-center font-medium text-lg"><%= item[:title] %></a>
+        <%= link_to item[:path], 
+            class: "block py-2.5 px-4 text-white rounded-lg
+                   transition-all duration-200 ease-in-out
+                   hover:bg-purple-600/90 hover:scale-105 hover:shadow-lg
+                   text-center font-medium text-lg" do %>
+          <%= item[:title] %>
+        <% end %>
       <% end %>
     </div>
   <% end %>
 <% else %>
-  <ul class="<%= mobile ? 'space-y-2 py-2' : 'flex justify-center space-x-6 mx-auto' %> font-medium">
+  <ul class="<%= mobile ? 'flex flex-col space-y-2 p-2' : 'flex space-x-4 p-2 space-around' %>">
     <% menu_items[:standard].each do |link| %>
-      <li class="<%= mobile ? 'block' : 'inline-block text-center' %>">
-        <%= link_to link[:path], class: "#{mobile ? 'block' : 'inline-flex'} py-2 px-3 text-white hover:bg-#{mobile ? 'purple-700/50' : 'white/10'} rounded-lg transition-colors duration-200 font-medium text-lg" do %>
-          <svg class="h-<%= mobile ? 5 : 5 %> w-<%= mobile ? 5 : 5 %> <%= mobile ? '' : 'mr-2' %>" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= link[:icon] %>" />
-          </svg>
-          <span><%= link[:title] %></span>
+      <li class="p-2">
+        <%= link_to link[:path], 
+            class: "block px-4 py-2 text-white hover:bg-purple-700 rounded-lg transition-colors duration-200" do %>
+          <%= link[:title] %>
         <% end %>
       </li>
     <% end %>

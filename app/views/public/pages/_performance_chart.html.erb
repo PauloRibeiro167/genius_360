@@ -1,13 +1,15 @@
-<article class="bg-purple-900 p-8 rounded-3xl shadow-2xl hover:shadow-purple-500 transition-all duration-500 transform hover:scale-[1.02]">
-  <header class="mb-4">
-    <h3 class="text-white text-xl font-semibold text-center">Desempenho Mensal</h3>
+<article class="bg-purple-900 p-3 sm:p-4 md:p-6 lg:p-8 rounded-2xl md:rounded-3xl shadow-lg hover:shadow-purple-500/30 transition-all duration-300">
+  <header class="mb-2 md:mb-4">
+    <h3 class="text-white text-base sm:text-lg md:text-xl font-semibold text-center">Desempenho Mensal</h3>
   </header>
   
-  <div data-controller="chart"
+  <div class="chart-container w-full relative min-h-40" 
+       data-controller="chart"
        data-chart-sales-value="<%= [45, 59, 65, 72, 78, 85, 89, 95, 98, 102, 108, 115].to_json %>"
        data-chart-leads-value="<%= [120, 145, 160, 175, 190, 210, 230, 245, 260, 280, 295, 310].to_json %>"
        data-chart-months-value="<%= %w[Jan Fev Mar Abr Mai Jun Jul Ago Set Out Nov Dez].to_json %>"
-       style="position: relative;">
-    <canvas class="w-full bg-purple-900" height="250"></canvas>
+       data-chart-responsive-value="true"
+       data-chart-maintain-aspect-ratio-value="false">
+    <canvas class="chart-canvas w-full h-40 sm:h-52 md:h-60 lg:h-72" id="performanceChart"></canvas>
   </div>
 </article>

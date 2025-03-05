@@ -1,0 +1,80 @@
+/* Estilos para o seletor de temas */
+
+.theme-selector {
+  margin: 0.5rem;
+}
+
+/* Estilo dos botões de seleção de tema */
+.theme-button {
+  width: 40px;
+  height: 40px;
+  border-width: 2px;
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.theme-button:hover {
+  transform: scale(1.05);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+.theme-button.active {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  color: var(--text-inverted);
+}
+
+/* Estilos específicos para cada botão de tema */
+[data-theme="light"] .theme-button[data-theme="light"] {
+  background-color: #f7fafc;
+  color: #2d3748;
+}
+
+[data-theme="dark"] .theme-button[data-theme="dark"] {
+  background-color: #2d3748;
+  color: #f7fafc;
+}
+
+[data-theme="purple"] .theme-button[data-theme="purple"] {
+  background-color: #9f7aea;
+  color: white;
+}
+
+/* Estilo para o dropdown */
+.theme-dropdown select {
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Estilo para o botão toggle */
+.theme-toggle-button {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-button:hover {
+  background-color: var(--bg-tertiary);
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+  .theme-button {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .theme-options {
+    justify-content: center;
+  }
+}

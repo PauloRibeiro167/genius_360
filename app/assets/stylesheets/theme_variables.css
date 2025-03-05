@@ -1,0 +1,196 @@
+/**
+ * Sistema unificado de variáveis para temas do Genius360
+ * Este arquivo contém todas as variáveis de cores e configurações para todos os temas
+ */
+
+/* Tema padrão (light) */
+:root {
+  /* Cores principais do tema */
+  --color-primary: #5a67d8;
+  --color-primary-light: #7f9cf5;
+  --color-primary-dark: #4c51bf;
+  --color-secondary: #ed64a6;
+  --color-secondary-light: #f687b3;
+  --color-secondary-dark: #d53f8c;
+  
+  /* Cores de fundo */
+  --bg-main: #ffffff;
+  --bg-secondary: #f7fafc;
+  --bg-tertiary: #edf2f7;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f8f9fa;
+  --bg-header: #ffffff;
+  --bg-footer: #f7fafc;
+  
+  /* Cores de texto */
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --text-light: #e2e8f0;
+  --text-inverted: #ffffff;
+  
+  /* Cores de borda */
+  --border-color: #e2e8f0;
+  --border-light: #edf2f7;
+  --border-dark: #cbd5e0;
+  
+  /* Cores de estado */
+  --color-success: #48bb78;
+  --color-warning: #ed8936;
+  --color-error: #e53e3e;
+  --color-info: #4299e1;
+  
+  /* Cores específicas de componentes */
+  --input-bg: #ffffff;
+  --input-border: #e2e8f0;
+  --input-text: #2d3748;
+  --button-primary-bg: var(--color-primary);
+  --button-primary-text: #ffffff;
+  
+  /* Cores para gráficos */
+  --chart-sales-color: #db2777; /* pink-600 */
+  --chart-leads-color: #9333ea; /* purple-600 */
+  --chart-grid-color: rgba(226, 232, 240, 0.3);
+  --chart-font-color: #4a5568;
+  --chart-tooltip-bg: #2d3748;
+  --chart-hover-color: rgba(226, 232, 240, 0.5);
+  
+  /* Configurações de fonte */
+  --font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-family-heading: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-size-xs: 0.75rem;  /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-md: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem;  /* 20px */
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  /* Bordas */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  
+  /* Transições */
+  --transition-fast: 0.2s ease-in-out;
+  --transition-medium: 0.3s ease-in-out;
+  --transition-slow: 0.5s ease-in-out;
+}
+
+/* Tema escuro */
+[data-theme="dark"] {
+  /* Cores principais do tema */
+  --color-primary: #7f9cf5;
+  --color-primary-light: #a3bffa;
+  --color-primary-dark: #5a67d8;
+  --color-secondary: #f687b3;
+  --color-secondary-light: #fbb6ce;
+  --color-secondary-dark: #ed64a6;
+  
+  /* Cores de fundo */
+  --bg-main: #1a202c;
+  --bg-secondary: #2d3748;
+  --bg-tertiary: #4a5568;
+  --bg-card: #2d3748;
+  --bg-sidebar: #171923;
+  --bg-header: #1a202c;
+  --bg-footer: #171923;
+  
+  /* Cores de texto */
+  --text-primary: #f7fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #a0aec0;
+  --text-light: #718096;
+  --text-inverted: #1a202c;
+  
+  /* Cores de borda */
+  --border-color: #4a5568;
+  --border-light: #2d3748;
+  --border-dark: #718096;
+  
+  /* Cores de estado */
+  --color-success: #68d391;
+  --color-warning: #f6ad55;
+  --color-error: #fc8181;
+  --color-info: #63b3ed;
+  
+  /* Cores específicas de componentes */
+  --input-bg: #2d3748;
+  --input-border: #4a5568;
+  --input-text: #e2e8f0;
+  --button-primary-bg: var(--color-primary);
+  --button-primary-text: #1a202c;
+  
+  /* Cores para gráficos */
+  --chart-sales-color: #f472b6; /* pink-400 */
+  --chart-leads-color: #a855f7; /* purple-500 */
+  --chart-grid-color: rgba(255, 255, 255, 0.1);
+  --chart-font-color: #e2e8f0;
+  --chart-tooltip-bg: #252525;
+  --chart-hover-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Tema roxo (corporativo) */
+[data-theme="purple"] {
+  /* Cores principais do tema */
+  --color-primary: #9f7aea;
+  --color-primary-light: #b794f4;
+  --color-primary-dark: #805ad5;
+  --color-secondary: #f687b3;
+  --color-secondary-light: #fbb6ce;
+  --color-secondary-dark: #ed64a6;
+  
+  /* Cores de fundo */
+  --bg-main: #ffffff;
+  --bg-secondary: #faf5ff;
+  --bg-tertiary: #e9d8fd;
+  --bg-card: #ffffff;
+  --bg-sidebar: #44337a;
+  --bg-header: #ffffff;
+  --bg-footer: #faf5ff;
+  
+  /* Cores de texto */
+  --text-primary: #44337a;
+  --text-secondary: #553c9a;
+  --text-muted: #805ad5;
+  --text-light: #d6bcfa;
+  --text-inverted: #ffffff;
+  
+  /* Cores de borda */
+  --border-color: #d6bcfa;
+  --border-light: #e9d8fd;
+  --border-dark: #b794f4;
+  
+  /* Cores de estado */
+  --color-success: #48bb78;
+  --color-warning: #ed8936;
+  --color-error: #e53e3e;
+  --color-info: #4299e1;
+  
+  /* Cores específicas de componentes */
+  --input-bg: #ffffff;
+  --input-border: #d6bcfa;
+  --input-text: #44337a;
+  --button-primary-bg: var(--color-primary);
+  --button-primary-text: #ffffff;
+  
+  /* Cores para gráficos */
+  --chart-sales-color: #db2777; /* pink-600 */
+  --chart-leads-color: #9333ea; /* purple-600 */
+  --chart-grid-color: rgba(214, 188, 250, 0.3);
+  --chart-font-color: #44337a;
+  --chart-tooltip-bg: #44337a;
+  --chart-hover-color: rgba(214, 188, 250, 0.5);
+}
+
+/* Classe de transição para suavizar mudanças de tema */
+.theme-transition {
+  transition: background-color var(--transition-medium), 
+              color var(--transition-medium), 
+              border-color var(--transition-medium), 
+              box-shadow var(--transition-medium);
+}

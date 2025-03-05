@@ -5,7 +5,7 @@ export default class extends Controller {
   static targets = ["modeText", "modeIcon", "menuContainer", "mobileView", "desktopView"]
   
   connect() {
-    console.log("View mode controller connected")
+    // Removido console.log
     // Inicialmente em modo desktop
     this.isDesktopMode = true
     this.updateViewMode()

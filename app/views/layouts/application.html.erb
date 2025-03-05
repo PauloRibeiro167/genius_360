@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-controller="theme-initializer">
   <head>
     <title><%= content_for(:title) || "Genius360" %></title>
     <meta charset="utf-8">
@@ -20,11 +20,12 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
     <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag "variables", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", nonce: request.content_security_policy_nonce %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
-  <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-x-hidden">
     <% if user_signed_in? %>
       <div class="w-full bg-green-500 text-white py-2 text-center fixed top-0 z-50 transition-opacity duration-500" 
            data-controller="message-login"
@@ -39,8 +40,8 @@
         <% end %>
       </div>
     <% end %>
-    <header class="w-full bg-white dark:bg-purple-950 shadow">
-      <%= render "layouts/navbar", class: "inline-flex items-center" %>
+    <header class="w-screen bg-white dark:bg-purple-950 shadow mx-4">
+      <%= render "layouts/navbar" %>
     </header>
     <%= render "layouts/breadcrumbs"%>
     <main class="w-full h-auto">

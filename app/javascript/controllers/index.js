@@ -22,6 +22,9 @@ application.register("dashboard", DashboardController)
 import DesktopNavController from "./desktop_nav_controller"
 application.register("desktop-nav", DesktopNavController)
 
+import DropdownController from "./dropdown_controller"
+application.register("dropdown", DropdownController)
+
 import FormController from "./form_controller"
 application.register("form", FormController)
 
@@ -66,6 +69,9 @@ application.register("sidebar", SidebarController)
 
 import SweetAlertController from "./sweet_alert_controller"
 application.register("sweet-alert", SweetAlertController)
+
+import ThemeController from "./theme_controller"
+application.register("theme", ThemeController)
 
 import ViewModeController from "./view_mode_controller"
 application.register("view-mode", ViewModeController)

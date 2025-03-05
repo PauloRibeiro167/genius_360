@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["menu"]
 
   connect() {
-    console.log("Desktop nav controller connected")
+    // Removido console.log
   }
 
   toggleMenu() {
