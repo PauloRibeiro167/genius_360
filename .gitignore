@@ -37,3 +37,13 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Docker related
+/.docker/.env
+/data/postgres/
+
+# Node modules (já existe, mas mantendo para referência)
+/node_modules
+
+# Cache files
+.cache/

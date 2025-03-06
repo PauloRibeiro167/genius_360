@@ -1,51 +1,19 @@
-# SQLite. Versions 3.8.0 and up are supported.
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem "sqlite3"
-#
 default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
-  username: <%= ENV.fetch("POSTGRES_USER", "postgres") %>
-  password: <%= ENV.fetch("POSTGRES_PASSWORD", "postgres") %>
+  host: postgres
+  username: postgres
+  password: postgres
 
 development:
-  adapter: postgresql
-  encoding: unicode
+  <<: *default
   database: genius360_development
-  pool: 5
-  username: Paulo
-  password: Paulo1lotusred
-  host: localhost
 
 test:
   <<: *default
   database: genius360_test
 
 production:
-  primary: &primary
-    adapter: postgresql
-    encoding: unicode
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    url: <%= ENV['DATABASE_URL'] %>
-    database: genius360_production
-    username: <%= ENV['GENIUS360_DATABASE_USERNAME'] %>
-    password: <%= ENV['GENIUS360_DATABASE_PASSWORD'] %>
-    
-  cable:
-    <<: *primary
-    url: <%= ENV.fetch('CABLE_DATABASE_URL') { ENV['DATABASE_URL'] } %>
-    database: <%= ENV.fetch('CABLE_DATABASE_NAME') { 'genius360_cable_production' } %>
-
-  queue:
-    <<: *primary
-    url: <%= ENV.fetch('QUEUE_DATABASE_URL') { ENV['DATABASE_URL'] } %>
-    database: <%= ENV.fetch('QUEUE_DATABASE_NAME') { 'genius360_queue_production' } %>
-
-  cache:
-    <<: *primary
-    url: <%= ENV.fetch('CACHE_DATABASE_URL') { ENV['DATABASE_URL'] } %>
-    database: <%= ENV.fetch('CACHE_DATABASE_NAME') { 'genius360_cache_production' } %>
+  <<: *default
+  database: genius360_production

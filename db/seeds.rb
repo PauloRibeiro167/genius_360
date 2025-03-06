@@ -54,9 +54,55 @@ User.create!(
   password_confirmation: '123456',
   first_name: 'Admin',
   last_name: 'Test',
-  username: 'admintest',
+  perfil_id: super_admin_perfil.id 
+)
+
+# Definir senha padrão para todos os usuários
+SENHA_PADRAO = 'Genius@2024'
+
+# Usuários padrões do sistema - todos como Super Admin
+# Brena Matos
+User.create!(
+  email: 'brenamatos@geniusdi.com',
+  password: SENHA_PADRAO,
+  password_confirmation: SENHA_PADRAO,
+  first_name: 'Brena',
+  last_name: 'Matos',
   perfil_id: super_admin_perfil.id
 )
+
+# Paulo Ribeiro
+User.create!(
+  email: 'paulorezende@geniusdi.com',
+  password: 'Paulo1lotusred',
+  password_confirmation: 'Paulo1lotusred',
+  first_name: 'Paulo',
+  last_name: 'Ribeiro',
+  perfil_id: super_admin_perfil.id
+)
+
+# Junior Peixoto
+User.create!(
+  email: 'juniorpeixoto@geniusdi.com',
+  password: SENHA_PADRAO,
+  password_confirmation: SENHA_PADRAO,
+  first_name: 'Junior',
+  last_name: 'Peixoto',
+  perfil_id: super_admin_perfil.id
+)
+
+# Lucas Moreira
+User.create!(
+  email: 'lucasmoreira@geniusdi.com',
+  password: SENHA_PADRAO,
+  password_confirmation: SENHA_PADRAO,
+  first_name: 'Lucas',
+  last_name: 'Moreira',
+  perfil_id: super_admin_perfil.id
+)
+
+puts "Usuários criados com sucesso!"
+puts "Senha padrão para todos os usuários (exceto Paulo): #{SENHA_PADRAO}"
 
 # Seeds para as Permissões
 permissions = [
@@ -99,3 +145,74 @@ permissions = [
 permissions.each do |permission|
   Permission.create!(permission)
 end
+
+# Seeds para as Actions Permissions
+action_permissions = [
+  # Ações do Controller
+  { name: "index" },
+  { name: "show" },
+  { name: "create" },
+  { name: "update" },
+  { name: "destroy" },
+  
+  # Ações específicas
+  { name: "export" },
+  { name: "filter" },
+  { name: "import" },
+  { name: "approve" },
+  { name: "reject" },
+  { name: "cancel" },
+  { name: "restore" }
+]
+
+puts "\nCriando Action Permissions..."
+action_permissions.each do |action|
+  ActionPermission.create!(action)
+end
+puts "Action Permissions criadas com sucesso!"
+
+puts "\nCriando Controller Permissions..."
+
+controller_permissions = [
+  # UsersController
+  { controller_name: "users", action_name: "index", description: "Listagem de usuários" },
+  { controller_name: "users", action_name: "show", description: "Visualização de usuário" },
+  { controller_name: "users", action_name: "create", description: "Criação de usuário" },
+  { controller_name: "users", action_name: "update", description: "Atualização de usuário" },
+  { controller_name: "users", action_name: "destroy", description: "Remoção de usuário" },
+
+  # MetricsController
+  { controller_name: "metrics", action_name: "index", description: "Visualização de métricas" },
+  { controller_name: "metrics", action_name: "export", description: "Exportação de métricas" },
+  { controller_name: "metrics", action_name: "filter", description: "Filtragem de métricas" },
+
+  # MarketingDemandsController
+  { controller_name: "marketing_demands", action_name: "index", description: "Listagem de demandas" },
+  { controller_name: "marketing_demands", action_name: "show", description: "Visualização de demanda" },
+  { controller_name: "marketing_demands", action_name: "create", description: "Criação de demanda" },
+  { controller_name: "marketing_demands", action_name: "update", description: "Atualização de demanda" },
+  { controller_name: "marketing_demands", action_name: "destroy", description: "Remoção de demanda" },
+
+  # SalesController
+  { controller_name: "sales", action_name: "index", description: "Listagem de vendas" },
+  { controller_name: "sales", action_name: "show", description: "Visualização de venda" },
+  { controller_name: "sales", action_name: "create", description: "Criação de venda" },
+  { controller_name: "sales", action_name: "update", description: "Atualização de venda" },
+  { controller_name: "sales", action_name: "destroy", description: "Remoção de venda" },
+
+  # FinanceController
+  { controller_name: "finance", action_name: "index", description: "Listagem de finanças" },
+  { controller_name: "finance", action_name: "show", description: "Visualização de finança" },
+  { controller_name: "finance", action_name: "update", description: "Atualização de finança" },
+  { controller_name: "finance", action_name: "export", description: "Exportação de finanças" },
+
+  # SettingsController
+  { controller_name: "settings", action_name: "show", description: "Visualização de configurações" },
+  { controller_name: "settings", action_name: "update", description: "Atualização de configurações" }
+]
+
+controller_permissions.each do |permission|
+  ControllerPermission.create!(permission)
+end
+
+puts "Controller Permissions criadas com sucesso!"

@@ -1,0 +1,116 @@
+=== Diagnóstico Genius360 qui 06 mar 2025 00:24:19 -03 ===
+
+=== Versão do Docker ===
+Docker version 28.0.1, build 068a01e
+
+=== Versão do Docker Compose ===
+Docker Compose version v2.32.2
+
+=== Status dos Containers ===
+CONTAINER ID   IMAGE                          COMMAND                  CREATED       STATUS        PORTS                          NAMES
+a68d1d7eaabf   selenium/standalone-chromium   "/opt/bin/entry_poin…"   4 weeks ago   Up 12 hours   4444/tcp, 5900/tcp, 9000/tcp   gestor_de_leeds-selenium-1
+
+=== Logs do Container Web ===
+Error response from daemon: No such container: genius360_web
+Container web não disponível
+
+=== Logs do Container Postgres ===
+Error response from daemon: No such container: genius360_postgres
+Container postgres não disponível
+
+=== Arquitetura do Projeto ===
+./config/database.yml
+./config.ru
+./Gemfile
+./Gemfile.lock
+./.ruby-lsp/Gemfile
+./.ruby-lsp/Gemfile.lock
+
+=== Conteúdo do docker-compose.yml ===
+services:
+  postgres:
+    image: postgres:14
+    container_name: genius360_postgres
+    env_file: .env
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - genius360_network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=genius360_development
+
+  web:
+    image: genius360-web
+    container_name: genius360_web
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "3002:3002"
+    volumes:
+      - .:/app
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/genius360_development
+      - BUNDLE_PATH=/app/vendor/bundle
+    working_dir: /app
+    restart: unless-stopped
+    networks:
+      - genius360_network
+
+networks:
+  genius360_network:
+    driver: bridge
+
+volumes:
+  bundle_cache:
+  postgres_data:
+=== Volumes Docker ===
+local     genius360_bundle_cache
+local     genius360_postgres_data
+
+=== Redes Docker ===
+
+=== Configuração do Banco de Dados ===
+# SQLite. Versions 3.8.0 and up are supported.
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem "sqlite3"
+#
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # Use o endereço IP do host do Docker em vez do nome
+  # ou use 'host.docker.internal' para ambientes macOS/Windows
+  # ou ainda 'postgres' se o serviço estiver na mesma rede Docker
+  host: <%= ENV.fetch("DATABASE_HOST", "postgres") %>
+  username: <%= ENV.fetch("DATABASE_USERNAME", "postgres") %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
+  # A porta no container continua sendo 5432, não altere aqui
+  port: 5432
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+  # Tente reconectar se a conexão falhar
+  reconnect: true
+
+development:
+  <<: *default
+  database: genius360_development
+
+test:
+  <<: *default
+  database: genius360_test
+
+production:
+  <<: *default
+  database: genius360_production
+  username: <%= ENV['GENIUS360_DATABASE_USERNAME'] %>
+  password: <%= ENV['GENIUS360_DATABASE_PASSWORD'] %>
+

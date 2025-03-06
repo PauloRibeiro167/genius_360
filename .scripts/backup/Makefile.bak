@@ -1,0 +1,139 @@
+.PHONY: exec down build clean help up ps restart status logs rails-console db-console db-migrate db-reset bash setup performance update test routes start shell debug fix-server server-start server-stop server-restart server-status
+
+help:
+	@echo "Comandos disponíveis:"
+	@echo "  make start        - Inicia todos os serviços e verifica funcionamento"
+	@echo "  make exec         - Inicia os containers e abre o console web"
+	@echo "  make shell        - Abre o terminal no container web (sem reiniciar serviços)"
+	@echo "  make down         - Para todos os containers"
+	@echo "  make build        - Rebuilda os containers"
+	@echo "  make clean        - Para os containers e remove volumes/imagens"
+	@echo "  make up           - Inicia os serviços em background"
+	@echo "  make ps           - Lista os containers em execução"
+	@echo "  make restart      - Reinicia os serviços"
+	@echo "  make status       - Verifica o status dos serviços"
+	@echo "  make logs         - Exibe os logs dos containers"
+	@echo "  make rails-console- Abre o console Rails"
+	@echo "  make db-console   - Abre o console PostgreSQL"
+	@echo "  make db-migrate   - Executa migrações do banco de dados"
+	@echo "  make db-reset     - Recria o banco de dados"
+	@echo "  make bash         - Abre um terminal no container web"
+	@echo "  make debug        - Executa diagnóstico completo do ambiente"
+	@echo "  make fix-server   - Corrige problemas com o servidor Rails"
+	@echo "  make server-start - Inicia o servidor Rails no container"
+	@echo "  make server-stop  - Para o servidor Rails no container"
+	@echo "  make server-restart - Reinicia o servidor Rails no container"
+	@echo "  make server-status  - Verifica o status do servidor Rails"
+
+up:
+	@echo "🚀 Iniciando serviços..."
+	@docker-compose up --remove-orphans -d
+	@echo "✨ Serviços iniciados em background"
+
+ps:
+	@docker-compose ps
+
+restart:
+	@echo "🔄 Reiniciando serviços..."
+	@bash scripts/restart_services.sh
+
+exec:
+	@echo "🚀 Iniciando ambiente Genius360..."
+	@docker-compose up -d --remove-orphans
+	@echo "⏳ Aguardando serviços..."
+	@sleep 5
+	@docker-compose exec web bash
+
+down:
+	@echo "🛑 Parando containers..."
+	@docker-compose down
+
+build:
+	@echo "🏗️ Reconstruindo containers..."
+	@docker-compose build
+	@echo "✨ Build completado"
+
+clean:
+	@echo "🧹 Limpando ambiente..."
+	@docker-compose down -v --rmi all --remove-orphans
+	@echo "🗑️ Containers, volumes e imagens removidos"
+
+status:
+	@echo "📊 Verificando status dos serviços..."
+	@bash scripts/check_status.sh
+
+logs:
+	@docker-compose logs -f
+
+rails-console:
+	@echo "🛤️ Abrindo console Rails..."
+	@docker-compose exec web rails console
+
+db-console:
+	@echo "🗄️ Abrindo console PostgreSQL..."
+	@docker-compose exec postgres psql -U postgres -d genius360_development
+
+db-migrate:
+	@echo "🔄 Executando migrações do banco de dados..."
+	@docker-compose exec web rails db:migrate
+
+db-reset:
+	@echo "⚠️ Recriando banco de dados... ⚠️"
+	@docker-compose exec web rails db:drop db:create db:migrate db:seed
+
+bash:
+	@echo "🐚 Abrindo terminal no container web..."
+	@docker-compose exec web bash
+
+setup:
+	@echo "🛠️ Configurando ambiente de desenvolvimento..."
+	@bash scripts/development_setup.sh
+
+performance:
+	@echo "📊 Verificando performance do sistema..."
+	@bash scripts/performance_check.sh
+
+update:
+	@echo "🔄 Atualizando dependências..."
+	@docker-compose exec web bundle update
+	@docker-compose exec web yarn upgrade || echo "Sem yarn no projeto"
+	@echo "✅ Dependências atualizadas"
+
+test:
+	@echo "🧪 Executando testes..."
+	@docker-compose exec web rails test
+
+routes:
+	@echo "🛣️ Rotas da aplicação:"
+	@docker-compose exec web rails routes | grep -v "^#"
+
+start:
+	@bash start.sh
+
+shell:
+	@echo "🐚 Abrindo terminal no container web..."
+	@docker-compose exec web bash || { echo "⚠️ Container web não está em execução. Iniciando serviços..."; make exec; }
+
+debug:
+	@echo "🔍 Executando diagnóstico do ambiente..."
+	@bash scripts/debug.sh
+
+fix-server:
+	@echo "🔧 Corrigindo problema de 'server already running'..."
+	@docker-compose exec web bash -c "bash /app/scripts/fix_server.sh" || echo "⚠️ Falha ao executar o fix-server"
+
+server-start:
+	@echo "🚀 Iniciando servidor Rails..."
+	@docker-compose exec web bash -c "cd /app && bash scripts/server_management.sh start"
+
+server-stop:
+	@echo "🛑 Parando servidor Rails..."
+	@docker-compose exec web bash -c "cd /app && bash scripts/server_management.sh stop"
+
+server-restart:
+	@echo "🔄 Reiniciando servidor Rails..."
+	@docker-compose exec web bash -c "cd /app && bash scripts/server_management.sh restart"
+
+server-status:
+	@echo "🔍 Verificando status do servidor Rails..."
+	@docker-compose exec web bash -c "cd /app && bash scripts/server_management.sh status"

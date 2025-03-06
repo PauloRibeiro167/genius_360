@@ -1,0 +1,27 @@
+# Versão simplificada do Makefile
+.PHONY: all up down ps fix-server
+
+all:
+	@echo "Comandos disponíveis:"
+	@echo "  make up         - Inicia os serviços em background"
+	@echo "  make down       - Para todos os containers"
+	@echo "  make ps         - Lista os containers em execução"
+	@echo "  make fix-server - Corrige problema 'server already running'"
+
+up:
+	@echo "🚀 Iniciando serviços..."
+	@docker-compose up -d
+	@echo "✨ Serviços iniciados"
+
+down:
+	@echo "🛑 Parando serviços..."
+	@docker-compose down
+	@echo "✨ Serviços parados"
+
+ps:
+	@docker-compose ps
+
+fix-server:
+	@echo "🔧 Corrigindo problema de 'server already running'..."
+	@docker-compose exec web bash -c "rm -f /app/tmp/pids/server.pid"
+	@echo "✅ Arquivo PID removido"
