@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Abre um shell no container web da aplicação Genius360
+echo "=== Genius360: Abrindo shell no container web ==="
+
+# Verificar se docker-compose está instalado
+if ! command -v docker-compose &> /dev/null; then
+  echo "Docker Compose não encontrado."
+  exit 1
+fi
+
+# Permitir escolher o container (web por padrão)
+CONTAINER="web"
+if [ "$#" -eq 1 ]; then
+  CONTAINER="$1"
+fi
+
+# Verificar se o container está rodando
+if ! docker-compose ps | grep -q "$CONTAINER.*Up"; then
+  echo "O container $CONTAINER não está rodando. Iniciando containers..."
+  docker-compose up -d
+  sleep 5
+fi
+
+# Abrir shell
+echo "=== Acessando shell do container $CONTAINER ==="
+echo "Digite 'exit' para sair"
+docker-compose exec $CONTAINER bash || {
+  echo "Falha ao executar bash. Tentando sh..."
+  docker-compose exec $CONTAINER sh
+}

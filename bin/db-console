@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Abre o console PostgreSQL da aplicação Genius360
+echo "=== Genius360: Abrindo console PostgreSQL ==="
+
+# Verificar se docker-compose está instalado
+if ! command -v docker-compose &> /dev/null; then
+  echo "Docker Compose não encontrado."
+  exit 1
+fi
+
+# Carregar variáveis de ambiente do .env se existir
+if [ -f ".env" ]; then
+  source .env
+fi
+
+# Definir valores padrão caso não estejam no .env
+POSTGRES_USER=${POSTGRES_USER:-postgres}
+POSTGRES_DB=${POSTGRES_DB:-genius360_development}
+
+# Verificar se o container postgres está rodando
+if ! docker-compose ps | grep -q "postgres.*Up"; then
+  echo "O container postgres não está rodando. Iniciando containers..."
+  docker-compose up -d postgres
+  sleep 5
+fi
+
+# Abrir console PostgreSQL
+docker-compose exec postgres psql -U $POSTGRES_USER -d $POSTGRES_DB

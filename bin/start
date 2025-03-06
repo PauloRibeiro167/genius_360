@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Inicia aplicação Genius360 em modo produção/background
+echo "=== Genius360: Iniciando aplicação em background ==="
+
+# Verificar se docker-compose está instalado
+if ! command -v docker-compose &> /dev/null; then
+  echo "Docker Compose não encontrado. Instale o Docker Compose antes de continuar."
+  exit 1
+fi
+
+# Garantir que arquivos necessários existem
+if [ ! -f "docker-compose.yml" ]; then
+  echo "Arquivo docker-compose.yml não encontrado."
+  exit 1
+fi
+
+# Iniciar containers
+docker-compose up -d
+
+# Verificar status
+echo "=== Verificando status dos containers ==="
+docker-compose ps
+
+# Tentativa de verificar se a aplicação está respondendo
+echo "=== Verificando se a aplicação está disponível ==="
+sleep 5
+if command -v curl &> /dev/null; then
+  curl -s http://localhost:3000 > /dev/null 
+  if [ $? -eq 0 ]; then
+    echo "✅ Aplicação disponível em http://localhost:3000"
+  else
+    echo "⚠️ Aplicação ainda não está respondendo. Verifique os logs com bin/logs"
+  fi
+else
+  echo "⚠️ Comando curl não disponível. Verifique manualmente se a aplicação está respondendo em http://localhost:3000"
+fi
+
+echo "=== Inicialização concluída ==="
+echo "Use bin/logs para ver os logs da aplicação"

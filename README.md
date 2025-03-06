@@ -23,45 +23,105 @@ Things you may want to cover:
 
 # Genius360
 
+Sistema de gestão integrada para empresas.
+
+## Requisitos
+
+- Docker
+- Docker Compose
+
+## Instalação e Execução Rápida
+
+Para iniciar rapidamente, execute:
+
+```bash
+# Torna os scripts executáveis
+chmod +x run.sh setup.sh
+
+# Executa o script de execução rápida
+./run.sh
+```
+
+Este script interativo:
+1. Verifica o status atual dos containers
+2. Oferece opções adequadas ao estado atual (iniciar/parar/reiniciar/logs)
+3. Executa as ações necessárias com base na escolha do usuário
+
+## Configuração Inicial (Primeira Vez)
+
+Para configurar o ambiente completo, execute:
+
+```bash
+# Torna o script de setup executável
+chmod +x setup.sh
+
+# Executa o setup
+./setup.sh
+```
+
+## Comandos Disponíveis
+
+O projeto utiliza Makefile para facilitar a execução de tarefas comuns:
+
+### Docker e Containers
+
+- `make build` - Constrói as imagens dos containers
+- `make run` - Inicia os containers em background
+- `make dev` - Inicia os containers em modo de desenvolvimento
+- `make stop` - Para os containers
+- `make down` - Para e remove os containers
+- `make clean` - Remove containers, imagens e volumes
+- `make logs` - Exibe logs dos containers
+- `make ps` - Exibe status dos containers
+
+### Comandos de Desenvolvimento
+
+- `make start` - Inicia os containers e verifica se a aplicação está respondendo
+- `make shell` - Abre um shell no container web
+- `make exec` - Inicia os containers e abre um shell no container web
+- `make status` - Mostra o status detalhado dos serviços
+
+### Comandos Rails e Banco de Dados
+
+- `make rails-console` - Abre o console Rails
+- `make db-console` - Abre o console PostgreSQL
+- `make db-migrate` - Executa migrações do banco de dados
+- `make db-reset` - Recria o banco de dados (drop, create, migrate, seed)
+- `make routes` - Lista todas as rotas da aplicação
+- `make test` - Executa os testes da aplicação
+- `make update` - Atualiza dependências (bundle update)
+
+### Utilitários e Diagnóstico
+
+- `make dev-setup` - Configura ambiente de desenvolvimento
+- `make backup` - Realiza backup do sistema
+- `make check-status` - Verifica status do servidor
+- `make debug` - Inicia depuração
+- `make fix-server` - Corrige problemas do servidor
+- `make restart` - Reinicia serviços
+- `make performance` - Verifica performance do sistema
+- `make diagnostico` - Executa diagnóstico Docker
+
+## Estrutura de Arquivos
+
+```
+genius360/
+├── .devcontainer/       # Configuração do ambiente de desenvolvimento
+│   ├── .scripts/        # Scripts utilitários
+│   ├── compose.yaml     # Configuração Docker Compose para dev containers
+│   ├── devcontainer.json # Configuração do VSCode Dev Containers
+│   └── Dockerfile       # Dockerfile para ambiente de desenvolvimento
+├── app/                 # Código fonte da aplicação
+├── config/              # Arquivos de configuração
+├── db/                  # Migrações e seeds do banco de dados
+├── docker-compose.yml   # Configuração Docker Compose para execução
+├── Makefile             # Comandos para facilitar o desenvolvimento
+├── run.sh               # Script de execução rápida
+├── setup.sh             # Script de configuração inicial
+└── ...
+```
+
 ## Solucionando problemas comuns
-
-### Porta 3000 em uso
-
-Se ao tentar iniciar o servidor Rails você receber o erro "Address already in use - bind(2) for "0" port 3000", significa que a porta 3000 já está sendo utilizada por outro processo. Você tem as seguintes opções:
-
-1. **Usar outra porta para o servidor Rails**:
-   ```bash
-   rails s -b 0 -p 3001
-   ```
-
-2. **Verificar e encerrar o processo que está usando a porta 3000**:
-   ```bash
-   # Encontrar o PID do processo
-   lsof -i :3000
-
-   # Encerrar o processo (substitua {PID} pelo número do processo)
-   kill -9 {PID}
-   ```
-
-3. **Usar o script auxiliar port_manager.sh**:
-   ```bash
-   bin/port_manager.sh 3000
-   ```
-
-4. **Usar o comando make**:
-   ```bash
-   # Iniciar na porta padrão (3000)
-   make start
-   
-   # Iniciar em uma porta específica
-   make start port=3001
-   ```
-
-
-# Genius360 - Guia de Comandos
-
-Este documento contém um guia rápido dos principais comandos para gerenciar o ambiente Docker do Genius360.
-
 ## Comandos Básicos
 
 | Comando | Descrição |

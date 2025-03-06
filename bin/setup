@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+set -vx
+
+# Script para configuração inicial do projeto Genius360
+echo "=== Genius360: Configurando o ambiente ==="
+
+# Criar diretórios necessários
+mkdir -p tmp/pids
+mkdir -p log
+mkdir -p storage
+
+# Verificar dependências
+echo "=== Verificando dependências ==="
+command -v docker >/dev/null 2>&1 || { echo "Docker não encontrado. Instale o Docker antes de continuar."; exit 1; }
+command -v docker-compose >/dev/null 2>&1 || { echo "Docker Compose não encontrado. Instale o Docker Compose antes de continuar."; exit 1; }
+
+# Checar se o arquivo .env existe
+if [ ! -f ".env" ]; then
+  echo "=== Criando arquivo .env ==="
+  cp .env.example .env 2>/dev/null || {
+    echo "Criando arquivo .env padrão..."
+    cat > .env << EOF
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=genius360_development
+RAILS_ENV=development
+NODE_ENV=development
+DATABASE_URL=postgres://postgres:postgres@postgres:5432/genius360_development
+PORT=3000
+EOF
+  }
+fi
+
+# Tornar scripts executáveis
+echo "=== Tornando scripts executáveis ==="
+chmod +x bin/*
+
+# Contruir a aplicação
+echo "=== Construindo containers ==="
+docker-compose build
+
+echo "=== Configuração concluída ==="
+echo "Para iniciar a aplicação, execute: bin/start"
