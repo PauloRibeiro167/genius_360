@@ -7,6 +7,27 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore bundle directory and contents - regras detalhadas
+/bundle/
+/bundle/*
+**/bundle/**/*
+**/vendor/bundle/**/*
+/vendor/bundle/
+vendor/bundle/
+
+# Ignore Ruby specific directories
+/ruby/
+**/ruby/**/*
+**/ruby/3.2.0/**
+/ruby/3.2.0/
+**/3.2.0/**/*
+
+# Ignore plugins directory
+/plugins/
+**/plugins/**/*
+/vendor/bundle/ruby/3.2.0/plugins/
+**/vendor/bundle/ruby/3.2.0/plugins/**/*
+
 # Ignore all environment files.
 /.env*
 
@@ -47,3 +68,7 @@
 
 # Cache files
 .cache/
+
+# Ignore vendor directory
+/vendor/
+/vendor/*
