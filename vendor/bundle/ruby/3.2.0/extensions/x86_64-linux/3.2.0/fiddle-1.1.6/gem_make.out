@@ -1,0 +1,42 @@
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/fiddle-1.1.6/ext/fiddle
+/usr/local/bin/ruby extconf.rb
+checking for --enable-debug-build option... no
+checking for ffi.h... yes
+checking for -lffi... yes
+libffi_version: 3.4.4
+checking for sys/mman.h... yes
+checking for link.h... yes
+checking for dlfcn.h... yes
+checking for -ldl... yes
+checking for dlopen()... yes
+checking for dlclose()... yes
+checking for dlsym()... yes
+checking for dlerror()... yes
+checking for dlinfo()... yes
+checking for RTLD_DI_LINKMAP in dlfcn.h... yes
+checking for FFI_STDCALL in ffi.h... no
+checking signedness of size_t... unsigned
+checking for rb_str_to_interned_str()... yes
+creating Makefile
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/fiddle-1.1.6/ext/fiddle
+make DESTDIR\= sitearchdir\=./.gem.20250306-19-d67lk2 sitelibdir\=./.gem.20250306-19-d67lk2 clean
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/fiddle-1.1.6/ext/fiddle
+make DESTDIR\= sitearchdir\=./.gem.20250306-19-d67lk2 sitelibdir\=./.gem.20250306-19-d67lk2
+compiling closure.c
+compiling conversions.c
+compiling fiddle.c
+compiling function.c
+compiling handle.c
+compiling memory_view.c
+compiling pinned.c
+compiling pointer.c
+linking shared-object fiddle.so
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/fiddle-1.1.6/ext/fiddle
+make DESTDIR\= sitearchdir\=./.gem.20250306-19-d67lk2 sitelibdir\=./.gem.20250306-19-d67lk2 install
+/usr/bin/install -c -m 0755 fiddle.so ./.gem.20250306-19-d67lk2
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/fiddle-1.1.6/ext/fiddle
+make DESTDIR\= sitearchdir\=./.gem.20250306-19-d67lk2 sitelibdir\=./.gem.20250306-19-d67lk2 clean

@@ -1,0 +1,43 @@
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/debase-0.2.9/ext/attach
+/usr/local/bin/ruby extconf.rb
+checking for vm_core.h... no
+checking for vm_core.h... no
+**************************************************************************
+No source for ruby-3.2.2-p53 (revision e51014f9c05aa65cbf203442d37fef7c12390015) provided with
+debase-ruby_core_source gem. Falling back to ruby-3.2.0-p0.
+**************************************************************************
+checking for vm_core.h... yes
+checking for iseq.h... yes
+checking for version.h... yes
+creating Makefile
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/debase-0.2.9/ext/attach
+make DESTDIR\= sitearchdir\=./.gem.20250306-19-t9shur sitelibdir\=./.gem.20250306-19-t9shur clean
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/debase-0.2.9/ext/attach
+make DESTDIR\= sitearchdir\=./.gem.20250306-19-t9shur sitelibdir\=./.gem.20250306-19-t9shur
+compiling attach.c
+attach.c: In function ‘__func_to_set_breakpoint_at’:
+attach.c:19:1: warning: old-style function definition [-Wold-style-definition]
+   19 | __func_to_set_breakpoint_at()
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+attach.c: In function ‘debase_start_attach’:
+attach.c:40:1: warning: old-style function definition [-Wold-style-definition]
+   40 | debase_start_attach()
+      | ^~~~~~~~~~~~~~~~~~~
+attach.c: In function ‘Init_attach’:
+attach.c:55:1: warning: old-style function definition [-Wold-style-definition]
+   55 | Init_attach()
+      | ^~~~~~~~~~~
+At top level:
+cc1: note: unrecognized command-line option ‘-Wno-self-assign’ may have been intended to silence earlier diagnostics
+cc1: note: unrecognized command-line option ‘-Wno-parentheses-equality’ may have been intended to silence earlier diagnostics
+cc1: note: unrecognized command-line option ‘-Wno-constant-logical-operand’ may have been intended to silence earlier diagnostics
+linking shared-object attach.so
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/debase-0.2.9/ext/attach
+make DESTDIR\= sitearchdir\=./.gem.20250306-19-t9shur sitelibdir\=./.gem.20250306-19-t9shur install
+/usr/bin/install -c -m 0755 attach.so ./.gem.20250306-19-t9shur
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/debase-0.2.9/ext/attach
+make DESTDIR\= sitearchdir\=./.gem.20250306-19-t9shur sitelibdir\=./.gem.20250306-19-t9shur clean

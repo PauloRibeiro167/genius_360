@@ -1,0 +1,95 @@
+==============================================
+🔍 Diagnóstico de Container 🔍
+==============================================
+📦 Container: web
+📅 Data: qui 06 mar 2025 14:36:36 -03
+📝 Log: ./logs/diagnose_20250306_143636.log
+📊 Relatório: ./logs/report_20250306_143636.txt
+==============================================
+
+📌 1. Status do Container
+----------------------------------------------
+Status: 
+Reiniciando: 
+Código de saída: 
+Status de saúde: 
+Iniciado em: 
+PID: 
+
+📌 2. Configuração do Container
+----------------------------------------------
+
+> Executando: docker inspect web
+[]
+Error: No such object: web
+
+📌 3. Logs Recentes (últimas 30 linhas)
+----------------------------------------------
+
+> Executando: docker logs --tail 30 web
+Error response from daemon: No such container: web
+
+📌 4. Uso de Recursos
+----------------------------------------------
+
+> Executando: docker stats --no-stream web
+Error response from daemon: No such container: web
+
+📌 5. Configuração de Rede
+----------------------------------------------
+
+> Executando: docker inspect web
+[]
+Error: No such object: web
+
+📌 6. Volumes
+----------------------------------------------
+
+> Executando: docker inspect web
+[]
+Error: No such object: web
+
+📌 7. Variáveis de Ambiente
+----------------------------------------------
+
+> Executando: docker inspect --format={{range .Config.Env}}{{println .}}{{end}} web
+
+Error: No such object: web
+
+📌 8. Arquivo de Composição
+----------------------------------------------
+Encontrado docker-compose.yml
+  web:
+    image: genius360-web
+    container_name: genius360_web
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "3002:3002"
+    volumes:
+      - .:/app
+    environment:
+      - RAILS_ENV=development
+
+📌 9. Problemas Comuns de Rails
+----------------------------------------------
+✅ Arquivo server.pid não encontrado.
+⚠️ Possível problema com bundler. Considere 'make bundle-fix'
+
+📌 10. Análise de Problemas
+----------------------------------------------
+⚠️ Erros encontrados nos logs:
+Error response from daemon: No such container: web
+⚠️ Possível problema de permissão nos diretórios
+
+📌 11. Conclusão e Recomendações
+----------------------------------------------
+⚠️ Container não está rodando (status: ).
+Recomendações:
+1. Execute 'make up' para iniciar os containers
+2. Execute 'make logs' para verificar logs detalhados
+
+📊 Relatório de diagnóstico salvo em: ./logs/report_20250306_143636.txt
+📝 Log detalhado salvo em: ./logs/diagnose_20250306_143636.log

@@ -1,6 +1,6 @@
 # Makefile para o projeto Genius360 - Versão com indentação corrigida
 
-.PHONY: all up down ps fix-server start exec shell logs rails-console db-console db-migrate db-reset server-status server-start server-stop server-restart help diagnose fix-container safe-exec deep-fix inspect-compose force-exec rebuild-web bundle-fix clean-gems gexec trycat check-health view-playbook
+.PHONY: all up down ps fix-server start exec shell logs rails-console db-console db-migrate db-reset server-status server-start server-stop server-restart help diagnose fix-container safe-exec deep-fix inspect-compose force-exec rebuild-web bundle-fix clean-gems gexec trycat check-health view-playbook fix-gems
 
 # Valor padrão para a porta
 port ?= 3000
@@ -110,6 +110,8 @@ help:
 	@echo "  make trycat cmd=\"comando\" - Executa comando com captura de erros"
 	@echo "  make check-health     - Verifica saúde do container web"
 	@echo "  make view-playbook    - Abre o playbook de erros no navegador"
+	@echo "  make bundle-fix       - Corrige problemas com bundler"
+	@echo "  make fix-gems         - Correção mais agressiva para problemas de dependências"
 
 # Adicionando comandos para diagnóstico e recuperação
 diagnose:
@@ -141,6 +143,15 @@ bundle-fix:
 	@chmod +x bin/bundle_fix.sh
 	@./bin/bundle_fix.sh
 
+fix-gems:
+	@echo "🔧 Executando correção agressiva de dependências..."
+	@chmod +x bin/bundle_fix.sh
+	@docker-compose down
+	@docker volume rm genius360_bundle_cache 2>/dev/null || true
+	@rm -rf vendor/bundle .bundle/cache tmp/cache/bootsnap* 2>/dev/null || true
+	@./bin/bundle_fix.sh
+	@echo "✅ Processo de correção de gems concluído. Verifique o status com 'make ps'."
+
 clean-gems:
 	@echo "🧹 Limpando cache de gems..."
 	@$(DOCKER_COMPOSE) exec web bash -c "rm -rf /usr/local/bundle/* && rm -rf vendor/bundle"
@@ -161,6 +172,9 @@ force-exec:
 	@echo "🚀 Forçando acesso ao container web (ignora status)..."
 	@docker start genius360_web || true
 	@sleep 5
+	@docker exec -it genius360_web bash || echo "❌ Não foi possível acessar o container"
+
+rebuild-web:
 	@echo "🔨 Reconstruindo apenas o container web..."
 	@docker-compose build --no-cache web
 	@docker-compose up -d web
@@ -279,3 +293,34 @@ fix-container-full:
 	@make find-dockerfile
 	@make fix-dockerfile || echo "⚠️ Falha ao corrigir Dockerfile"
 	@make force-rebuild
+
+# Comandos de diagnóstico e rastreamento de erros
+trycat:
+	@chmod +x bin/trycat.sh
+	@if [ -z "$(cmd)" ]; then \
+		echo "⚠️ Erro: Especifique um comando com cmd=\"seu comando\""; \
+		echo "Exemplo: make trycat cmd=\"docker logs genius360_web\""; \
+		exit 1; \
+	fi
+	@./bin/trycat.sh $(cmd)
+
+check-health:
+	@chmod +x bin/container_health.sh
+	@./bin/container_health.sh $(container)
+
+view-playbook:
+	@echo "🔍 Abrindo playbook de erros..."
+	@if [ -f "docs/playbooks/error_handling.md" ]; then \
+		if command -v xdg-open > /dev/null; then \
+			xdg-open docs/playbooks/error_handling.md; \
+		elif command -v open > /dev/null; then \
+			open docs/playbooks/error_handling.md; \
+		else \
+			echo "⚠️ Não foi possível abrir automaticamente. Arquivo em: docs/playbooks/error_handling.md"; \
+		fi; \
+	else \
+		echo "❌ Playbook não encontrado. Criando diretório..."; \
+		mkdir -p docs/playbooks; \
+		echo "# Playbook de Erros\n\nDocumentação ainda não criada." > docs/playbooks/error_handling.md; \
+		echo "✅ Arquivo de playbook criado. Execute novamente para abrir."; \
+	fi
