@@ -1,81 +1,11 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-# Iniciar aplicação em modo desenvolvimento
-
-# Detecta sistema operacional
-if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
-  echo "Executando no Windows Subsystem for Linux"
-  FOREMAN_COMMAND="foreman start -f Procfile.dev"
-else
-  echo "Executando em ambiente Unix/Linux/MacOS"
-  FOREMAN_COMMAND="foreman start -f Procfile.dev"
-fi
-
-# Verifica dependências
-if ! command -v foreman &> /dev/null; then
-  echo "Foreman não encontrado. Instalando..."
+if gem list --no-installed --exact --silent foreman; then
+  echo "Installing foreman..."
   gem install foreman
 fi
 
-# Verifica se o banco de dados está disponível
-echo "Verificando conexão com o banco de dados..."
-until pg_isready -h postgres -U postgres 2>/dev/null; do
-  echo "Aguardando banco de dados..."
-  sleep 2
-  # Verifica se estamos no timeout
-  (( WAIT_COUNT++ ))
-  if [ "$WAIT_COUNT" -gt 15 ]; then
-    echo "Falha ao conectar ao banco de dados. Verifique se o container do PostgreSQL está rodando."
-    exit 1
-  fi
-done
+# Default to port 3000 if not specified
+export PORT="${PORT:-3000}"
 
-# Prepara o ambiente
-echo "Preparando o ambiente Rails..."
-bundle check || bundle install
-
-# Verifica se precisa executar migrações
-if [ -d "db/migrate" ] && [ ! -z "$(ls -A db/migrate 2>/dev/null)" ]; then
-  echo "Verificando migrações pendentes..."
-  bin/rails db:migrate:status
-  echo "Executando migrações pendentes..."
-  bin/rails db:migrate 2>/dev/null || bin/rails db:setup
-fi
-
-# Limpa processos antigos (se houver)
-if [ -f tmp/pids/server.pid ]; then
-  echo "Removendo PID de servidor antigo..."
-  rm tmp/pids/server.pid
-fi
-
-# Inicia os processos usando foreman
-echo "Iniciando Genius360..."
-exec $FOREMAN_COMMAND
-
-#!/bin/bash
-
-# Script para iniciar o ambiente de desenvolvimento do Genius360
-# Autor: Sistema Genius360
-
-echo "======================================================"
-echo "       GENIUS360 - INICIANDO AMBIENTE DE DEV          "
-echo "======================================================"
-echo ""
-
-# Verifica se está no diretório raiz do projeto
-if [ ! -f "./Gemfile" ]; then
-  echo "Erro: Você precisa estar no diretório raiz do projeto."
-  echo "Por favor, execute 'cd /app' antes de executar este script."
-  exit 1
-fi
-
-# Iniciar o servidor de desenvolvimento Rails com Foreman
-if command -v foreman &> /dev/null; then
-  echo "Iniciando serviços com Foreman..."
-  foreman start -f Procfile.dev
-else
-  echo "Foreman não encontrado. Instalando..."
-  gem install foreman
-  echo "Iniciando serviços com Foreman..."
-  foreman start -f Procfile.dev
-fi
+exec foreman start -f Procfile.dev --env /dev/null "$@"
