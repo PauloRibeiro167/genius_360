@@ -28,6 +28,12 @@ vendor/bundle/
 /vendor/bundle/ruby/3.2.0/plugins/
 **/vendor/bundle/ruby/3.2.0/plugins/**/*
 
+# Ignore specifications directory and gemspec files
+/specifications/
+**/specifications/**/*
+**/vendor/bundle/ruby/3.2.0/specifications/
+**/vendor/bundle/ruby/3.2.0/specifications/**/*.gemspec
+
 # Ignore all environment files.
 /.env*
 
