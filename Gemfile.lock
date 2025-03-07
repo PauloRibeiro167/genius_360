@@ -173,7 +173,7 @@ GEM
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
-    faker (3.2.3)
+    faker (3.5.1)
       i18n (>= 1.8.11, < 2)
     ffi (1.17.1-aarch64-linux-gnu)
     ffi (1.17.1-aarch64-linux-musl)
@@ -614,7 +614,7 @@ DEPENDENCIES
   discard (~> 1.2)
   erb_lint (~> 0.5.0)
   factory_bot_rails (~> 6.4.0)
-  faker (~> 3.2.0)
+  faker (~> 3.5.1)
   foreman
   get_process_mem
   groupdate
