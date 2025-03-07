@@ -54,7 +54,7 @@ gem "kamal", require: false # Deploy com containers Docker
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Especificar versão do stringio para evitar avisos
-gem "stringio", "~> 3.1.3"
+gem "stringio", "~> 3.1.5"
 
 # Gems Opcionais (comentadas)
 # gem "bcrypt", "~> 3.1.7"           # Senhas seguras
