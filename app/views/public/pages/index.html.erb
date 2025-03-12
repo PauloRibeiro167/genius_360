@@ -1,11 +1,12 @@
-<main class="container mx-auto px-4 py-6 min-h-screen">
+<main class="min-h-screen p-4 md:p-12">
   <div class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 rounded-3xl overflow-hidden">
-    <div class="max-w-7xl mx-auto p-4 md:p-6">  
-      <%# Grid responsivo - 1 coluna em dispositivos móveis (padrão) e 2 colunas em dispositivos médios (md) e grandes %>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-        <%# Primeira coluna - Card principal %>
-        <section class="w-full">
-          <article class="bg-purple-900 p-6 md:p-8 lg:p-10 rounded-3xl shadow-2xl hover:shadow-pink-500/30 transition-all duration-500 transform hover:rotate-1">
+    <div class="max-w-7xl mx-auto">
+      <%# Container Grid Principal %>
+      <div class="grid grid-cols-2 lg:grid-cols-[1.2fr,0.8fr] gap-4 md:gap-6 p-4 lg:p-8">
+        
+        <%# Coluna A - Card Principal %>
+        <div class="w-full">
+          <article class="bg-purple-900 rounded-3xl transition-all duration-500 h-full p-4 md:p-6 lg:p-8 hover:shadow-pink-500/30 hover:rotate-1">
             <header class="mb-4">
               <h1 class="p-2 text-center bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl text-white text-xl sm:text-2xl md:text-3xl font-bold tracking-wider shadow-lg hover:shadow-purple-500/30 transform hover:scale-105 transition-all duration-500 flex items-center justify-center">
                 <svg class="w-6 h-6 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -50,12 +51,12 @@
               </button>
             </footer>
           </article>
-        </section>
+        </div>
 
-        <%# Segunda coluna - Cards empilhados %>
-        <section class="w-full space-y-6">
-          <%# Card de métricas %>
-          <article class="bg-purple-900 p-4 sm:p-6 rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 transform hover:scale-[1.02]">
+        <%# Coluna B - Stack de Cards %>
+        <div class="w-full flex flex-col gap-4 md:gap-6">
+          <%# Primeiro Card da Coluna B %>
+          <article class="bg-purple-900 rounded-3xl transition-all duration-500 flex-1 p-4 md:p-6 lg:p-8 hover:shadow-purple-500/30 hover:scale-[1.02]">
             <header class="flex flex-wrap items-center justify-center gap-3 mb-4">
               <div class="bg-gradient-to-r from-pink-500 to-purple-500 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-white font-medium text-sm sm:text-base flex items-center">
                 <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -92,9 +93,11 @@
             </ul>
           </article>
 
-          <%# Card do gráfico - agora com responsividade adequada %>
-          <%= render 'performance_chart' %>
-        </section>
+          <%# Segundo Card da Coluna B %>
+          <article class="bg-purple-900 rounded-3xl transition-all duration-500 flex-1 p-4 md:p-6 lg:p-8 hover:shadow-purple-500/30 hover:scale-[1.02]">
+            <%= render 'performance_chart' %>
+          </article>
+        </div>
       </div>
     </div>
   </div>

@@ -61,6 +61,9 @@ application.register("profile-form", ProfileFormController)
 import Select2UsersController from "./select2_users_controller"
 application.register("select2-users", Select2UsersController)
 
+import SelectionController from "./selection_controller"
+application.register("selection", SelectionController)
+
 import ServiceAlertController from "./service_alert_controller"
 application.register("service-alert", ServiceAlertController)
 

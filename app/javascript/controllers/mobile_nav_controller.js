@@ -1,42 +1,56 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["mobileMenu", "desktopMenu"]
-
+  static targets = ["mobileMenu", "desktopMenu", "mobileMenuButton"]
+  
   connect() {
-    // Configuração inicial baseada no tamanho da tela
     this.checkScreenSize()
-    // Adicionar listener com debounce para resize
-    this.resizeTimer = null
-    window.addEventListener('resize', () => {
-      clearTimeout(this.resizeTimer)
-      this.resizeTimer = setTimeout(() => this.checkScreenSize(), 250)
-    })
+    window.addEventListener('resize', this.checkScreenSize.bind(this))
+    
+    // Em vez de atribuir à propriedade hasDesktopMenuTarget, 
+    // vamos armazenar o estado em uma nova propriedade
+    this._hasDesktopMenu = this.element.querySelector('[data-mobile-nav-target="desktopMenu"]') !== null
   }
-
+  
   disconnect() {
     window.removeEventListener('resize', this.checkScreenSize.bind(this))
-    clearTimeout(this.resizeTimer)
   }
-
-  toggleMenu(event) {
-    event.preventDefault()
-    const mobileMenu = this.mobileMenuTarget
-    mobileMenu.classList.toggle('hidden')
-  }
-
-  checkScreenSize() {
-    const isMobile = window.innerWidth < 768 // breakpoint md do Tailwind
+  
+  toggleMenu() {
+    if (this.hasMobileMenuTarget) {
+      this.mobileMenuTarget.classList.toggle('hidden')
+    }
     
-    // Menu Desktop
-    if (isMobile) {
-      this.desktopMenuTarget.classList.add('hidden')
-      this.desktopMenuTarget.classList.remove('md:flex')
-    } else {
-      this.desktopMenuTarget.classList.remove('hidden')
-      this.desktopMenuTarget.classList.add('md:flex')
-      // Sempre esconde o menu mobile em desktop
+    if (this.hasMobileMenuButtonTarget) {
+      const expanded = this.mobileMenuButtonTarget.getAttribute('aria-expanded') === 'true' || false
+      this.mobileMenuButtonTarget.setAttribute('aria-expanded', !expanded)
+    }
+  }
+  
+  closeMobileMenu() {
+    if (this.hasMobileMenuTarget) {
       this.mobileMenuTarget.classList.add('hidden')
+    }
+    
+    if (this.hasMobileMenuButtonTarget) {
+      this.mobileMenuButtonTarget.setAttribute('aria-expanded', 'false')
+    }
+  }
+  
+  checkScreenSize() {
+    const isMobile = window.innerWidth < 768
+    
+    if (this.hasMobileMenuTarget) {
+      if (isMobile) {
+        this.mobileMenuTarget.classList.add('hidden')
+      } else {
+        this.mobileMenuTarget.classList.remove('hidden')
+      }
+    }
+    
+    // Usar a nova propriedade _hasDesktopMenu
+    if (this._hasDesktopMenu && this.hasDesktopMenuTarget) {
+      this.desktopMenuTarget.classList.toggle('hidden', isMobile)
     }
   }
 }

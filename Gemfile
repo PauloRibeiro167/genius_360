@@ -83,6 +83,9 @@ gem "groupdate" # opcional, útil para agrupar dados por data
 
 gem 'browser'
 
+# Security
+gem 'secure_headers', '~> 6.5'
+
 group :development, :test do
   # Desenvolvimento e Testes
   gem "debug", platforms: %i[ mri mingw x64_mingw ]

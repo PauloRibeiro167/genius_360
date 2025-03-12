@@ -1,4 +1,4 @@
-<main class="p-12 bg-gray-900 h-[calc(100vh-2rem)]">
+<main class="p-12 bg-gray-900 w-full h-full">
 <div class="container mx-auto max-w-6xl">
   <div class="w-full max-w-4xl mx-auto">
     <!-- Container para mensagens -->
@@ -12,17 +12,24 @@
 
     <div class="flex gap-6">
       <!-- Card do Perfil -->
-      <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <div class="w-full max-w-sm bg-purple-950 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 flex flex-col items-center">
+          <!-- Avatar do usuário -->
           <div class="relative group w-full max-w-md">
-            <% if current_user.avatar.attached? %>
-              <%= image_tag current_user.avatar_thumbnail, class: "w-24 h-24 mb-1 mx-auto rounded-full shadow-lg" %>
-            <% else %>
-              <div class="w-24 h-24 mb-2 mx-auto rounded-full shadow-lg bg-gray-300 flex items-center justify-center">
-                <span class="text-lg text-gray-600"><%= current_user.full_name %></span>
-              </div>
-            <% end %>
+            <div class="mb-4">
+              <% if current_user.avatar.attached? %>      
+              <div class="w-full max-w-sm bg-purple-950 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                <%= image_tag current_user.avatar_thumbnail, 
+                class: "w-24 h-24 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500 mx-auto",
+                alt: "#{current_user.full_name}'s avatar" %>
+                <% else %>
+                <div class="w-24 h-24 mx-auto overflow-hidden bg-purple-950 rounded-full dark:bg-gray-600 relative flex items-center justify-center">
+                <svg class="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                </div>
+              <% end %>
+            </div>
 
+            <!-- Upload de avatar -->
             <div class="mt-4">
               <label for="avatar-upload" class="flex flex-col items-center justify-center w-full p-4 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
                 <div class="flex flex-col items-center justify-center">
@@ -36,14 +43,15 @@
             </div>
           </div>
 
+          <!-- Formulário oculto para upload -->
           <%= form_tag admin_profile_update_path, method: :post, multipart: true, class: 'hidden' do %>
             <%= file_field_tag 'user[avatar]', 
-                id: 'avatar-upload', 
-                class: 'hidden',
-                accept: 'image/png,image/jpg,image/jpeg',
-                data: { 
-                  action: 'change->form#submit'
-                } %>
+              id: 'avatar-upload', 
+              class: 'hidden',
+              accept: 'image/png,image/jpg,image/jpeg',
+              data: { 
+                action: 'change->form#submit'
+              } %>
           <% end %>
           
           <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white mt-2"><%= current_user.full_name %></h5>
@@ -87,13 +95,6 @@
                   </div>
                 </div>
 
-                <div class="space-y-1">
-                  <%= text_field_tag 'user[username]', current_user.username, 
-                      class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500 font-medium',
-                      disabled: true,
-                      data: { profile_form_target: "field" } %>
-                </div>
-
                 <div class="space-y-2">
                   <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Email</label>
                   <div data-profile-form-target="display" class="py-3 px-4 text-gray-700 dark:text-gray-300 font-medium bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -132,31 +133,19 @@
             </div>
 
             <div class="tab-pane fade" id="senha">
-              <%= form_tag admin_profile_update_password_path, method: :post, class: 'space-y-6' do %>
-                <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Senha Atual</label>
-                  <%= password_field_tag 'user[current_password]', nil, 
-                      class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500' %>
-                </div>
-
-                <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Nova Senha</label>
-                  <%= password_field_tag 'user[password]', nil, 
-                      class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500' %>
-                </div>
-
-                <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">Confirmar Nova Senha</label>
-                  <%= password_field_tag 'user[password_confirmation]', nil, 
-                      class: 'w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-blue-500 focus:border-blue-500' %>
-                </div>
-
-                <div class="flex items-center justify-center">
-                  <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
-                  Alterar Senha
-                  </button>
-                </div>
-              <% end %>
+              <div class="flex flex-col items-center justify-center space-y-4">
+                <p class="text-gray-600 dark:text-gray-400 text-center">
+                  Para alterar sua senha, clique no botão abaixo. Você será redirecionado para a página de alteração de senha.
+                </p>
+                
+                <%= link_to edit_user_password_path, 
+                    class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 inline-flex items-center" do %>
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m0 0v2m0-2h2m-2 0H10m5-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                  Redefinir Senha
+                <% end %>
+              </div>
             </div>
           </div>
         </div>

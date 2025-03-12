@@ -1,0 +1,120 @@
+<div class="space-y-6 bg-indigo-900 rounded-xl p-6 border border-purple-500/20">
+  <%# Incluir a partial de steps %>
+  <%= render 'admin/propostas/steps', current_step: 1 %>
+  
+  <div class="mt-6">
+    <h2 class="text-xl font-bold text-white mb-4">Selecione uma opção</h2>
+    
+    <div class="flex space-x-4 mb-6" data-controller="selection">
+      <button type="button" 
+              class="flex-1 py-3 px-4 bg-purple-800 text-white rounded-lg border-2 border-purple-600 hover:bg-purple-700 transition-all duration-200"
+              data-selection-target="button"
+              data-action="click->selection#selectOption"
+              data-option="search">
+        <div class="flex items-center justify-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Pesquisar Cliente Existente
+        </div>
+      </button>
+      
+      <button type="button" 
+              class="flex-1 py-3 px-4 bg-purple-800 text-white rounded-lg border-2 border-purple-600 hover:bg-purple-700 transition-all duration-200"
+              data-selection-target="button"
+              data-action="click->selection#selectOption"
+              data-option="create">
+        <div class="flex items-center justify-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Cadastrar Novo Cliente
+        </div>
+      </button>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" data-controller="selection">
+      <%# Card de Pesquisa - Visível apenas quando opção de pesquisa está selecionada %>
+      <div class="bg-purple-950/30 rounded-xl p-6 border border-purple-500/20 hidden" 
+           data-selection-target="option" 
+           data-option-name="search">
+        <h3 class="text-lg font-medium text-white mb-4">Buscar Usuário</h3>
+        <%= form_with url: search_users_admin_propostas_path, 
+                      method: :get, 
+                      class: "relative",
+                      data: { 
+                        turbo_frame: "search-results",
+                        controller: "search",
+                        turbo: true 
+                      } do |f| %>
+          <div class="relative">
+            <%= f.text_field :query, 
+                placeholder: "Digite CPF, Nome ou Email do usuário",
+                class: "w-full rounded-lg border-2 border-purple-500/30 bg-purple-950 text-white 
+                       pl-10 pr-4 py-3 text-base
+                       focus:border-purple-400 focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50
+                       placeholder-gray-400
+                       transition-all duration-200" %>
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+        <% end %>
+        
+        <%# Resultados da Pesquisa %>
+        <%= turbo_frame_tag "search-results", class: "mt-4" %>
+      </div>
+
+      <%# Card de Novo Cadastro - Visível apenas quando opção de cadastro está selecionada %>
+      <div class="bg-purple-950/30 rounded-xl p-6 border border-purple-500/20 flex flex-col justify-between hidden"
+           data-selection-target="option" 
+           data-option-name="create">
+        <div>
+          <h3 class="text-lg font-medium text-white mb-4">Novo Usuário</h3>
+          <%= form_with url: "#", method: :post, class: "space-y-4", data: { turbo: true } do |f| %>
+            <div class="space-y-2">
+              <%= f.label :name, "Nome Completo", class: "block text-sm font-medium text-gray-300" %>
+              <%= f.text_field :name, 
+                  class: "w-full rounded-lg border-2 border-purple-500/30 bg-purple-950 text-white 
+                         px-4 py-2 text-base
+                         focus:border-purple-400 focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50
+                         placeholder-gray-400
+                         transition-all duration-200" %>
+            </div>
+            
+            <div class="space-y-2">
+              <%= f.label :cpf, "CPF", class: "block text-sm font-medium text-gray-300" %>
+              <%= f.text_field :cpf, 
+                  class: "w-full rounded-lg border-2 border-purple-500/30 bg-purple-950 text-white 
+                         px-4 py-2 text-base
+                         focus:border-purple-400 focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50
+                         placeholder-gray-400
+                         transition-all duration-200" %>
+            </div>
+            
+            <div class="space-y-2">
+              <%= f.label :email, "Email", class: "block text-sm font-medium text-gray-300" %>
+              <%= f.email_field :email, 
+                  class: "w-full rounded-lg border-2 border-purple-500/30 bg-purple-950 text-white 
+                         px-4 py-2 text-base
+                         focus:border-purple-400 focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50
+                         placeholder-gray-400
+                         transition-all duration-200" %>
+            </div>
+            
+            <div class="pt-4">
+              <%= f.submit "Avançar", 
+                  class: "w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 
+                         text-white font-medium rounded-lg
+                         hover:from-purple-700 hover:to-blue-700 
+                         focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 
+                         transition-all duration-200" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

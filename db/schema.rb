@@ -204,6 +204,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_25_191038) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "orders", force: :cascade do |t|
+    t.decimal "value", precision: 10, scale: 2, default: "0.0"
+    t.bigint "user_id"
+    t.string "status", default: "pending"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
   create_table "parceiros", force: :cascade do |t|
     t.bigint "usuario_id", null: false
     t.decimal "percentual_comissao"
@@ -377,6 +386,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_25_191038) do
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "meta", "usuarios"
   add_foreign_key "notifications", "users"
+  add_foreign_key "orders", "users"
   add_foreign_key "parceiros", "usuarios"
   add_foreign_key "perfil_permissions", "perfils"
   add_foreign_key "perfil_permissions", "permissions"

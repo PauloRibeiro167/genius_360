@@ -1,6 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
-  before_action :configure_sign_in_params, only: [ :create ]
-  before_action :verify_signed_out_user, only: [ :new, :create ]
+  before_action :configure_sign_in_params, only: [:create]
+  before_action :verify_signed_out_user, only: [:new, :create]
   before_action :log_request_info
   respond_to :html, :json, :turbo_stream
 
@@ -38,43 +38,57 @@ class Users::SessionsController < Devise::SessionsController
 
   def create
     Rails.logger.info "==== Tentando autenticar usuário ===="
+    Rails.logger.info "Email tentando login: #{params[:user][:email]}"
+    
     begin
-      super # Chama o método create do Devise::SessionsController
+      # Verificar se o usuário existe
+      user = User.find_by(email: params[:user][:email])
+      if user
+        Rails.logger.info "Usuário encontrado no banco"
+        Rails.logger.info "Perfil do usuário: #{user.perfil.try(:name)}"
+        
+        # Adicionar log para verificar a senha
+        Rails.logger.info "Verificando senha..."
+      else
+        Rails.logger.info "Usuário não encontrado no banco"
+      end
+
+      self.resource = warden.authenticate!(auth_options)
+      set_flash_message!(:notice, :signed_in)
+      sign_in(resource_name, resource)
+      flash[:welcome_message] = "Bem-vindo de volta, #{current_user.full_name}!" if is_navigational_format?
+      respond_with resource, location: after_sign_in_path_for(resource)
     rescue => e
       Rails.logger.error "==== Erro ao tentar logar ===="
       Rails.logger.error "Mensagem: #{e.message}"
-      handle_standard_error(e)
+      Rails.logger.error "Backtrace: #{e.backtrace.join("\n")}"
+      
+      handle_authentication_error(e)
     end
   end
 
   def destroy
-    Rails.logger.info "==== Logout ===="
-    Rails.logger.info "Usuário: #{current_user&.email}"
-    Rails.logger.info "Timestamp: #{Time.current}"
-    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
-    flash[:notice] = t('devise.sessions.signed_out') if signed_out
-    respond_to do |format|
-      format.html { redirect_to root_path }
-      format.json { head :no_content }
-    end
-  end
-
-  protected
-
-  def configure_sign_in_params
-    devise_parameter_sanitizer.permit(:sign_in, keys: [ :email, :password, :remember_me ])
+    sign_out(current_user)
+    flash[:notice] = "Logout realizado com sucesso."
+    redirect_to root_path
   end
 
   def after_sign_in_path_for(resource)
-    admin_root_path # ou '/admin' dependendo da sua configuração de rotas
+    admin_root_path
   end
 
   def after_sign_out_path_for(resource_or_scope)
     root_path
   end
 
-  def sign_in_params
-    params.require(:user).permit(:email, :password)
+  protected
+
+  def auth_options
+    { scope: resource_name, recall: "#{controller_path}#new" }
+  end
+
+  def configure_sign_in_params
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:email, :password])
   end
 
   private
@@ -92,12 +106,13 @@ class Users::SessionsController < Devise::SessionsController
     Rails.logger.error "==== Erro de autenticação DETALHADO ===="
     Rails.logger.error "Mensagem: #{error.message}"
     Rails.logger.error "Backtrace: #{error.backtrace.join("\n")}"
+    
     respond_to do |format|
       format.html do
-        flash[:alert] = "Email ou senha inválidos."
+        flash[:alert] = "Email ou senha inválidos. Por favor, verifique suas credenciais."
         redirect_to new_session_path(resource_name)
       end
-      format.json { render json: { error: "Email ou senha inválidos." }, status: :unauthorized }
+      format.json { render json: { error: "Email ou senha inválidos" }, status: :unauthorized }
     end
   end
 
@@ -105,9 +120,12 @@ class Users::SessionsController < Devise::SessionsController
     respond_to do |format|
       format.html do
         flash[:alert] = "Erro ao tentar logar: #{error.message}"
-        redirect_to new_session_path(resource_name)
+        redirect_to new_session_path(resource_name) and return
       end
-      format.json { render json: { error: "Erro ao tentar logar: #{error.message}" }, status: :unprocessable_entity }
+      format.json { 
+        render json: { error: "Erro ao tentar logar: #{error.message}" }, 
+        status: :unprocessable_entity 
+      }
     end
   end
 end

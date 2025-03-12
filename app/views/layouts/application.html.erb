@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR" data-controller="theme-initializer">
   <head>
-    <title><%= content_for(:title) || "Genius360" %></title>
+    <title>Genius360</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,6 +10,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <meta name="csp-nonce" content="<%= request.content_security_policy_nonce %>">
+    <%# Removendo esta meta tag que está causando conflito %>
+    <%# <meta http-equiv="Content-Security-Policy" content="default-src 'self'; frame-src 'self' https://www.google.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"> %>
 
     <%= yield :head %>
 
@@ -19,14 +21,16 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "variables", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    
+    <%= javascript_include_tag "Chart.bundle", "data-turbo-track": "reload" if defined?(Chart) %> 
+    <%= javascript_include_tag "chartkick", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
   <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-x-hidden">
-    <% if user_signed_in? %>
+    <% if user_signed_in? && @show_welcome_message %>
       <div class="w-full bg-green-500 text-white py-2 text-center fixed top-0 z-50 transition-opacity duration-500" 
            data-controller="message-login"
            data-message-login-target="message"
@@ -40,7 +44,7 @@
         <% end %>
       </div>
     <% end %>
-    <header class="w-screen bg-white dark:bg-purple-950 shadow mx-4">
+    <header class="w-screen bg-white dark:bg-purple-950 shadow">
       <%= render "layouts/navbar" %>
     </header>
     <%= render "layouts/breadcrumbs"%>

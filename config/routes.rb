@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { sessions: "users/sessions" }
+  devise_for :users, controllers: { 
+    sessions: 'users/sessions'}
   resources :perfil_users
   namespace :concerns do
     get "authorization/check_permissions"
@@ -42,11 +43,9 @@ Rails.application.routes.draw do
 
   resources :contact_messages, only: [ :create ]
 
-  # PWA routes
   get "pwa/manifest", to: "pwa#manifest", format: "json", as: "pwa_manifest"
   get "pwa/pwa"
 
-  # Public routes
   namespace :public do
     get "/", to: "pages#index"
     get "sobre", to: "pages#sobre"
@@ -55,10 +54,8 @@ Rails.application.routes.draw do
     get "contato", to: "pages#contato"
   end
 
-  # Root route
   root "public/pages#index"
 
-  # Admin routes
   namespace :admin do
     root to: "dashboard#index"
 
@@ -105,7 +102,6 @@ Rails.application.routes.draw do
     post "profile/update", to: "profile#update"
     post "profile/update_password", to: "profile#update_password", as: :profile_update_password
 
-    # API Manager routes
     resources :api_manager, only: [] do
       collection do
         get :start
@@ -119,6 +115,7 @@ Rails.application.routes.draw do
         get :consulta_servidor
         post :buscar_servidor
         get :selecionar_consulta
+        get :search_users  # Adicione esta linha
         post :redirecionar_consulta
         get :consulta_servidores_federais
         get :consulta_servidores_pi
@@ -128,8 +125,16 @@ Rails.application.routes.draw do
         post :buscar_servidores_pi
         post :buscar_servidores_ce
         post :buscar_beneficios
+        get :filter_by_prazo
+      end
+      
+      member do
+        get :next_step
+        get :previous_step
       end
     end
+
+    resources :users, only: [:new, :create]
   end
 
   namespace :api do
@@ -141,7 +146,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # Test resources
   resources :tests do
     member do
       patch :discard

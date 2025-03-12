@@ -1,0 +1,65 @@
+<ol class="flex items-center w-full space-x-4 rtl:space-x-reverse flex-wrap">
+  <li class="flex items-center <%= current_step == 1 ? 'text-purple-600 dark:text-purple-500' : 'text-gray-400 dark:text-gray-400' %> space-x-2.5 rtl:space-x-reverse mb-3">
+    <span class="flex items-center justify-center w-8 h-8 border <%= current_step == 1 ? 'border-purple-600 dark:border-purple-500' : 'border-gray-400 dark:border-gray-400' %> rounded-full shrink-0">
+      1
+    </span>
+    <span>
+      <h3 class="font-medium leading-tight">Cadastro de Cliente</h3>
+      <p class="text-sm">Dados pessoais</p>
+    </span>
+  </li>
+  
+  <li class="flex items-center <%= current_step == 2 ? 'text-purple-600 dark:text-purple-500' : 'text-gray-400 dark:text-gray-400' %> space-x-2.5 rtl:space-x-reverse mb-3">
+    <span class="flex items-center justify-center w-8 h-8 border <%= current_step == 2 ? 'border-purple-600 dark:border-purple-500' : 'border-gray-400 dark:border-gray-400' %> rounded-full shrink-0">
+      2
+    </span>
+    <span>
+      <h3 class="font-medium leading-tight">Consulta de Proposta</h3>
+      <p class="text-sm">Melhor proposta para o cliente</p>
+    </span>
+  </li>
+  
+  <li class="flex items-center <%= current_step == 3 ? 'text-purple-600 dark:text-purple-500' : 'text-gray-400 dark:text-gray-400' %> space-x-2.5 rtl:space-x-reverse mb-3">
+    <span class="flex items-center justify-center w-8 h-8 border <%= current_step == 3 ? 'border-purple-600 dark:border-purple-500' : 'border-gray-400 dark:border-gray-400' %> rounded-full shrink-0">
+      3
+    </span>
+    <span>
+      <h3 class="font-medium leading-tight">Aguardando Averbação</h3>
+      <p class="text-sm">Processo em análise</p>
+    </span>
+  </li>
+  
+  <li class="flex items-center <%= current_step == 4 ? 'text-purple-600 dark:text-purple-500' : 'text-gray-400 dark:text-gray-400' %> space-x-2.5 rtl:space-x-reverse mb-3">
+    <span class="flex items-center justify-center w-8 h-8 border <%= current_step == 4 ? 'border-purple-600 dark:border-purple-500' : 'border-gray-400 dark:border-gray-400' %> rounded-full shrink-0">
+      4
+    </span>
+    <span>
+      <h3 class="font-medium leading-tight">Averbação Concluída</h3>
+      <p class="text-sm">Processo finalizado</p>
+    </span>
+  </li>
+
+  <li class="flex items-center <%= current_step == 5 ? 'text-purple-600 dark:text-purple-500' : 'text-gray-400 dark:text-gray-400' %> space-x-2.5 rtl:space-x-reverse mb-3">
+    <span class="flex items-center justify-center w-8 h-8 border <%= current_step == 5 ? 'border-purple-600 dark:border-purple-500' : 'border-gray-400 dark:border-gray-400' %> rounded-full shrink-0">
+      5
+    </span>
+    <span>
+      <h3 class="font-medium leading-tight">Comissão Agendada</h3>
+      <p class="text-sm">Pagamento programado</p>
+    </span>
+  </li>
+
+  <li class="flex items-center <%= current_step == 6 ? 'text-purple-600 dark:text-purple-500' : 'text-gray-400 dark:text-gray-400' %> space-x-2.5 rtl:space-x-reverse mb-3">
+    <span class="flex items-center justify-center w-8 h-8 border <%= current_step == 6 ? 'border-purple-600 dark:border-purple-500' : 'border-gray-400 dark:border-gray-400' %> rounded-full shrink-0">
+      6
+    </span>
+    <span>
+      <h3 class="font-medium leading-tight">Comissão Paga</h3>
+      <p class="text-sm">Pagamento efetuado</p>
+    </span>
+  </li>
+</ol>
+
+<% if defined?(show_filters) && show_filters %>
+  <%= render 'admin/propostas/prazo_filtros' %>
+<% end %>

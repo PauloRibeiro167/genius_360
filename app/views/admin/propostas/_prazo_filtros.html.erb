@@ -1,0 +1,61 @@
+<div class="mt-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+  <h3 class="text-lg font-medium mb-2">Filtrar por Prazo de Contrato</h3>
+  
+  <%= form_with url: filter_by_prazo_admin_propostas_path, method: :get, class: "space-y-4", data: { controller: "form", action: "submit->form#submit" } do |f| %>
+    <div class="flex flex-wrap gap-4">
+      <div class="flex items-center">
+        <%= f.radio_button :prazo_tipo, 'todos', class: 'mr-2', checked: params[:prazo_tipo] == 'todos' || params[:prazo_tipo].nil? %>
+        <%= f.label :prazo_tipo_todos, 'Todos', class: 'text-sm font-medium' %>
+      </div>
+      
+      <div class="flex items-center">
+        <%= f.radio_button :prazo_tipo, 'em_dia', class: 'mr-2', checked: params[:prazo_tipo] == 'em_dia' %>
+        <%= f.label :prazo_tipo_em_dia, 'Em dia', class: 'text-sm font-medium' %>
+      </div>
+      
+      <div class="flex items-center">
+        <%= f.radio_button :prazo_tipo, 'proximo_vencimento', class: 'mr-2', checked: params[:prazo_tipo] == 'proximo_vencimento' %>
+        <%= f.label :prazo_tipo_proximo_vencimento, 'Próximo ao vencimento (30 dias)', class: 'text-sm font-medium' %>
+      </div>
+      
+      <div class="flex items-center">
+        <%= f.radio_button :prazo_tipo, 'vencido', class: 'mr-2', checked: params[:prazo_tipo] == 'vencido' %>
+        <%= f.label :prazo_tipo_vencido, 'Vencido', class: 'text-sm font-medium' %>
+      </div>
+      
+      <div class="flex items-center">
+        <%= f.radio_button :prazo_tipo, 'personalizado', class: 'mr-2', checked: params[:prazo_tipo] == 'personalizado' %>
+        <%= f.label :prazo_tipo_personalizado, 'Período personalizado', class: 'text-sm font-medium' %>
+      </div>
+    </div>
+    
+    <div id="periodo_personalizado" class="<%= params[:prazo_tipo] == 'personalizado' ? '' : 'hidden' %> flex gap-4">
+      <div>
+        <%= f.label :data_inicial, 'Data Inicial', class: 'block text-sm font-medium mb-1' %>
+        <%= f.date_field :data_inicial, class: 'rounded-md w-full border-gray-300' %>
+      </div>
+      <div>
+        <%= f.label :data_final, 'Data Final', class: 'block text-sm font-medium mb-1' %>
+        <%= f.date_field :data_final, class: 'rounded-md w-full border-gray-300' %>
+      </div>
+    </div>
+    
+    <div class="flex justify-end">
+      <%= f.submit 'Filtrar', class: 'px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition' %>
+      <%= link_to 'Limpar Filtros', admin_propostas_path, class: 'px-4 py-2 bg-gray-200 text-gray-700 rounded-md ml-2 hover:bg-gray-300 transition' %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const radioBtns = document.querySelectorAll('input[name="prazo_tipo"]');
+    const periodoPersonalizado = document.getElementById('periodo_personalizado');
+    
+    radioBtns.forEach(radio => {
+      radio.addEventListener('change', function() {
+        periodoPersonalizado.classList.toggle('hidden', this.value !== 'personalizado');
+      });
+    });
+  });
+</script>

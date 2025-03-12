@@ -73,4 +73,7 @@ Rails.application.configure do
   config.hosts.clear # Permite todas as origens em desenvolvimento
 
   config.log_level = :debug
+
+  # Ativar CSP no ambiente de desenvolvimento
+  config.content_security_policy_report_only = true
 end

@@ -1,40 +1,61 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["content"]
+  static targets = ["dropdownContent"]
   
   connect() {
-    console.log("DropdownController conectado")
-    // Fechar ao clicar fora
-    document.addEventListener('click', this.clickOutside.bind(this))
+    try {
+      document.addEventListener('click', this.clickOutside.bind(this))
+    } catch (error) {
+      console.error('Erro ao conectar dropdown:', error)
+    }
   }
   
   disconnect() {
-    console.log("DropdownController desconectado")
-    document.removeEventListener('click', this.clickOutside.bind(this))
+    try {
+      document.removeEventListener('click', this.clickOutside.bind(this))
+    } catch (error) {
+      console.error('Erro ao desconectar dropdown:', error)
+    }
   }
   
   toggle(event) {
-    event.stopPropagation()
-    
-    console.log("Dropdown toggle clicado")
-    
-    if (this.hasContentTarget) {
-      this.contentTarget.classList.toggle('hidden')
-      const isOpen = !this.contentTarget.classList.contains('hidden')
-      console.log(`Dropdown ${isOpen ? "aberto" : "fechado"}`)
-    } else {
-      console.error("Dropdown content não encontrado")
+    try {
+      event?.stopPropagation()
+      
+      if (!this.hasDropdownContentTarget) {
+        throw new Error('Target dropdownContent não encontrado')
+      }
+
+      const isOpen = this.dropdownContentTarget.classList.toggle('hidden')
+      isOpen && this.positionDropdown()
+      
+    } catch (error) {
+      console.error('Erro ao alternar dropdown:', {
+        erro: error.message,
+        elemento: this.element,
+        target: this.dropdownContentTarget
+      })
+    }
+  }
+  
+  positionDropdown() {
+    try {
+      window.innerWidth < 768 && this.dropdownContentTarget.classList.add('w-full')
+    } catch (error) {
+      console.error('Erro ao posicionar dropdown:', error)
     }
   }
   
   clickOutside(event) {
-    // Se o dropdown estiver aberto e o clique for fora do dropdown
-    if (this.hasContentTarget && !this.contentTarget.classList.contains('hidden')) {
-      if (!this.element.contains(event.target)) {
-        console.log("Clique fora do dropdown detectado, fechando dropdown")
-        this.contentTarget.classList.add('hidden')
-      }
+    try {
+      const shouldClose = this.hasDropdownContentTarget && 
+                         !this.dropdownContentTarget.classList.contains('hidden') && 
+                         !this.element.contains(event.target)
+      
+      shouldClose && this.dropdownContentTarget.classList.add('hidden')
+    } catch (error) {
+      console.error('Erro ao processar clique externo:', error)
     }
   }
 }

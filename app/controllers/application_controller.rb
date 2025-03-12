@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :log_authentication_status
   before_action :set_content_security_policy
+  before_action :set_csp_for_fonts_and_maps
+  before_action :set_welcome_message, if: :user_signed_in?
 
   protected
 
@@ -62,5 +64,23 @@ class ApplicationController < ActionController::Base
       "connect-src 'self' https:",
       "frame-src 'self'"
     ].join('; ')
+  end
+
+  def set_csp_for_fonts_and_maps
+    # Override padrão do CSP para permitir fontes data: e frames do Google Maps
+    SecureHeaders.override_content_security_policy_directives(request, 
+      font_src: %w('self' https: data: 'unsafe-inline'),
+      frame_src: %w('self' https://www.google.com https://*.google.com),
+      style_src: %w('self' https: 'unsafe-inline')
+    )
+  end
+
+  def set_welcome_message
+    @show_welcome_message = false
+    
+    if session[:welcome_message_shown].nil? && user_signed_in?
+      @show_welcome_message = true
+      session[:welcome_message_shown] = true
+    end
   end
 end
