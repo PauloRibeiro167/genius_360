@@ -93,7 +93,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false  # Linting
   gem "shoulda-matchers", "~> 5.0"
   gem "simplecov", require: false
-  gem "rspec-rails", "~> 6.1.0"
+  gem "rspec-rails", "~> 7.1.1"
   gem "factory_bot_rails", "~> 6.4.0"
   gem "faker", "~> 3.2.0"
 end
