@@ -26,6 +26,7 @@ class Users::SessionsController < Devise::SessionsController
   def new
     @resource = User.new
     Rails.logger.info "==== Acessando action NEW do SessionsController ===="
+    Rails.logger.info "Após o login, o usuário será redirecionado para: #{after_sign_in_path_for(resource)}"
     begin
       render "devise/sessions/new"
     rescue => e

@@ -16,14 +16,14 @@
       </svg>
     </button>
 
-    <!-- Menu Desktop - Sempre visível em MD+ -->
+    <!-- Menu Desktop -->
     <div class="hidden md:!flex md:items-center md:justify-between md:flex-1 md:w-auto" 
          id="desktop-menu">
       <div class="flex items-center justify-center flex-grow px-1">
         <%= render 'shared/nav_menu', mobile: false, flowbite_style: true %>
       </div>
 
-        <!-- Desktop User Menu -->
+      <!-- Desktop User Menu -->
       <div class="flex items-center justify-start w-48">
         <% if user_signed_in? %>
         <div class="relative" data-controller="dropdown">
@@ -50,6 +50,13 @@
             <%= render partial: 'shared/user_dropdown_content', locals: { mobile: false, flowbite_style: true } %>
           </div>
         </div>
+        <% elsif current_page?(root_path) %>
+          <%= link_to new_user_session_path, class: "flex items-center justify-center py-2 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:bg-purple-700 transition-colors duration-200" do %>
+            <svg class="w-5 h-5 text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+            </svg>
+            <span>Login</span>
+          <% end %>
         <% end %>
       </div>
     </div>
@@ -79,15 +86,15 @@
               <%= render partial: 'shared/user_dropdown_content', locals: { mobile: true, flowbite_style: true } %>
             </div>
           </li>
-        <% else %>
-            <li>
+        <% elsif current_page?(root_path) %>
+          <li>
             <%= link_to new_user_session_path, class: "flex items-center justify-center py-2 px-4 mt-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-600 text-white" do %>
               <svg class="w-6 h-6 text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
               </svg>
               <span>Login</span>
             <% end %>
-            </li>
+          </li>
         <% end %>
       </ul>
     </div>

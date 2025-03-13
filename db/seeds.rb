@@ -46,64 +46,6 @@ perfis.each do |perfil|
   Perfil.create!(perfil)
 end
 
-# Criar usuário admin
-super_admin_perfil = Perfil.find_by(name: "Super Admin")
-User.create!(
-  email: 'admin@teste.com',
-  password: '123456',
-  password_confirmation: '123456',
-  first_name: 'Admin',
-  last_name: 'Test',
-  perfil_id: super_admin_perfil.id 
-)
-
-# Definir senha padrão para todos os usuários
-SENHA_PADRAO = 'Genius@2024'
-
-# Usuários padrões do sistema - todos como Super Admin
-# Brena Matos
-User.create!(
-  email: 'brenamatos@geniusdi.com',
-  password: SENHA_PADRAO,
-  password_confirmation: SENHA_PADRAO,
-  first_name: 'Brena',
-  last_name: 'Matos',
-  perfil_id: super_admin_perfil.id
-)
-
-# Paulo Ribeiro
-User.create!(
-  email: 'paulorezende@geniusdi.com',
-  password: 'Paulo1lotusred',
-  password_confirmation: 'Paulo1lotusred',
-  first_name: 'Paulo',
-  last_name: 'Ribeiro',
-  perfil_id: super_admin_perfil.id
-)
-
-# Junior Peixoto
-User.create!(
-  email: 'juniorpeixoto@geniusdi.com',
-  password: SENHA_PADRAO,
-  password_confirmation: SENHA_PADRAO,
-  first_name: 'Junior',
-  last_name: 'Peixoto',
-  perfil_id: super_admin_perfil.id
-)
-
-# Lucas Moreira
-User.create!(
-  email: 'lucasmoreira@geniusdi.com',
-  password: SENHA_PADRAO,
-  password_confirmation: SENHA_PADRAO,
-  first_name: 'Lucas',
-  last_name: 'Moreira',
-  perfil_id: super_admin_perfil.id
-)
-
-puts "Usuários criados com sucesso!"
-puts "Senha padrão para todos os usuários (exceto Paulo): #{SENHA_PADRAO}"
-
 # Seeds para as Permissões
 permissions = [
   # UsersController
