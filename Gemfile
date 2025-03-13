@@ -64,7 +64,7 @@ gem "stringio", "~> 3.1.3"
 gem "pg"
 
 # Redis para caching e Sidekiq
-gem "redis", "~> 4.0"
+gem "redis", "~> 5.4"
 
 # Sidekiq para background jobs
 gem "sidekiq"
