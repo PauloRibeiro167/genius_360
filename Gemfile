@@ -28,7 +28,7 @@ gem "tailwindcss-rails"     # Framework CSS
 gem "breadcrumbs_on_rails", "~> 4.1"  # Gerenciamento de breadcrumbs
 
 # Notificações
-gem "noticed", "~> 1.6"
+gem "noticed", "~> 2.6"
 
 # API e JSON
 gem "jbuilder"              # Construa APIs JSON facilmente
