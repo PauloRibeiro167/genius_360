@@ -54,8 +54,7 @@ gem "kamal", require: false # Deploy com containers Docker
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Especificar versão do stringio para evitar avisos
-gem "stringio", "~> 3.1.3"
-
+gem 'stringio', '3.1.5'
 # Gems Opcionais (comentadas)
 # gem "bcrypt", "~> 3.1.7"           # Senhas seguras
 # gem "image_processing", "~> 1.2"    # Transformação de imagens
@@ -86,6 +85,9 @@ gem 'browser'
 # Security
 gem 'secure_headers', '~> 6.5'
 
+# Mantenha apenas uma ocorrência desta gem
+gem 'get_process_mem'
+
 group :development, :test do
   # Desenvolvimento e Testes
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
@@ -107,13 +109,11 @@ group :development do
   gem "spring"
   gem "ruby-lsp", require: false
   gem "solargraph", require: false
-  gem "get_process_mem"
 end
 
 group :production do
   # Gems específicas para produção
   gem "rails_12factor"
-  gem "get_process_mem"
 end
 
 group :test do

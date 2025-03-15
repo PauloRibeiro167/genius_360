@@ -15,32 +15,7 @@ Perfil.destroy_all
 puts "Banco de dados limpo."
 
 # Seeds para os Perfis
-perfis = [
-  {
-    name: "Super Admin"
-  },
-  {
-    name: "Analista de Dados"
-  },
-  {
-    name: "Gerente Comercial"
-  },
-  {
-    name: "Diretor Executivo"
-  },
-  {
-    name: "Operador"
-  },
-  {
-    name: "Marketing"
-  },
-  {
-    name: "Supervisor"
-  },
-  {
-    name: "Monitor de Fraudes"
-  }
-]
+perfis = %w[Super\ Admin Analista\ de\ Dados Gerente\ Comercial Diretor\ Executivo Operador Marketing Supervisor Monitor\ de\ Fraudes].map { |name| { name: name } }
 
 perfis.each do |perfil|
   Perfil.create!(perfil)
@@ -250,3 +225,44 @@ perfil_permissions_map.each do |perfil_name, permission_names|
 end
 
 puts "Associações entre Perfis e Permissões criadas com sucesso!"
+
+# Criar associações entre Permissions e ControllerPermissions
+puts "\nCriando associações entre Permissions e ControllerPermissions..."
+
+permission_controller_map = {
+  "Listar usuários" => { controller: "users", action: "index" },
+  "Visualizar usuário" => { controller: "users", action: "show" },
+  "Atualizar usuário" => { controller: "users", action: "update" },
+  "Remover usuário" => { controller: "users", action: "destroy" },
+  
+  "Visualizar métricas" => { controller: "metrics", action: "index" },
+  "Exportar métricas" => { controller: "metrics", action: "export" },
+  "Filtrar métricas" => { controller: "metrics", action: "filter" },
+  
+  # ...adicione mais mapeamentos conforme necessário
+}
+
+permission_controller_map.each do |permission_name, controller_action|
+  permission = Permission.find_by(name: permission_name)
+  controller_permission = ControllerPermission.find_by(
+    controller_name: controller_action[:controller],
+    action_name: controller_action[:action]
+  )
+  
+  if permission && controller_permission
+    permission.controller_permissions << controller_permission unless permission.controller_permissions.include?(controller_permission)
+  end
+end
+
+puts "Associações entre Permissions e ControllerPermissions criadas com sucesso!"
+
+# Criar um usuário Super Admin
+puts "\nCriando usuário Super Admin..."
+
+admin_user = User.create!(
+  email: 'paulorezende877@gmail.com',
+  password: 'sua_senha_aqui',
+  perfil: Perfil.find_by(name: 'Super Admin')
+)
+
+puts "Usuário Super Admin criado com sucesso!"

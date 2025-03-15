@@ -1,9 +1,7 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # Include default devise modules
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :trackable
+         :recoverable, :rememberable, :validatable
   include Discard::Model
 
   belongs_to :perfil
@@ -25,6 +23,8 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :email, presence: true, uniqueness: true
   validates :perfil_id, presence: true
+  validates :cpf, presence: true, uniqueness: { message: "já está cadastrado no sistema" }
+  validates :phone, presence: true, uniqueness: true
 
   # Validações do avatar
   # validates :avatar,
@@ -33,14 +33,22 @@ class User < ApplicationRecord
   #          if: :avatar_attached?
 
   validate :validate_cpf_format
+  validate :validate_cpf_valido
   validate :validate_phone_format
+  validate :cpf_must_be_unique
   
   def avatar_attached?
     avatar.attached?
   end
 
   def admin?
-    perfil == 'admin'
+    admin == true
+  end
+
+  def public_user?
+    # Implemente sua lógica aqui para determinar se o usuário é público
+    # Por exemplo:
+    perfil&.name == 'public' || has_role?(:public)
   end
 
   # Adicione perfil aos atributos pesquisáveis
@@ -108,14 +116,67 @@ class User < ApplicationRecord
 
   def validate_cpf_format
     return if cpf.blank?
+    
+    # Remove caracteres não numéricos
     formatted_cpf = cpf.to_s.gsub(/[^\d]/, '')
     
+    # Verifica se tem 11 dígitos
     unless formatted_cpf.match?(/\A\d{11}\z/)
       errors.add(:cpf, "deve conter exatamente 11 dígitos")
       return
     end
     
+    # Normaliza o CPF removendo pontuação
     self.cpf = formatted_cpf
+  end
+
+  def validate_cpf_valido
+    return if cpf.blank?
+    
+    unless cpf_valido?(cpf)
+      errors.add(:cpf, "não é válido")
+    end
+  end
+
+  def cpf_valido?(cpf)
+    # Remove caracteres não numéricos
+    cpf = cpf.to_s.gsub(/[^0-9]/, '')
+    
+    # Verifica o tamanho
+    return false unless cpf.length == 11
+    
+    # Verifica CPFs com números repetidos (mais rigoroso)
+    primeiro_digito = cpf[0]
+    return false if cpf.chars.all? { |d| d == primeiro_digito }
+    
+    # Lista de CPFs inválidos conhecidos
+    cpfs_invalidos = %w[
+      00000000000 11111111111 22222222222 33333333333 44444444444
+      55555555555 66666666666 77777777777 88888888888 99999999999
+    ]
+    return false if cpfs_invalidos.include?(cpf)
+    
+    # Cálculo do primeiro dígito verificador
+    soma = 0
+    9.times do |i|
+      soma += cpf[i].to_i * (10 - i)
+    end
+    
+    resto = soma % 11
+    primeiro_dv = resto < 2 ? 0 : 11 - resto
+    return false if primeiro_dv != cpf[9].to_i
+    
+    # Cálculo do segundo dígito verificador
+    soma = 0
+    10.times do |i|
+      soma += cpf[i].to_i * (11 - i)
+    end
+    
+    resto = soma % 11
+    segundo_dv = resto < 2 ? 0 : 11 - resto
+    return false if segundo_dv != cpf[10].to_i
+    
+    true
   end
 
   def validate_phone_format
@@ -128,5 +189,13 @@ class User < ApplicationRecord
     end
     
     self.phone = formatted_phone
+  end
+
+  def cpf_must_be_unique
+    return unless cpf_changed?
+    
+    if User.where(cpf: cpf).where.not(id: id).exists?
+      errors.add(:cpf, "já está em uso")
+    end
   end
 end

@@ -1,15 +1,18 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  # before_action :verify_admin_access, only: [:new, :create]
+  prepend_before_action :authenticate_user!
+  before_action :check_super_admin
+  skip_before_action :require_no_authentication
   respond_to :html, :turbo_stream
 
   private
 
-  # def verify_admin_access
-  #   unless current_user&.admin?
-  #     flash[:alert] = "Acesso negado. Apenas administradores podem cadastrar novos usuários."
-  #     redirect_to root_path
-  #   end
-  # end
+  def check_super_admin
+    unless user_signed_in? && current_user.perfil&.name == 'Super Admin'
+      Rails.logger.warn "Tentativa de acesso não autorizado ao registro - IP: #{request.remote_ip}, Usuário: #{current_user&.email}"
+      flash[:alert] = "Acesso permitido apenas para administradores do sistema."
+      redirect_to root_path and return
+    end
+  end
 
   def sign_up_params
     params.require(:user).permit(:first_name, :last_name, :email, :phone, :cpf, :password, :password_confirmation, :perfil_id)
@@ -21,36 +24,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   protected
 
-  def after_sign_up_path_for(resource)
-    admin_dashboard_index_path
+  def sign_up(resource_name, resource)
+    true
   end
 
-  def respond_with(resource, _opts = {})
-    if resource.persisted?
-      flash[:notice] = "Conta criada com sucesso."
-      redirect_to after_sign_up_path_for(resource)
-    else
-      begin
-        flash.now[:alert] = resource.errors.full_messages.join(", ")
-        respond_to do |format|
-          format.turbo_stream { 
-            render turbo_stream: turbo_stream.replace(
-              "new_user",
-              template: "devise/registrations/new",
-              locals: { resource: resource }
-            )
-          }
-          format.html { 
-            render :new, status: :unprocessable_entity
-          }
-        end
-      rescue StandardError => e
-        flash.now[:error] = "Ocorreu um erro inesperado: #{e.message}"
-        respond_to do |format|
-          format.html { render :new, status: :internal_server_error }
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("new_user", partial: "shared/error") }
-        end
-      end
-    end
+  def after_sign_up_path_for(resource)
+    admin_root_path
   end
 end

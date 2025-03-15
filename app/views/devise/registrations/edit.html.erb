@@ -1,35 +1,85 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<section class="container mx-auto p-4 w-1/2 min-h-[30vh] flex items-center justify-center">
+  <div class="p-6 bg-purple-900 rounded-3xl w-full max-w-2xl">
+    <div class="mb-7">
+      <h2 class="font-semibold text-2xl text-gray-100 text-center">Editar Perfil</h2>
+    </div>
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= f.error_notification %>
+    <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="form-inputs">
-    <%= f.input :email, required: true, autofocus: true %>
+    <div class="space-y-6 px-8">
+      <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, data: { turbo: false } }) do |f| %>
+        <% form_fields = [
+          { field: :first_name, label: "Nome", type: :input },
+          { field: :last_name, label: "Sobrenome", type: :input },
+          { field: :email, label: "E-mail", type: :input, autocomplete: "email" },
+          { field: :phone, label: "Telefone", type: :input },
+          { field: :cpf, label: "CPF", type: :input },
+          { field: :perfil, label: "Perfil", type: :association, collection: Perfil.all, prompt: "Selecione um perfil" },
+          { field: :password, label: "Nova Senha", type: :input, hint: "Deixe em branco se não quiser alterar", required: false, autocomplete: "new-password" },
+          { field: :password_confirmation, label: "Confirmação da Nova Senha", type: :input, required: false, autocomplete: "new-password" },
+          { field: :current_password, label: "Senha Atual", type: :input, hint: "Precisamos da sua senha atual para confirmar as alterações", required: true, autocomplete: "current-password" }
+        ] %>
 
-    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-      <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
-    <% end %>
+        <div class="grid grid-cols-2 gap-4">
+          <% form_fields.each do |field_config| %>
+            <div class="mb-5">
+              <% if field_config[:type] == :association %>
+                <%= f.association field_config[:field],
+                    label: field_config[:label],
+                    required: field_config[:required].nil? ? true : field_config[:required],
+                    collection: field_config[:collection],
+                    prompt: field_config[:prompt],
+                    required_mark: -> {
+                      tag.svg(xmlns: "http://www.w3.org/2000/svg", fill: "none", viewbox: "0 0 24 24", 
+                        stroke_width: "1.5", stroke: "currentColor", class: "w-4 h-4 text-red-500 inline-block ml-1") do
+                        tag.path(stroke_linecap: "round", stroke_linejoin: "round", 
+                          d: "M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126z")
+                      end
+                    },
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5"
+                    },
+                    wrapper_html: { class: 'mb-0' },
+                    label_html: { class: "block mb-2 text-sm font-medium text-gray-100" } %>
+              <% else %>
+                <%= f.input field_config[:field],
+                    label: field_config[:label],
+                    required: field_config[:required].nil? ? true : field_config[:required],
+                    required_mark: -> {
+                      tag.svg(xmlns: "http://www.w3.org/2000/svg", fill: "none", viewbox: "0 0 24 24", 
+                        stroke_width: "1.5", stroke: "currentColor", class: "w-4 h-4 text-red-500 inline-block ml-1") do
+                        tag.path(stroke_linecap: "round", stroke_linejoin: "round", 
+                          d: "M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126z")
+                      end
+                    },
+                    input_html: { 
+                      class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                      autocomplete: field_config[:autocomplete]
+                    },
+                    hint: field_config[:hint],
+                    wrapper_html: { class: 'mb-0' },
+                    label_html: { class: "block mb-2 text-sm font-medium text-gray-100" },
+                    hint_html: { class: "mt-1 text-sm text-gray-300" } %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
 
-    <%= f.input :password,
-                hint: "leave it blank if you don't want to change it",
-                required: false,
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                required: false,
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :current_password,
-                hint: "we need your current password to confirm your changes",
-                required: true,
-                input_html: { autocomplete: "current-password" } %>
+        <div class="mt-7">
+          <%= f.button :submit, "Atualizar", class: "w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500" %>
+        </div>
+      <% end %>
+
+      <div class="mt-7 text-sm text-center text-gray-100">
+        <h3 class="font-semibold mb-3">Cancelar minha conta</h3>
+        <%= button_to "Cancelar minha conta", registration_path(resource_name), 
+            data: { confirm: "Tem certeza?", turbo_confirm: "Tem certeza?" }, 
+            method: :delete,
+            class: "w-full bg-red-600 hover:bg-red-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500" %>
+        
+        <%= link_to "Voltar", current_user.admin? ? admin_root_path : root_path, 
+            class: "inline-block mt-4 text-gray-300 hover:text-gray-100" %>
+      </div>
+    </div>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Update" %>
-  </div>
-<% end %>
-
-<h3>Cancel my account</h3>
-
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
-
-<%= link_to "Back", :back %>
+</section>

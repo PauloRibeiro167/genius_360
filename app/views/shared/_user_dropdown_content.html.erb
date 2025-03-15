@@ -1,25 +1,28 @@
 <% mobile ||= false %>
 <% flowbite_style = true unless defined?(flowbite_style) %>
 
-<% dropdown_class = mobile ? "space-y-2 py-2" : 
-                             "z-10 hidden absolute right-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-gray-700 dark:divide-gray-600" %>
+<% menu_items = [
+  { text: "Dashboard", path: admin_dashboard_index_path, icon: "fas fa-tachometer-alt" },
+  { text: "Perfil", path: edit_user_registration_path, icon: "fas fa-user" },
+  { text: "Configurações", path: settings_admin_pages_path, icon: "fas fa-cog" },
+  { text: "Sair", path: destroy_user_session_path, 
+    icon: "fas fa-sign-out-alt", 
 
-<% link_class = "block px-4 py-2 #{mobile ? 'text-white hover:bg-purple-700 rounded-md text-lg' : 
-                                            'hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-base'}" %>
+    method: :delete, 
+    class_extra: "text-red-300 font-bold" }
+] %>
 
-<div class="<%= mobile ? 'mt-2' : 'absolute right-0 top-full mt-2' %> z-10 bg-purple-900 divide-y divide-purple-800 rounded-lg shadow-lg w-48">
+<div class="<%= mobile ? 'mt-1' : 'absolute right-0 top-full mt-1' %> z-10 bg-purple-950 divide-y divide-purple-800 rounded-lg shadow-lg w-44">
   <ul class="py-2 text-sm text-white">
-    <li>
-      <%= link_to "Dashboard", admin_dashboard_index_path, class: "block px-4 py-2 hover:bg-purple-800" %>
-    </li>
-    <li>
-      <%= link_to "Perfil", edit_user_registration_path, class: "block px-4 py-2 hover:bg-purple-800" %>
-    </li>
-    <li>
-      <%= link_to "Configurações", settings_admin_pages_path, class: "block px-4 py-2 hover:bg-purple-800" %>
-    </li>
-    <li>
-      <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "w-full text-left block px-4 py-2 hover:bg-purple-800 text-red-300" %>
-    </li>
+    <% menu_items.each do |item| %>
+      <li>
+        <%= link_to item[:path], method: item[:method], class: "block px-4 py-2 hover:bg-purple-800 #{item[:class_extra]}" do %>
+          <div class="flex items-center">
+            <i class="<%= item[:icon] %> w-5 text-center"></i>
+            <span class="font-bold ml-1 mr-1"><%= item[:text] %></span>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
   </ul>
 </div>

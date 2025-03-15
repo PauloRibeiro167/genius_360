@@ -58,6 +58,9 @@ application.register("notifications", NotificationsController)
 import ProfileFormController from "./profile_form_controller"
 application.register("profile-form", ProfileFormController)
 
+import Registratiom__LoginMaskController from "./registratiom/login_mask_controller"
+application.register("registratiom--login-mask", Registratiom__LoginMaskController)
+
 import Select2UsersController from "./select2_users_controller"
 application.register("select2-users", Select2UsersController)
 
@@ -75,6 +78,9 @@ application.register("sweet-alert", SweetAlertController)
 
 import ThemeController from "./theme_controller"
 application.register("theme", ThemeController)
+
+import ThemeInitializerController from "./theme_initializer_controller"
+application.register("theme-initializer", ThemeInitializerController)
 
 import ViewModeController from "./view_mode_controller"
 application.register("view-mode", ViewModeController)

@@ -1,5 +1,10 @@
 class Permission < ApplicationRecord
   include Discard::Model
+
+  # Associações
+  has_and_belongs_to_many :controller_permissions
+  has_many :perfil_permissions
+  has_many :perfis, through: :perfil_permissions
   
   # Escopo padrão para mostrar apenas registros ativos
   default_scope -> { kept }

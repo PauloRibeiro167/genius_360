@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
+  # Combine as configurações do Devise em uma única declaração
   devise_for :users, controllers: { 
-    sessions: 'users/sessions'}
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'  # Adicione esta linha
+  }
+  
   resources :perfil_users
   namespace :concerns do
     get "authorization/check_permissions"
@@ -45,6 +49,8 @@ Rails.application.routes.draw do
 
   get "pwa/manifest", to: "pwa#manifest", format: "json", as: "pwa_manifest"
   get "pwa/pwa"
+
+  get 'users/check_cpf', to: 'users#check_cpf'
 
   namespace :public do
     get "/", to: "pages#index"

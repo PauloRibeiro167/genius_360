@@ -8,6 +8,8 @@ module AuthorizationConcern
   private
 
   def check_permissions
+    # Ignora verificação para controllers públicos e devise
+    return if controller_path.start_with?('public/') || devise_controller?
     return if controller_name == 'sessions' # Permite acesso ao controller de sessões
     return unless current_user
 

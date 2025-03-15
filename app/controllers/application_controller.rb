@@ -1,8 +1,18 @@
 require "ostruct"
 
 class ApplicationController < ActionController::Base
-  # include AuthorizationConcern  
+  include AuthorizationConcern
   
+  # Primeiro definimos o before_action authenticate_user!
+  before_action :authenticate_user!
+  
+  # Depois definimos as exceções
+  skip_before_action :authenticate_user!, if: :public_page?
+  skip_before_action :authenticate_user!, if: :devise_controller?
+  
+  # Mantemos a verificação de permissões
+  before_action :check_permissions, unless: :devise_controller?
+
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern, 
                 if: -> { browser.modern_browser?(browser) || browser.mobile? || Rails.env.development? }
@@ -30,7 +40,50 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_in, keys: [:email, :password, :remember_me])
   end
 
+  def check_permissions
+    return if public_page? || devise_controller?
+    
+    unless current_user
+      store_location_for(:user, request.fullpath)
+      flash[:alert] = "Por favor, faça login para continuar"
+      redirect_to new_user_session_path
+      return
+    end
+
+    # Aqui você pode adicionar verificações adicionais de permissão para usuários logados
+    # if current_user && !current_user.can_access?(controller_name, action_name)
+    #   flash[:alert] = "Você não tem permissão para acessar esta página"
+    #   redirect_to root_path
+    # end
+  end
+
   private
+
+  def public_page?
+    public_controllers = %w[
+      home
+      about
+      contact
+      products
+      sessions # Adicione o controller de sessões aqui
+      users # E o controller de usuários se necessário
+    ]
+
+    public_actions = {
+      'pages' => ['index', 'show'],
+      'articles' => ['index', 'show'],
+      'sessions' => ['new', 'create'], # Adicione as ações de sessão
+      'users' => ['sign_in', 'sign_up'] # E as ações de usuário
+    }
+
+    # Verifica se o controller atual está na lista de controllers públicos
+    return true if public_controllers.include?(controller_name)
+
+    # Verifica se a ação atual está na lista de ações públicas para o controller atual
+    return true if public_actions[controller_name]&.include?(action_name)
+
+    false
+  end
 
   def require_admin
     unless current_user&.admin?

@@ -8,7 +8,8 @@ class DeviseCreateUsers < ActiveRecord::Migration[8.0]
       t.string :encrypted_password, null: false, default: ""
       t.string :first_name
       t.string :last_name
-      t.string :phone
+      t.string :cpf,               null: false, unique: true
+      t.string :phone,             null: false, unique: true
       t.boolean :admin, default: false 
 
       ## Recoverable
@@ -40,7 +41,12 @@ class DeviseCreateUsers < ActiveRecord::Migration[8.0]
       t.timestamps null: false
     end
 
-    add_index :users, :email,                unique: true
+    # Removendo o índice único existente do email
+    # add_index :users, :email, unique: true
+    
+    # Adicionando índice composto único para email, cpf e phone
+    add_index :users, [:email, :cpf, :phone], unique: true, name: 'index_users_on_email_cpf_phone'
+    
     add_index :users, :reset_password_token, unique: true
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true

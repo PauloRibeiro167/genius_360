@@ -1,6 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
   before_action :configure_sign_in_params, only: [:create]
-  before_action :verify_signed_out_user, only: [:new, :create]
+  before_action :verify_signed_out_user, only: [:create]
   before_action :log_request_info
   respond_to :html, :json, :turbo_stream
 
@@ -44,11 +44,19 @@ class Users::SessionsController < Devise::SessionsController
     begin
       # Verificar se o usuário existe
       user = User.find_by(email: params[:user][:email])
+      
       if user
         Rails.logger.info "Usuário encontrado no banco"
         Rails.logger.info "Perfil do usuário: #{user.perfil.try(:name)}"
         
-        # Adicionar log para verificar a senha
+        # Verificar se é um usuário público
+        if user.public_user?  # Você precisa adicionar este método ao modelo User
+          Rails.logger.info "Usuário público detectado - permitindo acesso"
+          sign_in(user)
+          flash[:notice] = "Bem-vindo, #{user.full_name}!"
+          return respond_with user, location: after_sign_in_path_for(user)
+        end
+        
         Rails.logger.info "Verificando senha..."
       else
         Rails.logger.info "Usuário não encontrado no banco"

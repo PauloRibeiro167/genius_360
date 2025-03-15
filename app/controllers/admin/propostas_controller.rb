@@ -3,7 +3,6 @@ module Admin
     before_action :set_proposta, only: [:show, :edit, :update, :destroy, :next_step, :previous_step]
     
     def consulta_servidor
-      # Action para exibir o formulário de consulta
     end
 
     def buscar_servidor

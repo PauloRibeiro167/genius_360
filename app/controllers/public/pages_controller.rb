@@ -1,5 +1,7 @@
 class Public::PagesController < ApplicationController
-  # Removido os skip_before_action que causavam erro
+  skip_before_action :authenticate_user!
+  skip_before_action :check_permissions
+  layout 'application'
   
   def index
   end
