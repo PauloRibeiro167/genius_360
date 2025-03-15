@@ -77,7 +77,7 @@ gem "aws-sdk-s3", require: false
 
 gem "csv"
 
-gem "chartkick"
+gem 'chartkick', '~> 5.1', '>= 5.1.4'
 gem "groupdate" # opcional, útil para agrupar dados por data
 
 gem 'browser'
@@ -87,6 +87,9 @@ gem 'secure_headers', '~> 6.5'
 
 # Mantenha apenas uma ocorrência desta gem
 gem 'get_process_mem'
+
+# Para resolver problemas de CORS
+gem 'rack-cors'
 
 group :development, :test do
   # Desenvolvimento e Testes
