@@ -121,7 +121,7 @@ group :test do
   gem "capybara", "~> 3.39.0"
   gem "selenium-webdriver", "~> 4.10.0"
   gem "webdrivers", "~> 5.3.0"
-  gem "erb_lint", "~> 0.5.0"
+  gem "erb_lint", "~> 0.9.0"
   gem "rails-controller-testing", "~> 1.0.5"
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
