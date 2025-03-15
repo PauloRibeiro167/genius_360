@@ -83,7 +83,7 @@ gem "groupdate" # opcional, útil para agrupar dados por data
 gem 'browser'
 
 # Security
-gem 'secure_headers', '~> 6.5'
+gem 'secure_headers', '~> 7.1'
 
 # Mantenha apenas uma ocorrência desta gem
 gem 'get_process_mem'
