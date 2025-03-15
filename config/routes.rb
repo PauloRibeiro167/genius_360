@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  # Combine as configurações do Devise em uma única declaração
+  # Configuração do Devise com controller customizado e novas rotas de sign_out
   devise_for :users, controllers: { 
     sessions: 'users/sessions',
-    registrations: 'users/registrations'  # Adicione esta linha
-  }
+    registrations: 'users/registrations'
+  }, sign_out_via: [:get, :delete]  # Adicionando GET para sign_out
   
   resources :perfil_users
   namespace :concerns do
