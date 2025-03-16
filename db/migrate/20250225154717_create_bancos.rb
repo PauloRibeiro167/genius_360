@@ -6,7 +6,7 @@ class CreateBancos < ActiveRecord::Migration[8.0]
       t.text :descricao
       t.string :site
       t.text :regras_gerais
-      t.datetime :descartado_em
+      t.datetime :discarded_at
 
       t.timestamps
     end

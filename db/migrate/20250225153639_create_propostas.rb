@@ -3,6 +3,7 @@ class CreatePropostas < ActiveRecord::Migration[8.0]
     create_table :proposta do |t|
       t.string :numero
       t.string :status
+      t.datetime :discarded_at
 
       t.timestamps
     end

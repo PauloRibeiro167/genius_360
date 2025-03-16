@@ -5,7 +5,7 @@ class CreateAcompanhamentos < ActiveRecord::Migration[8.0]
       t.datetime   :data_acompanhamento
       t.text       :resultado
       t.string     :tipo_acompanhamento
-      t.references :usuario, foreign_key: true
+      t.references :user, foreign_key: true
       t.string     :status
       t.datetime   :proxima_data
       t.integer    :prioridade
