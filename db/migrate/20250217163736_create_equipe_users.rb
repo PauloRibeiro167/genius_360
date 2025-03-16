@@ -1,6 +1,6 @@
-class CreateEquipesUsers < ActiveRecord::Migration[8.0]
+class CreateEquipeUsers < ActiveRecord::Migration[8.0]
   def change
-    create_table :equipes_users do |t|
+    create_table :equipes_users do |t|  # Alterado para equipes_users
       t.references :equipe, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
       t.string :cargo # Função do usuário na equipe
