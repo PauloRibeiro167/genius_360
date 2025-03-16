@@ -19,7 +19,7 @@ class CreateFinancialTransactions < ActiveRecord::Migration[7.0]
       t.references :user, foreign_key: true, null: false
       t.references :aprovado_por, foreign_key: { to_table: :users }
       t.references :entidade, polymorphic: true
-      t.references :conta_bancaria, foreign_key: true, null: true
+      t.string :conta_bancaria  # Alterado de references para string
       
       t.string :centro_custo
       t.text :observacoes
@@ -43,6 +43,7 @@ class CreateFinancialTransactions < ActiveRecord::Migration[7.0]
     add_index :financial_transactions, :status
     add_index :financial_transactions, :discarded_at
     add_index :financial_transactions, :categoria
+    add_index :financial_transactions, :conta_bancaria  # Adicionado índice para conta_bancaria
     
     add_index :financial_transactions, :reembolsavel
     add_index :financial_transactions, :status_reembolso

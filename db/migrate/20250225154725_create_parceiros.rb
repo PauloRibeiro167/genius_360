@@ -20,7 +20,7 @@ class CreateParceiros < ActiveRecord::Migration[8.0]
       t.string :periodicidade_pagamento, default: 'mensal'
       t.integer :dia_pagamento, default: 5
       t.decimal :valor_minimo_pagamento, precision: 10, scale: 2, default: 0
-      t.string :codigo_parceiro, null: false, index: { unique: true }
+      t.string :codigo_parceiro, null: false
       t.string :qrcode_path
       t.string :url_indicacao
       t.boolean :ativo, default: true
@@ -36,7 +36,7 @@ class CreateParceiros < ActiveRecord::Migration[8.0]
       t.timestamps
     end
     
-    add_index :parceiros, :codigo_parceiro
+    add_index :parceiros, :codigo_parceiro, unique: true
     add_index :parceiros, :discarded_at
     add_index :parceiros, :ativo
     add_index :parceiros, :proximo_pagamento 
