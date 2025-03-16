@@ -8,8 +8,8 @@ class DeviseCreateUsers < ActiveRecord::Migration[8.0]
       t.string :encrypted_password, null: false, default: ""
       t.string :first_name
       t.string :last_name
-      t.string :cpf,               null: false, unique: true
-      t.string :phone,             null: false, unique: true
+      t.string :cpf,               null: false
+      t.string :phone,             null: false
       t.boolean :admin, default: false 
 
       ## Recoverable
@@ -20,11 +20,11 @@ class DeviseCreateUsers < ActiveRecord::Migration[8.0]
       t.datetime :remember_created_at
 
       ## Trackable
-      # t.integer  :sign_in_count, default: 0, null: false
-      # t.datetime :current_sign_in_at
-      # t.datetime :last_sign_in_at
-      # t.string   :current_sign_in_ip
-      # t.string   :last_sign_in_ip
+      t.integer  :sign_in_count, default: 0, null: false
+      t.datetime :current_sign_in_at
+      t.datetime :last_sign_in_at
+      t.string   :current_sign_in_ip
+      t.string   :last_sign_in_ip
 
       ## Confirmable
       # t.string   :confirmation_token
@@ -37,17 +37,29 @@ class DeviseCreateUsers < ActiveRecord::Migration[8.0]
       # t.string   :unlock_token # Only if unlock strategy is :email or :both
       # t.datetime :locked_at
 
-
+      ## Geolocalização
+      t.string :last_known_ip
+      t.string :location
+      t.float :latitude
+      t.float :longitude
+      
+      ## Timestamps
       t.timestamps null: false
+      
+      ## Referência para perfil
+      t.references :perfil, null: false, foreign_key: true
+
+      ## Soft delete
+      t.datetime :discarded_at
     end
 
-    # Removendo o índice único existente do email
-    # add_index :users, :email, unique: true
-    
-    # Adicionando índice composto único para email, cpf e phone
-    add_index :users, [:email, :cpf, :phone], unique: true, name: 'index_users_on_email_cpf_phone'
+    # Índices separados para cada campo único
+    add_index :users, :email, unique: true
+    add_index :users, :cpf, unique: true
+    add_index :users, :phone, unique: true
     
     add_index :users, :reset_password_token, unique: true
+    add_index :users, :discarded_at
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
   end

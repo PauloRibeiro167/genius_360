@@ -239,7 +239,6 @@ permission_controller_map = {
   "Exportar métricas" => { controller: "metrics", action: "export" },
   "Filtrar métricas" => { controller: "metrics", action: "filter" },
   
-  # ...adicione mais mapeamentos conforme necessário
 }
 
 permission_controller_map.each do |permission_name, controller_action|
@@ -256,13 +255,137 @@ end
 
 puts "Associações entre Permissions e ControllerPermissions criadas com sucesso!"
 
-# Criar um usuário Super Admin
 puts "\nCriando usuário Super Admin..."
 
-admin_user = User.create!(
+user = User.new(
   email: 'paulorezende877@gmail.com',
-  password: 'sua_senha_aqui',
+  password: 'senha1',
+  password_confirmation: 'senha1',
+  first_name: 'Paulo',
+  last_name: 'Ribeiro',
+  cpf: '035.380.543-20',
+  phone: '(85) 99686-1158',
+  admin: true,
   perfil: Perfil.find_by(name: 'Super Admin')
 )
 
-puts "Usuário Super Admin criado com sucesso!"
+puts "\nCriando usuários para cada perfil..."
+
+user_examples = [
+  {
+    email: 'admin@genius360.com',
+    password: 'senha123',
+    password_confirmation: 'senha123',
+    first_name: 'Admin',
+    last_name: 'Principal',
+    cpf: '111.111.111-11',
+    phone: '(85) 99999-1111',
+    admin: true,
+    perfil_name: 'Super Admin'
+  },
+  {
+    email: 'analista@genius360.com',
+    password: 'senha123',
+    password_confirmation: 'senha123',
+    first_name: 'Ana',
+    last_name: 'Dados',
+    cpf: '222.222.222-22',
+    phone: '(85) 99999-2222',
+    admin: false,
+    perfil_name: 'Analista de Dados'
+  },
+  {
+    email: 'gerente@genius360.com',
+    password: 'senha123',
+    password_confirmation: 'senha123',
+    first_name: 'Geraldo',
+    last_name: 'Comercial',
+    cpf: '333.333.333-33',
+    phone: '(85) 99999-3333',
+    admin: false,
+    perfil_name: 'Gerente Comercial'
+  },
+  {
+    email: 'diretor@genius360.com',
+    password: 'senha123',
+    password_confirmation: 'senha123',
+    first_name: 'Diana',
+    last_name: 'Executiva',
+    cpf: '444.444.444-44',
+    phone: '(85) 99999-4444',
+    admin: false,
+    perfil_name: 'Diretor Executivo'
+  },
+  {
+    email: 'operador@genius360.com',
+    password: 'senha123',
+    password_confirmation: 'senha123',
+    first_name: 'Olavo',
+    last_name: 'Operador',
+    cpf: '555.555.555-55',
+    phone: '(85) 99999-5555',
+    admin: false,
+    perfil_name: 'Operador'
+  },
+  {
+    email: 'marketing@genius360.com',
+    password: 'senha123',
+    password_confirmation: 'senha123',
+    first_name: 'Maria',
+    last_name: 'Marketing',
+    cpf: '666.666.666-66',
+    phone: '(85) 99999-6666',
+    admin: false,
+    perfil_name: 'Marketing'
+  },
+  {
+    email: 'supervisor@genius360.com',
+    password: 'senha123',
+    password_confirmation: 'senha123',
+    first_name: 'Sérgio',
+    last_name: 'Supervisor',
+    cpf: '777.777.777-77',
+    phone: '(85) 99999-7777',
+    admin: false,
+    perfil_name: 'Supervisor'
+  },
+  {
+    email: 'monitor@genius360.com',
+    password: 'senha123',
+    password_confirmation: 'senha123',
+    first_name: 'Moacir',
+    last_name: 'Fraudes',
+    cpf: '888.888.888-88',
+    phone: '(85) 99999-8888',
+    admin: false,
+    perfil_name: 'Monitor de Fraudes'
+  }
+]
+
+user_examples.each do |user_data|
+  perfil = Perfil.find_by(name: user_data[:perfil_name])
+  unless perfil
+    puts "Perfil '#{user_data[:perfil_name]}' não encontrado. Pulando criação do usuário #{user_data[:email]}"
+    next
+  end
+
+  user = User.new(
+    email: user_data[:email],
+    password: user_data[:password],
+    password_confirmation: user_data[:password_confirmation],
+    first_name: user_data[:first_name],
+    last_name: user_data[:last_name],
+    cpf: user_data[:cpf],
+    phone: user_data[:phone],
+    admin: user_data[:admin],
+    perfil: perfil
+  )
+
+  if user.save
+    puts "Usuário #{user.email} (#{user_data[:perfil_name]}) criado com sucesso!"
+  else
+    puts "Erro ao criar usuário #{user.email}: #{user.errors.full_messages.join(', ')}"
+  end
+end
+
+puts "Finalizada a criação de usuários para teste!"

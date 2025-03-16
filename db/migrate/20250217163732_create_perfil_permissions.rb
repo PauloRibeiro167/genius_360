@@ -3,6 +3,7 @@ class CreatePerfilPermissions < ActiveRecord::Migration[7.0]
     create_table :perfil_permissions do |t|
       t.references :perfil, null: false, foreign_key: true
       t.references :permission, null: false, foreign_key: true
+      t.datetime :discarded_at
 
       t.timestamps
     end

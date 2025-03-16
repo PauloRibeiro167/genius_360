@@ -6,6 +6,7 @@ class CreateNotifications < ActiveRecord::Migration[8.0]
       t.json :data
       t.datetime :read_at
       t.string :url
+      t.datetime :discarded_at
 
       t.timestamps
     end

@@ -4,8 +4,10 @@ class CreateLeads < ActiveRecord::Migration[8.0]
       t.string :nome
       t.string :email
       t.string :telefone
-      t.text :observacoes
       t.string :status
+      t.string :origem
+      t.text   :observacoes
+      t.jsonb  :dados_extras, default: {}
 
       t.timestamps
     end

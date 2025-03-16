@@ -5,6 +5,7 @@ class CreateControllerPermissions < ActiveRecord::Migration[8.0]
       t.string :action_name, null: false
       t.string :description
       t.boolean :active, default: true
+      t.references :permissions, null: true, foreign_key: true
 
       t.timestamps
     end
