@@ -91,6 +91,9 @@ gem 'get_process_mem'
 # Para resolver problemas de CORS
 gem 'rack-cors'
 
+gem 'colorize'
+gem 'benchmark-ips'
+
 group :development, :test do
   # Desenvolvimento e Testes
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
