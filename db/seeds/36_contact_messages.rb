@@ -28,24 +28,24 @@ total_erros = 0
 puts " Iniciando criação de mensagens de contato para testes...".colorize(:blue)
 
 begin
-    # Tipos de solicitação possíveis
+    # Tipos de solicitação possíveis (alterado para corresponder ao enum)
     request_types = [
-      "Informação",
-      "Orçamento",
-      "Suporte",
-      "Reclamação",
-      "Sugestão",
-      "Parceria",
-      "Demonstração"
+      :informacao,
+      :orcamento,
+      :suporte,
+      :reclamacao,
+      :sugestao,
+      :parceria,
+      :demonstracao
     ]
 
-    # Status possíveis para as mensagens
+    # Status possíveis para as mensagens (alterado para corresponder ao enum)
     statuses = [
-      "Nova",
-      "Em análise",
-      "Respondida",
-      "Encerrada",
-      "Pendente"
+      :nova,
+      :em_analise, 
+      :respondida,
+      :encerrada,
+      :pendente
     ]
 
     # Lista de mensagens fictícias
@@ -161,7 +161,7 @@ begin
           phone: phone,
           message: "URGENTE: #{message_texts.sample}",
           request_type: request_types.sample,
-          status: "Nova",
+          status: :nova,
           created_at: Time.now - rand(1..3).hours
         )
         
