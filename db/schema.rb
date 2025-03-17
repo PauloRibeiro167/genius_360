@@ -198,10 +198,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
 
   create_table "disponibilidades", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "dia_semana"
-    t.time "hora_inicio"
-    t.time "hora_fim"
-    t.boolean "disponivel", default: true
+    t.string "dia_semana", null: false
+    t.time "hora_inicio", null: false
+    t.time "hora_fim", null: false
+    t.boolean "disponivel", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_disponibilidades_on_user_id"
@@ -239,7 +239,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.index ["ativo"], name: "index_equipes_users_on_ativo"
     t.index ["cargo"], name: "index_equipes_users_on_cargo"
     t.index ["discarded_at"], name: "index_equipes_users_on_discarded_at"
-    t.index ["equipe_id", "user_id"], name: "index_equipes_users_on_equipe_id_and_user_id", unique: true
+    t.index ["equipe_id", "user_id", "cargo", "data_entrada"], name: "idx_equipes_users_unique_active", unique: true, where: "(ativo = true)"
     t.index ["equipe_id"], name: "index_equipes_users_on_equipe_id"
     t.index ["user_id"], name: "index_equipes_users_on_user_id"
   end
@@ -346,8 +346,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.string "type"
+    t.bigint "user_id", null: false
     t.json "data"
     t.datetime "read_at"
     t.string "url"

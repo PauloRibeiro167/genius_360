@@ -1,9 +1,30 @@
-puts "\nCriando reuniões, participantes e disponibilidades para testes..."
+require 'colorize'
+
+# Função para normalizar texto
+def normalizar_texto(texto)
+    return nil if texto.nil?
+    texto.to_s
+         .unicode_normalize(:nfkd)
+         .gsub(/[^\x00-\x7F]/, '')
+         .gsub(/[^\w\s-]/, ' ')
+         .squeeze(' ')
+         .strip
+end
+
+# Contadores para estatísticas
+total_reunioes = 0
+reunioes_criadas = 0
+reunioes_com_erro = 0
+participantes_criados = 0
+disponibilidades_criadas = 0
+
+puts "\n Iniciando criação de reuniões e disponibilidades...".colorize(:blue)
 
 # Verifica se existem usuários no sistema
 if User.count < 5
-  puts "É necessário ter pelo menos 5 usuários no sistema. Execute primeiro a seed de usuários."
-  return
+    puts "🟡 Aviso: É necessário ter pelo menos 5 usuários no sistema.".colorize(:yellow)
+    puts " Execute primeiro a seed de usuários".colorize(:yellow)
+    return
 end
 
 # Lista de salas de reunião físicas
@@ -68,42 +89,52 @@ organizadores = User.where(admin: true).or(User.where("email LIKE ?", "%gerente%
 organizadores = users.sample(3) if organizadores.empty?
 
 # Criar disponibilidades para todos os usuários
-puts "\nCriando disponibilidades para usuários..."
+puts "\n Iniciando criação de disponibilidades...".colorize(:cyan)
 dias_semana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"]
 
 users.each do |user|
-  # Para cada usuário, cria disponibilidades para os dias da semana
-  dias_semana.each do |dia|
-    # Define horários de trabalho padrão (8h às 18h)
-    hora_inicio = Time.parse("08:00:00")
-    hora_fim = Time.parse("18:00:00")
-    
-    # Alguns usuários têm disponibilidade reduzida em alguns dias
-    if rand < 0.2
-      # 20% de chance de ter horário reduzido
-      hora_inicio = Time.parse("10:00:00")
-      hora_fim = Time.parse("16:00:00")
+  begin
+    # Para cada usuário, cria disponibilidades para os dias da semana
+    dias_semana.each do |dia|
+      # Define horários de trabalho padrão (8h às 18h)
+      hora_inicio = Time.parse("08:00:00")
+      hora_fim = Time.parse("18:00:00")
+      
+      # Alguns usuários têm disponibilidade reduzida em alguns dias
+      if rand < 0.2
+        # 20% de chance de ter horário reduzido
+        hora_inicio = Time.parse("10:00:00")
+        hora_fim = Time.parse("16:00:00")
+      end
+      
+      # Alguns usuários não estão disponíveis em alguns dias
+      disponivel = rand < 0.9 # 90% de chance de estar disponível
+      
+      disponibilidade = Disponibilidade.new(
+        user_id: user.id,
+        dia_semana: dia,
+        hora_inicio: hora_inicio,
+        hora_fim: hora_fim,
+        disponivel: disponivel
+      )
+      
+      if disponibilidade.save
+        disponibilidades_criadas += 1
+        puts "🟢 Disponibilidade criada para #{user.email} - #{dia}".colorize(:green)
+      else
+        puts " Erro ao criar disponibilidade: #{disponibilidade.errors.full_messages.join(', ')}".colorize(:red)
+      end
     end
-    
-    # Alguns usuários não estão disponíveis em alguns dias
-    disponivel = rand < 0.9 # 90% de chance de estar disponível
-    
-    disponibilidade = Disponibilidade.new(
-      user_id: user.id,
-      dia_semana: dia,
-      hora_inicio: hora_inicio,
-      hora_fim: hora_fim,
-      disponivel: disponivel
-    )
-    
-    disponibilidade.save
+  rescue => e
+    puts " Erro ao processar disponibilidades: #{e.message}".colorize(:red)
+    puts "🟣 Debug: #{e.backtrace.first}".colorize(:magenta)
   end
   
   puts "Disponibilidades criadas para #{user.email}"
 end
 
 # Criar reuniões
-puts "\nCriando reuniões..."
+puts "\n Iniciando criação de reuniões...".colorize(:blue)
 
 # Datas para as reuniões (passado, presente e futuro)
 data_atual = Time.now
@@ -179,6 +210,7 @@ data_atual = Time.now
   )
   
   if reuniao.save
+    reunioes_criadas += 1
     puts "Reunião criada: #{titulo} (#{status}) - Organizador: #{organizador.email}"
     
     # Adiciona participantes (entre 3 e 8 participantes)
@@ -214,10 +246,12 @@ data_atual = Time.now
         status: status_participante,
         observacoes: observacoes
       )
+      participantes_criados += 1
     end
     
     puts "  #{participantes_count} participantes adicionados"
   else
+    reunioes_com_erro += 1
     puts "Erro ao criar reunião: #{reuniao.errors.full_messages.join(', ')}"
   end
 end
@@ -248,6 +282,7 @@ puts "\nCriando reuniões recorrentes..."
         user_id: participante.id,
         status: "pendente"
       )
+      participantes_criados += 1
     end
     
     puts "Reunião recorrente semanal criada para #{reuniao_recorrente.data_inicio.strftime('%d/%m/%Y')}"
@@ -275,11 +310,20 @@ end
         user_id: user.id,
         status: "pendente"
       )
+      participantes_criados += 1
     end
     
     puts "Reunião mensal criada para #{reuniao_mensal.data_inicio.strftime('%d/%m/%Y')}"
   end
 end
+
+puts "\n=== Resumo da Operação ===".colorize(:white)
+puts "⚪ Total de reuniões processadas: #{total_reunioes}".colorize(:white)
+puts "🟢 Reuniões criadas com sucesso: #{reunioes_criadas}".colorize(:green)
+puts " Reuniões com erro: #{reunioes_com_erro}".colorize(:red)
+puts " Disponibilidades criadas: #{disponibilidades_criadas}".colorize(:cyan)
+puts " Participantes criados: #{participantes_criados}".colorize(:cyan)
+puts "⚫ Operação finalizada em: #{Time.now}".colorize(:light_black)
 
 puts "\nCriação de reuniões concluída!"
 puts "Total: #{Reuniao.count} reuniões, #{Participante.count} participantes e #{Disponibilidade.count} registros de disponibilidade."

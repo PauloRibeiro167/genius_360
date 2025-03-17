@@ -3,11 +3,11 @@ class CreateEquipes < ActiveRecord::Migration[8.0]
     create_table :equipes do |t|
       t.string :nome, null: false
       t.text :descricao
-      t.references :lider, foreign_key: { to_table: :users }  # Usuário líder da equipe
-      t.string :tipo_equipe  # Ex: Vendas, Atendimento, Administração
+      t.references :lider, foreign_key: { to_table: :users }
+      t.string :tipo_equipe
       t.string :regiao_atuacao
       t.boolean :ativo, default: true
-      t.datetime :discarded_at  # Para soft delete
+      t.datetime :discarded_at
 
       t.timestamps
     end

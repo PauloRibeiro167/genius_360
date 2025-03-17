@@ -1,10 +1,53 @@
-puts "\nCriando notificações de teste para usuários..."
+require 'colorize'
 
-# Verifica se existem usuários no sistema
-if User.count.zero?
-  puts "Nenhum usuário encontrado. Execute primeiro a seed de usuários."
-  return
+# Contadores para estatísticas
+success_count = 0
+error_count = 0
+
+# Função de normalização de texto aprimorada
+def normalize_text(text)
+    text.to_s
+        .unicode_normalize(:nfkd)
+        .encode('ASCII', replace: '')
+        .downcase
+        .gsub(/[^a-z0-9\s-]/, '')
+        .gsub(/\s+/, ' ')
+        .strip
+        .gsub(/[áàãâä]/, 'a')
+        .gsub(/[éèêë]/, 'e')
+        .gsub(/[íìîï]/, 'i')
+        .gsub(/[óòõôö]/, 'o')
+        .gsub(/[úùûü]/, 'u')
+        .gsub(/[ç]/, 'c')
+        .gsub(/[ñ]/, 'n')
 end
+
+# Função auxiliar para criar notificação
+def create_notification(user, type, data_item, created_at, read_at, notification_urls)
+  Notification.new(
+    user: user,
+    type: type, # Usando 'type' consistentemente
+    data: {
+      title: data_item[:title],
+      content: data_item[:content],
+      url: notification_urls[type]
+    },
+    url: notification_urls[type],
+    read_at: read_at,
+    created_at: created_at,
+    updated_at: created_at
+  )
+end
+
+puts "\n Iniciando criação de notificações de teste...".colorize(:blue)
+
+# Verificação inicial de usuários
+if User.count.zero?
+    puts " Erro: Nenhum usuário encontrado. Execute primeiro a seed de usuários.".colorize(:red)
+    return
+end
+
+puts "🟣 Debug: #{User.count} usuários encontrados".colorize(:magenta)
 
 # Tipos de notificações possíveis
 notification_types = [
@@ -81,93 +124,113 @@ notification_urls = {
   "AccountActivity" => "/account/activity"
 }
 
-# Cria notificações para cada usuário
+# Seção principal de criação de notificações
 User.all.each do |user|
-  # Quantidade aleatória de notificações por usuário (entre 3 e 10)
-  notification_count = rand(3..10)
-  
-  notification_count.times do
-    # Escolhe aleatoriamente um tipo de notificação
-    type = notification_types.sample
-    
-    # Escolhe aleatoriamente um item de dados desse tipo
-    data_item = notification_data[type].sample
-    
-    # Determina se será lida ou não (70% de chance de não ser lida)
-    read_at = rand < 0.3 ? Time.now - rand(1..72).hours : nil
-    
-    # Cria a notificação
-    created_at = Time.now - rand(1..14).days
-    notification = Notification.new(
-      user: user,
-      type: type,
-      data: data_item,
-      read_at: read_at,
-      url: notification_urls[type],
-      created_at: created_at,
-      updated_at: created_at
-    )
-    
-    if notification.save
-      status = read_at.nil? ? "não lida" : "lida"
-      puts "Notificação criada para #{user.email}: #{type} (#{status})"
-    else
-      puts "Erro ao criar notificação para #{user.email}: #{notification.errors.full_messages.join(', ')}"
+    begin
+        notification_count = rand(3..10)
+        puts "⚪ Processando usuário: #{user.email}".colorize(:white)
+        
+        notification_count.times do
+            type = notification_types.sample
+            data_item = notification_data[type].sample
+            
+            # Normalização dos textos
+            normalized_title = normalize_text(data_item[:title])
+            normalized_content = normalize_text(data_item[:content])
+            
+            created_at = Time.now - rand(1..14).days
+            read_at = rand < 0.3 ? Time.now - rand(1..72).hours : nil
+            
+            notification = create_notification(
+                user,
+                type,
+                {
+                    title: normalized_title,
+                    content: normalized_content
+                },
+                created_at,
+                read_at,
+                notification_urls
+            )
+            
+            if notification.save
+                success_count += 1
+                status = read_at.nil? ? "não lida" : "lida"
+                puts "🟢 Notificação criada: #{type} (#{status})".colorize(:green)
+            else
+                error_count += 1
+                puts " Erro ao criar notificação: #{notification.errors.full_messages.join(', ')}".colorize(:red)
+            end
+        end
+        
+    rescue => e
+        error_count += 1
+        puts " Erro fatal: #{user.email} - #{e.message}".colorize(:red)
     end
-  end
 end
 
-# Criar algumas notificações recentes (últimas 24 horas) e não lidas para testes
-puts "\nCriando notificações recentes não lidas..."
+# Seção de notificações recentes
+puts "\n Iniciando criação de notificações recentes...".colorize(:blue)
 User.limit(5).each do |user|
-  3.times do
-    type = notification_types.sample
-    data_item = notification_data[type].sample
-    created_at = Time.now - rand(1..24).hours
-    
-    notification = Notification.new(
-      user: user,
-      type: type,
-      data: data_item,
-      read_at: nil,
-      url: notification_urls[type],
-      created_at: created_at,
-      updated_at: created_at
-    )
-    
-    if notification.save
-      puts "Notificação recente não lida criada para #{user.email}: #{type}"
-    else
-      puts "Erro ao criar notificação recente para #{user.email}: #{notification.errors.full_messages.join(', ')}"
+    puts "🟣 Debug: Processando notificações para #{user.email}".colorize(:magenta)
+    3.times do
+        type = notification_types.sample
+        data_item = notification_data[type].sample
+        created_at = Time.now - rand(1..24).hours
+        
+        notification = create_notification(
+            user,
+            type,
+            {
+                title: normalize_text(data_item[:title]),
+                content: normalize_text(data_item[:content])
+            },
+            created_at,
+            nil,
+            notification_urls
+        )
+        
+        if notification.save
+            puts "🟢 Notificação criada: #{type} (não lida)".colorize(:green)
+        else
+            puts " Erro ao criar notificação: #{notification.errors.full_messages.join(', ')}".colorize(:red)
+        end
     end
-  end
 end
 
 # Criar algumas notificações em massa para um usuário específico (para testar paginação)
 admin_user = User.find_by(email: 'admin@genius360.com')
+# Seção do admin
 if admin_user
-  puts "\nCriando múltiplas notificações para o usuário admin..."
-  15.times do |i|
-    type = notification_types.sample
-    data_item = notification_data[type].sample
-    created_at = Time.now - rand(1..30).days
-    read_at = rand < 0.5 ? Time.now - rand(1..24).hours : nil
-    
-    notification = Notification.new(
-      user: admin_user,
-      type: type,
-      data: data_item,
-      read_at: read_at,
-      url: notification_urls[type],
-      created_at: created_at,
-      updated_at: created_at
-    )
-    
-    notification.save
-  end
-  puts "15 notificações adicionais criadas para #{admin_user.email}"
+    puts "\n Criando notificações para administrador...".colorize(:blue)
+    15.times do
+        type = notification_types.sample
+        data_item = notification_data[type].sample
+        created_at = Time.now - rand(1..30).days
+        read_at = rand < 0.5 ? Time.now - rand(1..24).hours : nil
+        
+        notification = create_notification(
+            admin_user,
+            type,
+            data_item,
+            created_at,
+            read_at,
+            notification_urls
+        )
+        
+        if notification.save
+            status = read_at.nil? ? "não lida" : "lida"
+            puts "🟢 Notificação admin: #{type} (#{status})".colorize(:green)
+        else
+            puts " Erro em notificação admin: #{notification.errors.full_messages.join(', ')}".colorize(:red)
+        end
+    end
+    puts "⚪ Criadas 15 notificações para #{admin_user.email}".colorize(:white)
 end
 
-total_count = Notification.count
-unread_count = Notification.where(read_at: nil).count
-puts "\nCriação de notificações concluída! Total: #{total_count} notificações (#{unread_count} não lidas)"
+# Resumo final
+puts "\n Resumo da operação:".colorize(:cyan)
+puts "🟢 Total de sucessos: #{success_count}".colorize(:green)
+puts " Total de erros: #{error_count}".colorize(:red)
+puts "⚪ Notificações no sistema: #{Notification.count}".colorize(:white)
+puts "🟡 Notificações não lidas: #{Notification.where(read_at: nil).count}".colorize(:yellow)

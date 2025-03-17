@@ -1,4 +1,22 @@
-puts "\nCriando avisos do sistema para testes..."
+require 'colorize'
+
+# Função para normalizar texto
+def normalizar_texto(texto)
+    return nil if texto.nil?
+    texto.to_s
+         .unicode_normalize(:nfkd)
+         .gsub(/[^\x00-\x7F]/, '')
+         .gsub(/[^\w\s-]/, ' ')
+         .squeeze(' ')
+         .strip
+end
+
+# Contadores para estatísticas
+total_avisos = 0
+avisos_criados = 0
+avisos_com_erro = 0
+
+puts "\n Iniciando criação de avisos do sistema...".colorize(:blue)
 
 # Lista de avisos para serem criados
 avisos = [
@@ -64,40 +82,71 @@ avisos = [
   }
 ]
 
+puts " Processando #{avisos.length} avisos...".colorize(:cyan)
+
 # Criando os avisos no banco de dados
 avisos.each_with_index do |aviso, index|
-  # Define datas diferentes para os avisos (alguns mais recentes, outros mais antigos)
-  dias_atras = index < 5 ? rand(0..7) : rand(8..30)
-  created_at = Time.now - dias_atras.days
-  
-  # Cria o aviso
-  novo_aviso = Aviso.new(
-    titulo: aviso[:titulo],
-    descricao: aviso[:descricao],
-    created_at: created_at,
-    updated_at: created_at
-  )
-  
-  if novo_aviso.save
-    puts "Aviso criado: #{aviso[:titulo]}"
-  else
-    puts "Erro ao criar aviso: #{novo_aviso.errors.full_messages.join(', ')}"
-  end
+    begin
+        # Define datas diferentes para os avisos
+        dias_atras = index < 5 ? rand(0..7) : rand(8..30)
+        created_at = Time.now - dias_atras.days
+        
+        # Normaliza os textos
+        titulo_normalizado = normalizar_texto(aviso[:titulo])
+        descricao_normalizada = normalizar_texto(aviso[:descricao])
+        
+        # Cria o aviso
+        novo_aviso = Aviso.new(
+            titulo: titulo_normalizado,
+            descricao: descricao_normalizada,
+            created_at: created_at,
+            updated_at: created_at
+        )
+        
+        if novo_aviso.save
+            avisos_criados += 1
+            puts "🟢 Aviso criado: #{titulo_normalizado}".colorize(:green)
+        else
+            avisos_com_erro += 1
+            puts " Erro ao criar aviso: #{novo_aviso.errors.full_messages.join(', ')}".colorize(:red)
+        end
+    rescue => e
+        avisos_com_erro += 1
+        puts " Erro inesperado: #{e.message}".colorize(:red)
+        puts "🟣 Debug: #{e.backtrace.first}".colorize(:magenta)
+    end
 end
 
-# Adicionalmente, cria um aviso marcado como descartado para testar soft delete
-aviso_descartado = Aviso.new(
-  titulo: "Aviso Temporário - Descartado",
-  descricao: "Este é um aviso temporário que foi descartado. Usado apenas para fins de teste da funcionalidade de soft delete.",
-  created_at: Time.now - 45.days,
-  updated_at: Time.now - 45.days,
-  discarded_at: Time.now - 15.days
-)
+# Criando aviso descartado para teste
+begin
+    puts "\n Criando aviso de teste para soft delete...".colorize(:cyan)
+    aviso_descartado = Aviso.new(
+        titulo: normalizar_texto("Aviso Temporário - Descartado"),
+        descricao: normalizar_texto("Este é um aviso temporário que foi descartado. Usado apenas para fins de teste."),
+        created_at: Time.now - 45.days,
+        updated_at: Time.now - 45.days,
+        discarded_at: Time.now - 15.days
+    )
 
-if aviso_descartado.save
-  puts "Aviso descartado criado para teste de soft delete"
-else
-  puts "Erro ao criar aviso descartado: #{aviso_descartado.errors.full_messages.join(', ')}"
+    if aviso_descartado.save
+        avisos_criados += 1
+        puts "🟢 Aviso descartado criado com sucesso".colorize(:green)
+    else
+        avisos_com_erro += 1
+        puts " Erro ao criar aviso descartado: #{aviso_descartado.errors.full_messages.join(', ')}".colorize(:red)
+    end
+rescue => e
+    avisos_com_erro += 1
+    puts " Erro ao criar aviso descartado: #{e.message}".colorize(:red)
 end
 
-puts "\nCriação de avisos concluída! Total: #{Aviso.count} avisos criados (#{Aviso.where.not(discarded_at: nil).count} descartados)"
+# Estatísticas finais
+total_avisos = Aviso.count
+total_descartados = Aviso.where.not(discarded_at: nil).count
+
+puts "\n=== Resumo da Operação ===".colorize(:white)
+puts "⚪ Total de avisos processados: #{avisos.length}".colorize(:white)
+puts "🟢 Avisos criados com sucesso: #{avisos_criados}".colorize(:green)
+puts " Avisos com erro: #{avisos_com_erro}".colorize(:red)
+puts " Total no banco de dados: #{total_avisos} (#{total_descartados} descartados)".colorize(:cyan)
+puts "⚫ Operação finalizada em: #{Time.now}".colorize(:light_black)

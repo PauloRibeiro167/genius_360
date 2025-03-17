@@ -1,20 +1,27 @@
 class CreateEquipeUsers < ActiveRecord::Migration[8.0]
   def change
-    create_table :equipes_users do |t|  # Alterado para equipes_users
-      t.references :equipe, null: false, foreign_key: true
-      t.references :user, null: false, foreign_key: true
-      t.string :cargo # Função do usuário na equipe
+    create_table :equipes_users do |t|
+      # Modificar estas linhas para não criar índices únicos implícitos
+      t.references :equipe, null: false, foreign_key: true, index: false
+      t.references :user, null: false, foreign_key: true, index: false
+      t.string :cargo
       t.date :data_entrada
       t.date :data_saida
       t.boolean :ativo, default: true
-      t.decimal :meta_individual, precision: 10, scale: 2  # Meta específica para o membro na equipe
+      t.decimal :meta_individual, precision: 10, scale: 2
       t.datetime :discarded_at
 
       t.timestamps
     end
     
-    # Índice composto para garantir que um usuário só apareça uma vez em cada equipe
-    add_index :equipes_users, [:equipe_id, :user_id], unique: true
+    # Adicionar índices compostos que permitam múltiplas entradas
+    add_index :equipes_users, [:equipe_id, :user_id, :cargo, :data_entrada], 
+              name: 'idx_equipes_users_unique_active', 
+              unique: true,
+              where: "ativo = true"
+              
+    add_index :equipes_users, :equipe_id
+    add_index :equipes_users, :user_id
     add_index :equipes_users, :cargo
     add_index :equipes_users, :ativo
     add_index :equipes_users, :discarded_at

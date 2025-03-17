@@ -175,7 +175,8 @@ categorias_beneficios.each_with_index do |categoria, index|
   categoria[:beneficios].each do |beneficio_data|
     beneficio = Beneficio.new(
       nome: beneficio_data[:nome],
-      descricao: beneficio_data[:descricao]
+      descricao: beneficio_data[:descricao],
+      categoria: categoria[:categoria]  # Adicionando a categoria
     )
     
     if beneficio.save

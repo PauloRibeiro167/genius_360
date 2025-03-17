@@ -1,13 +1,28 @@
-puts "Criando mensagens entre usuários para demonstração..."
+require 'colorize'
 
-# Limpa registros existentes para evitar duplicações
-# Message.destroy_all (descomente se quiser limpar a tabela antes)
+# Função para normalizar texto
+def normalize_text(text)
+    return text unless text.is_a?(String)
+    text.unicode_normalize(:nfkd)
+        .encode('ASCII', replace: '')
+        .downcase
+        .gsub(/[^a-z0-9\s]/i, '')
+        .strip
+end
+
+puts " Iniciando criação de mensagens para demonstração...".colorize(:blue)
+
+# Contadores para estatísticas
+mensagens_criadas = 0
+total_sucesso = 0
+total_erros = 0
 
 # Verifica se existem usuários no sistema
 users = User.all
 if users.count < 2
-  puts "ATENÇÃO: É necessário ter pelo menos 2 usuários cadastrados. Execute primeiro a seed de usuários."
-  exit
+    puts " ERRO: É necessário ter pelo menos 2 usuários cadastrados.".colorize(:red)
+    puts "🟡 Execute primeiro a seed de usuários (#37_users.rb)".colorize(:yellow)
+    exit
 end
 
 # Conteúdos possíveis para as mensagens
@@ -42,7 +57,6 @@ data_inicial = 30.days.ago
 data_final = Time.now
 
 # Número de mensagens a serem criadas
-mensagens_criadas = 0
 total_mensagens = 100 # Ajuste conforme necessário
 
 puts "Gerando #{total_mensagens} mensagens entre usuários..."
@@ -72,8 +86,8 @@ total_mensagens.times do |i|
   # Cria a mensagem
   message = Message.new(
     content: mensagem,
-    sender: sender,
-    recipient: recipient,
+    sender_id: sender.id,      # Corrigido: usando sender_id
+    recipient_id: recipient.id, # Corrigido: usando recipient_id
     read: lida,
     discarded_at: descartada ? rand(data_mensagem..Time.now) : nil,
     created_at: data_mensagem,
@@ -82,16 +96,21 @@ total_mensagens.times do |i|
   
   if message.save
     mensagens_criadas += 1
+    total_sucesso += 1
     status = if message.discarded_at
-               "[DESCARTADA]"
+               "🟡 [DESCARTADA]"
              elsif message.read
-               "[LIDA]"
+               "🟢 [LIDA]"
              else
-               "[NÃO LIDA]"
+               "⚪ [NÃO LIDA]"
              end
-    puts "Mensagem criada: De #{sender.email} para #{recipient.email} #{status}"
+    # Corrigido: usando primeiro nome ou email como fallback
+    sender_name = sender.first_name.presence || sender.email
+    recipient_name = recipient.first_name.presence || recipient.email
+    puts " Mensagem criada: De #{normalize_text(sender_name)} para #{normalize_text(recipient_name)} #{status}".colorize(:blue)
   else
-    puts "ERRO ao criar mensagem: #{message.errors.full_messages.join(', ')}"
+    total_erros += 1
+    puts " ERRO ao criar mensagem: #{message.errors.full_messages.join(', ')}".colorize(:red)
   end
 end
 
@@ -114,8 +133,8 @@ end
     
     Message.create!(
       content: mensagem,
-      sender: sender,
-      recipient: recipient,
+      sender_id: sender.id,      # Corrigido: usando sender_id
+      recipient_id: recipient.id, # Corrigido: usando recipient_id
       read: i < 4, # Última mensagem não lida
       created_at: tempo,
       updated_at: tempo
@@ -132,22 +151,23 @@ total_lidas = Message.where(read: true).count
 total_nao_lidas = Message.where(read: false).count
 total_descartadas = Message.where.not(discarded_at: nil).count
 
-puts "\nEstatísticas das mensagens:"
-puts "- Total de mensagens criadas: #{mensagens_criadas}"
-puts "- Mensagens lidas: #{total_lidas} (#{(total_lidas.to_f / mensagens_criadas * 100).round(1)}%)"
-puts "- Mensagens não lidas: #{total_nao_lidas} (#{(total_nao_lidas.to_f / mensagens_criadas * 100).round(1)}%)"
-puts "- Mensagens descartadas: #{total_descartadas} (#{(total_descartadas.to_f / mensagens_criadas * 100).round(1)}%)"
+puts "\n⚪ Estatísticas das mensagens:".colorize(:white)
+puts "🟢 Total de mensagens criadas com sucesso: #{total_sucesso}".colorize(:green)
+puts " Total de erros: #{total_erros}".colorize(:red) if total_erros > 0
+puts " Mensagens lidas: #{total_lidas} (#{(total_lidas.to_f / mensagens_criadas * 100).round(1)}%)".colorize(:cyan)
+puts " Mensagens não lidas: #{total_nao_lidas} (#{(total_nao_lidas.to_f / mensagens_criadas * 100).round(1)}%)".colorize(:cyan)
+puts "🟡 Mensagens descartadas: #{total_descartadas} (#{(total_descartadas.to_f / mensagens_criadas * 100).round(1)}%)".colorize(:yellow)
 
-# Mensagens por usuário
-puts "\nTop 5 usuários com mais mensagens enviadas:"
+puts "\n Ranking de usuários por mensagens enviadas:".colorize(:blue)
 top_senders = Message.group(:sender_id)
                     .count
                     .sort_by { |_, count| -count }
                     .first(5)
 
-top_senders.each do |user_id, count|
-  user = User.find(user_id)
-  puts "- #{user.email}: #{count} mensagens"
+top_senders.each.with_index(1) do |(user_id, count), index|
+    user = User.find(user_id)
+    display_name = user.first_name.presence || user.email
+    puts "⚪ #{index}º - #{normalize_text(display_name)}: #{count} mensagens".colorize(:white)
 end
 
-puts "\nMensagens criadas com sucesso!"
+puts "\n🟢 Processo de criação de mensagens concluído com sucesso!".colorize(:green)

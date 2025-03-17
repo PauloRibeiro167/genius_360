@@ -9,16 +9,17 @@ begin
     # Definição dos perfis
     perfis = [
         'Super Admin',
-        'Analista de Dados',
-        'Gerente Comercial',
-        'Gerente Executivo',
-        'Diretor Executivo',
-        'Digitador',
         'Gerente de Marketing',
         'Gerente de Estrategia',
+        'Gerente Comercial',
+        'Gerente Executivo',
+        'Gestor de CRM',
+        'Gestor de Projetos',
+        'Analista de Dados',
+        'Diretor Executivo',
+        'Digitador',
         'Supervisor',
         'Monitor de Fraudes',
-        'Gestor de CRM'
     ].freeze
 
     # Processamento dos perfis
