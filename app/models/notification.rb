@@ -1,13 +1,16 @@
 # app/models/notification.rb
 class Notification < ApplicationRecord
-  include Noticed::Model
-  belongs_to :recipient, polymorphic: true
-  belongs_to :actor, polymorphic: true, optional: true
-  belongs_to :record, polymorphic: true, optional: true
+  self.inheritance_column = nil  
+  
+  belongs_to :user
   
   scope :unread, -> { where(read_at: nil) }
   scope :read, -> { where.not(read_at: nil) }
   scope :newest_first, -> { order(created_at: :desc) }
+  
+  validates :user, presence: true
+  validates :type, presence: true
+  validates :data, presence: true
   
   def mark_as_read!
     update(read_at: Time.current)

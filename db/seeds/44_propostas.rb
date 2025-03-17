@@ -1,4 +1,13 @@
-puts "\nCriando propostas fictícias para testes..."
+require 'colorize'
+
+def exibir_barra_progresso(atual, total, tipo)
+    porcentagem = (atual.to_f / total * 100).round
+    barras_preenchidas = (porcentagem / 5).round
+    barra = "█" * barras_preenchidas + "░" * (20 - barras_preenchidas)
+    print "\r Processando #{tipo}: [#{barra}] #{porcentagem}% (#{atual}/#{total})".colorize(:cyan)
+end
+
+puts "\n Iniciando geração de propostas fictícias...".colorize(:blue)
 
 # Status possíveis para as propostas
 status_propostas = [
@@ -30,98 +39,91 @@ def gerar_numero_proposta(prefixo)
   "#{prefixo}#{ano}-#{sequencia}"
 end
 
-# Criação de propostas fictícias
+# Contadores para estatísticas
 total_propostas = 50
 propostas_criadas = 0
+erros = 0
+start_time = Time.now
 
-puts "Gerando #{total_propostas} propostas com status variados..."
+begin
+    puts "\n Gerando #{total_propostas} propostas com status variados...".colorize(:cyan)
+    
+    total_propostas.times do |i|
+        begin
+            prefixo = prefixos_propostas.sample
+            numero = gerar_numero_proposta(prefixo)
+            status = status_propostas.sample
+            
+            proposta = Proposta.new(numero: numero, status: status)
+            
+            if proposta.save
+                propostas_criadas += 1
+                exibir_barra_progresso(i + 1, total_propostas, "propostas base")
+            else
+                erros += 1
+                puts "\n Erro ao criar proposta #{numero}: #{proposta.errors.full_messages.join(', ')}".colorize(:red)
+            end
+        rescue => e
+            erros += 1
+            puts "\n Erro inesperado: #{e.message}".colorize(:red)
+            puts "🟣 Debug: #{e.backtrace.first}".colorize(:magenta)
+        end
+    end
 
-total_propostas.times do |i|
-  # Escolhe um prefixo aleatório para a proposta
-  prefixo = prefixos_propostas.sample
-  
-  # Gera um número de proposta único
-  numero = gerar_numero_proposta(prefixo)
-  
-  # Define o status da proposta
-  status = status_propostas.sample
-  
-  # Cria a proposta no banco de dados
-  proposta = Proposta.new(
-    numero: numero,
-    status: status
-  )
-  
-  # Salva a proposta e contabiliza
-  if proposta.save
-    propostas_criadas += 1
-    print "." if i % 5 == 0 # Imprime um ponto a cada 5 propostas para mostrar o progresso
-  else
-    puts "\nErro ao criar proposta #{numero}: #{proposta.errors.full_messages.join(', ')}"
-  end
-end
+    puts "\n🟢 #{propostas_criadas} propostas base criadas com sucesso!".colorize(:green)
+    
+    # Criação de propostas específicas para teste
+    puts "\n Criando propostas específicas para testes...".colorize(:blue)
+    
+    propostas_teste = {
+        "Em análise" => 3,
+        "Aprovada" => 5,
+        "Pendente" => 2
+    }
+    
+    propostas_teste.each do |status, quantidade|
+        quantidade.times do |i|
+            begin
+                prefixo = prefixos_propostas.sample
+                numero = gerar_numero_proposta(prefixo)
+                
+                proposta = Proposta.create(numero: numero, status: status)
+                
+                if proposta.persisted?
+                    puts "🟢 Proposta #{status.downcase} criada: #{numero}".colorize(:green)
+                else
+                    puts " Falha ao criar proposta #{status.downcase}: #{numero}".colorize(:red)
+                    erros += 1
+                end
+            rescue => e
+                erros += 1
+                puts " Erro ao criar proposta #{status}: #{e.message}".colorize(:red)
+            end
+        end
+    end
+    
+    # Estatísticas finais
+    puts "\n === Estatísticas de Propostas ===".colorize(:blue)
+    total_por_status = {}
+    
+    status_propostas.each do |status|
+        contagem = Proposta.where(status: status).count
+        total_por_status[status] = contagem
+        cor = contagem > 0 ? :green : :yellow
+        puts "⚪ #{status}: #{contagem} propostas".colorize(cor)
+    end
+    
+    puts "\n=== Resumo da Operação ===".colorize(:blue)
+    puts "🟢 Total de propostas criadas: #{Proposta.count}".colorize(:green)
+    puts " Total de erros: #{erros}".colorize(:red) if erros > 0
+    puts "⚫ Tempo de execução: #{(Time.now - start_time).round} segundos".colorize(:light_black)
+    
+    if Proposta.count == 0
+        puts "\n🟡 ATENÇÃO: Nenhuma proposta foi criada!".colorize(:yellow)
+        puts "🟡 Verifique se a tabela 'propostas' existe no banco de dados.".colorize(:yellow)
+    end
 
-puts "\n#{propostas_criadas} propostas criadas com sucesso!"
-
-# Cria algumas propostas com status específicos para testes
-puts "\nCriando algumas propostas com status específicos para testes..."
-
-# Propostas em análise (recentes)
-3.times do |i|
-  prefixo = prefixos_propostas.sample
-  numero = gerar_numero_proposta(prefixo)
-  
-  proposta = Proposta.create(
-    numero: numero,
-    status: "Em análise"
-  )
-  
-  puts "Proposta em análise criada: #{numero}" if proposta.persisted?
-end
-
-# Propostas aprovadas (para testes de fluxo)
-5.times do |i|
-  prefixo = prefixos_propostas.sample
-  numero = gerar_numero_proposta(prefixo)
-  
-  proposta = Proposta.create(
-    numero: numero,
-    status: "Aprovada"
-  )
-  
-  puts "Proposta aprovada criada: #{numero}" if proposta.persisted?
-end
-
-# Propostas pendentes (para testes de alerta)
-2.times do |i|
-  prefixo = prefixos_propostas.sample
-  numero = gerar_numero_proposta(prefixo)
-  
-  proposta = Proposta.create(
-    numero: numero,
-    status: "Pendente"
-  )
-  
-  puts "Proposta pendente criada: #{numero}" if proposta.persisted?
-end
-
-# Estatísticas finais
-total_por_status = {}
-
-status_propostas.each do |status|
-  contagem = Proposta.where(status: status).count
-  total_por_status[status] = contagem
-end
-
-puts "\nEstatísticas de propostas por status:"
-total_por_status.each do |status, contagem|
-  puts "  - #{status}: #{contagem} propostas"
-end
-
-puts "\nTotal de propostas criadas: #{Proposta.count}"
-
-# Nota: você pode precisar corrigir o nome da tabela na migration se estiver usando "proposta" (singular) em vez de "propostas" (plural)
-if Proposta.count == 0
-  puts "\nATENÇÃO: Nenhuma proposta foi criada. Verifique se a tabela 'propostas' existe ou se o nome da tabela na migration está correto."
-  puts "A migration atual está criando uma tabela chamada 'proposta' (singular), mas o padrão do Rails é usar o plural."
+rescue => e
+    puts "\n Erro fatal durante a execução: #{e.message}".colorize(:red)
+    puts "🟣 Debug: #{e.backtrace.first}".colorize(:magenta)
 end

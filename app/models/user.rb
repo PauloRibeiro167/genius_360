@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id'
   has_many :notifications, dependent: :destroy
   has_and_belongs_to_many :avisos
+  has_many :disponibilidades, dependent: :destroy
 
   # Escopo padrão para mostrar apenas registros ativos
   default_scope -> { kept }
@@ -37,6 +38,8 @@ class User < ApplicationRecord
   validate :validate_phone_format
   validate :cpf_must_be_unique
   
+  belongs_to :hierarquia, optional: true
+
   def avatar_attached?
     avatar.attached?
   end
@@ -46,9 +49,7 @@ class User < ApplicationRecord
   end
 
   def public_user?
-    # Implemente sua lógica aqui para determinar se o usuário é público
-    # Por exemplo:
-    perfil&.name == 'public' || has_role?(:public)
+    perfil&.name == 'Public'
   end
 
   # Adicione perfil aos atributos pesquisáveis
@@ -110,6 +111,14 @@ class User < ApplicationRecord
                     WHEN recipient_id = #{id} THEN sender_id 
                    END as user_id")
           .where("sender_id = ? OR recipient_id = ?", id, id)
+  end
+
+  def nivel_hierarquico
+    hierarquia&.nivel
+  end
+  
+  def nome_hierarquia
+    hierarquia&.nome || "Sem hierarquia definida"
   end
 
   private

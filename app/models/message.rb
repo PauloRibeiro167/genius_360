@@ -65,7 +65,7 @@ class Message < ApplicationRecord
   def broadcast_message
     message_data = {
       content: content,
-      sender_name: sender.name,
+      sender_name: sender.first_name.presence || sender.email, # Corrigido: usando first_name ou email como fallback
       sender_id: sender_id,
       created_at: created_at.strftime("%H:%M"),
       recipient_id: recipient_id

@@ -26,11 +26,22 @@ class ContactMessage < ApplicationRecord
 
   # Definição correta do enum
   enum :status, {
-    solicitacao_contato: 0,
+    nova: 0,
     em_analise: 1,
-    respondido: 2,
-    finalizado: 3
-  }, default: :solicitacao_contato
+    respondida: 2,
+    encerrada: 3,
+    pendente: 4
+  }
+
+  enum :request_type, {
+    informacao: 0,
+    orcamento: 1,
+    suporte: 2,
+    reclamacao: 3,
+    sugestao: 4,
+    parceria: 5,
+    demonstracao: 6
+  }
 
   # Validações - agora request_types já está definido
   validates :status, presence: true, inclusion: { in: statuses.keys }
@@ -38,10 +49,11 @@ class ContactMessage < ApplicationRecord
   
   def status_formatado
     case status
-    when 'solicitacao_contato' then 'Solicitação de Contato'
+    when 'nova' then 'Nova'
     when 'em_analise' then 'Em Análise'
-    when 'respondido' then 'Respondido'
-    when 'finalizado' then 'Finalizado'
+    when 'respondida' then 'Respondida'
+    when 'encerrada' then 'Encerrada'
+    when 'pendente' then 'Pendente'
     end
   end
 
