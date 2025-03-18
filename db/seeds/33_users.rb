@@ -1,17 +1,6 @@
-require 'colorize'
-
-# Adicione esta função no início do arquivo, após o require
-def normalize_perfil_name(name)
-  name.strip.titleize
-end
-
-puts "\nCriando usuário Super Admin..."
-
-# Função para gerar CPFs válidos
 def generate_valid_cpf
   numbers = 9.times.map { rand(10) }
   
-  # Calcula o primeiro dígito verificador
   factor = 10
   sum = 0
   9.times do |i|
@@ -22,10 +11,8 @@ def generate_valid_cpf
   remainder = sum % 11
   first_validator = remainder < 2 ? 0 : 11 - remainder
   
-  # Adiciona o primeiro dígito verificador
   numbers << first_validator
   
-  # Calcula o segundo dígito verificador
   factor = 11
   sum = 0
   10.times do |i|
@@ -36,14 +23,11 @@ def generate_valid_cpf
   remainder = sum % 11
   second_validator = remainder < 2 ? 0 : 11 - remainder
   
-  # Adiciona o segundo dígito verificador
   numbers << second_validator
   
-  # Formata o CPF
   "#{numbers[0..2].join}.#{numbers[3..5].join}.#{numbers[6..8].join}-#{numbers[9..10].join}"
 end
 
-# Usuário principal com CPF gerado aleatoriamente
 valid_cpf = generate_valid_cpf
 user = User.new(
   email: 'paulorezende877@gmail.com',
@@ -66,12 +50,10 @@ end
 puts "\nCriando usuários para cada perfil..."
 
 begin
-  puts "\n Iniciando criação de usuários...".colorize(:blue)
+  puts "\n Iniciando criação de usuários..."
 
-  # Estatísticas de processamento
   stats = { criados: 0, existentes: 0, erros: 0 }
 
-  # Array de usuários baseados nos perfis disponíveis
   user_examples = [
     {
       email: 'admin@genius360.com',
@@ -93,7 +75,7 @@ begin
       cpf: generate_valid_cpf,
       phone: '(85) 99999-2222',
       admin: false,
-      perfil_name: 'Analista De Dados'  # Alterado para corresponder ao formato titleize  # Alterado para corresponder ao formato titleize
+      perfil_name: 'Analista De Dados'
     },
     {
       email: 'gerente_comercial@genius360.com',
@@ -148,7 +130,7 @@ begin
       cpf: generate_valid_cpf,
       phone: '(85) 99999-6666',
       admin: false,
-      perfil_name: 'Gerente De Marketing'  # Alterado para corresponder ao formato titleize  # Alterado para corresponder ao formato titleize
+      perfil_name: 'Gerente De Marketing'
     },
     {
       email: 'estrategia@genius360.com',
@@ -159,7 +141,7 @@ begin
       cpf: generate_valid_cpf,
       phone: '(85) 99999-7766',
       admin: false,
-      perfil_name: 'Gerente De Estrategia'  # Alterado para corresponder ao formato titleize  # Alterado para corresponder ao formato titleize
+      perfil_name: 'Gerente De Estrategia'
     },
     {
       email: 'supervisor@genius360.com',
@@ -181,7 +163,7 @@ begin
       cpf: generate_valid_cpf,
       phone: '(85) 99999-8888',
       admin: false,
-      perfil_name: 'Monitor De Fraudes'  # Alterado para corresponder ao formato titleize  # Alterado para corresponder ao formato titleize
+      perfil_name: 'Monitor De Fraudes'
     },
     {
       email: 'crm@genius360.com',
@@ -192,76 +174,41 @@ begin
       cpf: generate_valid_cpf,
       phone: '(85) 99999-9999',
       admin: false,
-      perfil_name: 'Gestor De CRM'  # Alterado para corresponder ao formato titleize  # Alterado para corresponder ao formato titleize
+      perfil_name: 'Gestor De CRM'
     }
   ]
 
-  puts "\n Verificando normalização dos nomes dos perfis...".colorize(:cyan)
   user_examples.each do |user_data|
-    original_name = user_data[:perfil_name]
-    normalized_name = normalize_perfil_name(original_name)
-    puts "⚪ #{original_name} -> #{normalized_name}".colorize(:white)
-  end
-
-  # Verificação prévia dos perfis
-  puts "\n Verificando perfis disponíveis...".colorize(:cyan)
-  user_examples.each do |user_data|
-    perfil = Perfil.find_by(name: normalize_perfil_name(user_data[:perfil_name]))
-    if perfil
-      puts "🟢 Perfil encontrado: #{user_data[:perfil_name]}".colorize(:green)
-    else
-      puts " Perfil não encontrado: #{user_data[:perfil_name]}".colorize(:red)
+    perfil = Perfil.find_by(name: user_data[:perfil_name])
+    
+    unless perfil
+      stats[:erros] += 1
+      next
     end
-  end
 
-  # Processamento dos usuários
-  puts "\n Criando usuários...".colorize(:blue)
-  user_examples.each do |user_data|
-    begin
-      perfil = Perfil.find_by(name: normalize_perfil_name(user_data[:perfil_name]))
-      
-      unless perfil
-        puts " Erro: Perfil '#{user_data[:perfil_name]}' não encontrado".colorize(:red)
-        stats[:erros] += 1
-        next
-      end
+    if User.exists?(email: user_data[:email])
+      stats[:existentes] += 1
+      next
+    end
 
-      # Verifica se o usuário já existe
-      if User.exists?(email: user_data[:email])
-        puts "⚪ Usuário já existe: #{user_data[:email]}".colorize(:white)
-        stats[:existentes] += 1
-        next
-      end
-
-      user = User.new(user_data.except(:perfil_name).merge(perfil: perfil))
-      
-      if user.save
-        puts "🟢 Usuário criado: #{user.email} (#{user_data[:perfil_name]})".colorize(:green)
-        stats[:criados] += 1
-      else
-        puts " Erro ao criar usuário: #{user.errors.full_messages.join(', ')}".colorize(:red)
-        stats[:erros] += 1
-      end
-      
-    rescue => e
-      puts " Erro inesperado: #{e.message}".colorize(:red)
-      puts "🟣 Debug: #{e.backtrace[0..2].join("\n")}".colorize(:magenta)
+    user = User.new(user_data.except(:perfil_name).merge(perfil: perfil))
+    
+    if user.save
+      stats[:criados] += 1
+    else
       stats[:erros] += 1
     end
   end
 
-  # Exibição do resumo da operação
-  puts "\n Resumo da operação:".colorize(:cyan)
-  puts " → Total de usuários processados: #{user_examples.size}".colorize(:blue)
-  puts "🟢 → Usuários criados: #{stats[:criados]}".colorize(:green)
-  puts "⚪ → Usuários existentes: #{stats[:existentes]}".colorize(:white)
-  puts " → Erros encontrados: #{stats[:erros]}".colorize(:red)
-  puts "⚫ → Total de usuários no sistema: #{User.count}".colorize(:light_black)
+  puts "\n Resumo da operação:"
+  puts "Total de usuários processados: #{user_examples.size}"
+  puts "Usuários criados: #{stats[:criados]}"
+  puts "Usuários existentes: #{stats[:existentes]}"
+  puts "Erros encontrados: #{stats[:erros]}"
+  puts "Total de usuários no sistema: #{User.count}"
 
 rescue => e
-  puts "\n Erro inesperado:".colorize(:red)
-  puts " → #{e.message}".colorize(:red)
-  puts "🟣 Debug: #{e.backtrace[0..2].join("\n")}".colorize(:magenta)
+  puts "Erro inesperado: #{e.message}"
 end
 
 puts "\nCriação de usuários concluída!"

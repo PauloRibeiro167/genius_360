@@ -6,14 +6,15 @@ class Acesso < ApplicationRecord
 
   # Definição dos atributos pesquisáveis
   def self.ransackable_attributes(auth_object = nil)
-    %w[id usuario descricao data_acesso ip modelo_dispositivo created_at updated_at discarded_at]
+    %w[id user_id descricao data_acesso ip modelo_dispositivo created_at updated_at discarded_at]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    []
+    %w[user]
   end
 
-  belongs_to :usuario, required: true
+  # Corrigindo a associação para apontar para user em vez de usuario
+  belongs_to :user, optional: true
 
   # Callbacks para quando o registro é descartado/restaurado
   before_discard do

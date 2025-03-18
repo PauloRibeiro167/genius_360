@@ -6,6 +6,7 @@ class CreateSecurityIncidents < ActiveRecord::Migration[8.0]
       t.text :details
       t.string :source_ip
       t.text :user_agent
+      t.datetime :discarded_at
 
       t.timestamps
     end

@@ -25,11 +25,11 @@ tipos_metas = [
   "Satisfação do Cliente"
 ]
 
-# Status possíveis para as metas
+# Status possíveis para as metas (CORRIGIDO)
 status_metas = [
   "em andamento",
-  "concluída",
-  "não atingida",
+  "concluida",
+  "nao_atingida",  # Modificado: underscore em vez de espaço
   "superada",
   "cancelada"
 ]
@@ -93,7 +93,7 @@ end
 # Cria algumas metas concluídas (históricas)
 3.times do |i|
   mes_passado = mes_atual - (i+1).months
-  status_historico = ["concluída", "não atingida", "superada"].sample
+  status_historico = ["concluida", "nao_atingida", "superada"].sample
   
   # Seleciona usuários aleatórios para metas históricas
   usuario_aleatorio = users.sample

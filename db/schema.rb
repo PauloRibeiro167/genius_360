@@ -20,6 +20,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.datetime "data_acesso"
     t.string "ip"
     t.string "modelo_dispositivo"
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_acessos_on_user_id"
@@ -35,6 +36,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.datetime "proxima_data"
     t.integer "prioridade"
     t.integer "duracao_minutos"
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["data_acompanhamento"], name: "index_acompanhamentos_on_data_acompanhamento"
@@ -106,6 +108,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.index ["user_id"], name: "index_avisos_users_on_user_id"
   end
 
+  create_table "banco_taxas", force: :cascade do |t|
+    t.bigint "banco_id", null: false
+    t.bigint "taxa_consignado_id", null: false
+    t.decimal "taxa_preferencial", precision: 6, scale: 3
+    t.boolean "ativo", default: true
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ativo"], name: "index_banco_taxas_on_ativo"
+    t.index ["banco_id", "taxa_consignado_id"], name: "index_banco_taxas_on_banco_id_and_taxa_consignado_id", unique: true
+    t.index ["banco_id"], name: "index_banco_taxas_on_banco_id"
+    t.index ["discarded_at"], name: "index_banco_taxas_on_discarded_at"
+    t.index ["taxa_consignado_id"], name: "index_banco_taxas_on_taxa_consignado_id"
+  end
+
   create_table "bancos", force: :cascade do |t|
     t.string "numero_identificador"
     t.string "nome"
@@ -117,39 +134,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "bancos_taxas", force: :cascade do |t|
-    t.bigint "banco_id", null: false
-    t.bigint "taxa_consignado_id", null: false
-    t.decimal "taxa_preferencial", precision: 6, scale: 3
-    t.boolean "ativo", default: true
-    t.datetime "discarded_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["ativo"], name: "index_bancos_taxas_on_ativo"
-    t.index ["banco_id", "taxa_consignado_id"], name: "index_bancos_taxas_on_banco_id_and_taxa_consignado_id", unique: true
-    t.index ["banco_id"], name: "index_bancos_taxas_on_banco_id"
-    t.index ["discarded_at"], name: "index_bancos_taxas_on_discarded_at"
-    t.index ["taxa_consignado_id"], name: "index_bancos_taxas_on_taxa_consignado_id"
-  end
-
   create_table "beneficios", force: :cascade do |t|
     t.string "nome", null: false
     t.text "descricao"
     t.string "categoria", null: false
-    t.boolean "consignavel", default: true
+    t.integer "codigo", null: false
+    t.boolean "consignavel", default: true, null: false
     t.decimal "margem_padrao", precision: 5, scale: 2
     t.decimal "margem_cartao_padrao", precision: 5, scale: 2
-    t.string "fonte_pagadora"
-    t.boolean "ativo", default: true
+    t.boolean "ativo", default: true, null: false
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ativo"], name: "index_beneficios_on_ativo"
     t.index ["categoria"], name: "index_beneficios_on_categoria"
+    t.index ["codigo"], name: "index_beneficios_on_codigo", unique: true
     t.index ["consignavel"], name: "index_beneficios_on_consignavel"
     t.index ["discarded_at"], name: "index_beneficios_on_discarded_at"
-    t.index ["fonte_pagadora"], name: "index_beneficios_on_fonte_pagadora"
-    t.index ["nome"], name: "index_beneficios_on_nome"
+    t.index ["nome"], name: "index_beneficios_on_nome", unique: true
   end
 
   create_table "clientes", force: :cascade do |t|
@@ -272,6 +274,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.date "data_solicitacao_reembolso"
     t.text "justificativa_reembolso"
     t.string "comprovante_reembolso_path"
+    t.string "tags"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["aprovado_por_id"], name: "index_financial_transactions_on_aprovado_por_id"
@@ -286,6 +289,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.index ["solicitante_id_id"], name: "index_financial_transactions_on_solicitante_id_id"
     t.index ["status"], name: "index_financial_transactions_on_status"
     t.index ["status_reembolso"], name: "index_financial_transactions_on_status_reembolso"
+    t.index ["tags"], name: "index_financial_transactions_on_tags"
     t.index ["tipo"], name: "index_financial_transactions_on_tipo"
     t.index ["transacao_relacionada_id"], name: "index_financial_transactions_on_transacao_relacionada_id"
     t.index ["user_id"], name: "index_financial_transactions_on_user_id"
@@ -305,15 +309,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
   end
 
   create_table "leads", force: :cascade do |t|
-    t.string "nome"
+    t.string "nome", null: false
     t.string "email"
     t.string "telefone"
-    t.string "status"
+    t.string "empresa"
+    t.string "cargo"
     t.string "origem"
-    t.text "observacoes"
-    t.jsonb "dados_extras", default: {}
+    t.string "status"
+    t.text "observacao"
+    t.bigint "user_id"
+    t.date "data_contato"
+    t.boolean "ativo", default: true
+    t.decimal "potencial_venda", precision: 10, scale: 2
+    t.string "instituicao"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_leads_on_email"
+    t.index ["instituicao"], name: "index_leads_on_instituicao"
+    t.index ["nome"], name: "index_leads_on_nome"
+    t.index ["origem"], name: "index_leads_on_origem"
+    t.index ["status"], name: "index_leads_on_status"
+    t.index ["user_id"], name: "index_leads_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -469,7 +485,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.index ["user_id"], name: "index_progresso_vendas_on_user_id"
   end
 
-  create_table "proposta", force: :cascade do |t|
+  create_table "propostas", force: :cascade do |t|
     t.string "numero"
     t.string "status"
     t.datetime "discarded_at"
@@ -501,6 +517,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.text "details"
     t.string "source_ip"
     t.text "user_agent"
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -593,7 +610,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.datetime "data_venda"
     t.datetime "data_contratacao"
     t.boolean "indicacao", default: false
-    t.bigint "parceiro_id", null: false
+    t.bigint "parceiro_id"
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cliente_id"], name: "index_vendas_on_cliente_id"
@@ -609,8 +627,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "avisos_users", "avisos"
   add_foreign_key "avisos_users", "users"
-  add_foreign_key "bancos_taxas", "bancos"
-  add_foreign_key "bancos_taxas", "taxas_consignados", column: "taxa_consignado_id"
+  add_foreign_key "banco_taxas", "bancos"
+  add_foreign_key "banco_taxas", "taxas_consignados", column: "taxa_consignado_id"
   add_foreign_key "controller_permissions", "permissions", column: "permissions_id"
   add_foreign_key "disponibilidades", "users"
   add_foreign_key "equipes", "users", column: "lider_id"
@@ -619,6 +637,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
   add_foreign_key "financial_transactions", "users"
   add_foreign_key "financial_transactions", "users", column: "aprovado_por_id"
   add_foreign_key "financial_transactions", "users", column: "solicitante_id_id"
+  add_foreign_key "leads", "users"
   add_foreign_key "messages", "users", column: "recipient_id"
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "meta", "users"

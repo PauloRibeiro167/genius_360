@@ -14,6 +14,22 @@ class Acompanhamento < ApplicationRecord
   end
 
   belongs_to :lead, required: true
+  belongs_to :user, optional: true
+  
+  validates :data_acompanhamento, presence: true
+  validates :tipo_acompanhamento, presence: true
+  
+  scope :pendentes, -> { where(status: 'Pendente') }
+  scope :concluidos, -> { where(status: 'Concluído') }
+  scope :proximos, -> { where('proxima_data >= ?', Date.today).order(:proxima_data) }
+  
+  def self.tipo_options
+    ['Ligação', 'Email', 'Reunião', 'Visita', 'Outro']
+  end
+  
+  def self.status_options
+    ['Pendente', 'Concluído', 'Cancelado']
+  end
 
   # Callbacks para quando o registro é descartado/restaurado
   before_discard do

@@ -19,6 +19,15 @@ class Disponibilidade < ApplicationRecord
     scope :disponiveis, -> { where(disponivel: true) }
     scope :por_dia, ->(dia) { where(dia_semana: dia) }
     
+    def disponivel_no_horario?(hora_inicio_reuniao, hora_fim_reuniao)
+        return false unless disponivel?
+        
+        inicio_reuniao = Time.parse(hora_inicio_reuniao)
+        fim_reuniao = Time.parse(hora_fim_reuniao)
+        
+        inicio_reuniao >= hora_inicio && fim_reuniao <= hora_fim
+    end
+    
     private
     
     def hora_fim_depois_de_hora_inicio

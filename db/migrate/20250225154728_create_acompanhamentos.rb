@@ -10,6 +10,7 @@ class CreateAcompanhamentos < ActiveRecord::Migration[8.0]
       t.datetime   :proxima_data
       t.integer    :prioridade
       t.integer    :duracao_minutos
+      t.datetime   :discarded_at
 
       t.timestamps
     end

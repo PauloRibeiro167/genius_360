@@ -1,30 +1,13 @@
-require 'colorize'
-
-# Contadores para estatísticas
 sucessos = 0
 erros = 0
 
-puts " Iniciando criação de participantes...".colorize(:blue)
-
-# Função de normalização
-def normalizar_dados(participante_data)
-    {
-        reuniao: participante_data[:reuniao],
-        user: participante_data[:user],
-        status: participante_data[:status].to_s.downcase.strip,
-        observacoes: participante_data[:observacoes].to_s.strip
-    }
-end
-
 begin
-    # Verifica pré-requisitos
     reunioes = Reuniao.all
     users = User.all
 
-    puts "🟣 Debug: Encontradas #{reunioes.count} reuniões e #{users.count} usuários".colorize(:magenta)
+    puts "Encontradas #{reunioes.count} reuniões e #{users.count} usuários"
 
     if reunioes.any? && users.any?
-        # Dados de exemplo
         participantes_data = [
             {
                 reuniao: reunioes.first,
@@ -46,37 +29,34 @@ begin
             }
         ]
 
-        # Processamento dos participantes
         participantes_data.each do |participante_data|
             begin
-                dados_normalizados = normalizar_dados(participante_data)
-                puts " Processando participante: #{dados_normalizados[:user].email}".colorize(:cyan)
+                puts "Processando participante: #{participante_data[:user].email}"
                 
                 Participante.find_or_create_by!(
-                    reuniao: dados_normalizados[:reuniao],
-                    user: dados_normalizados[:user]
+                    reuniao: participante_data[:reuniao],
+                    user: participante_data[:user]
                 ) do |participante|
-                    participante.status = dados_normalizados[:status]
-                    participante.observacoes = dados_normalizados[:observacoes]
+                    participante.status = participante_data[:status].to_s.downcase.strip
+                    participante.observacoes = participante_data[:observacoes].to_s.strip
                 end
                 
                 sucessos += 1
-                puts "⚪ Participante processado com sucesso".colorize(:white)
+                puts "Participante processado com sucesso"
             rescue => e
                 erros += 1
-                puts " Erro ao processar participante: #{e.message}".colorize(:red)
+                puts "Erro ao processar participante: #{e.message}"
             end
         end
 
-        # Exibição do resumo
-        puts "\n=== Resumo da Operação ===".colorize(:blue)
-        puts "🟢 Participantes criados com sucesso: #{sucessos}".colorize(:green)
-        puts " Erros encontrados: #{erros}".colorize(:red) if erros > 0
-        puts "⚫ Total processado: #{sucessos + erros}".colorize(:light_black)
+        puts "\n=== Resumo da Operação ==="
+        puts "Participantes criados com sucesso: #{sucessos}"
+        puts "Erros encontrados: #{erros}" if erros > 0
+        puts "Total processado: #{sucessos + erros}"
     else
-        puts "🟡 Aviso: Não existem reuniões ou usuários cadastrados no sistema".colorize(:yellow)
+        puts "Aviso: Não existem reuniões ou usuários cadastrados no sistema"
     end
 rescue => e
-    puts " Erro fatal: #{e.message}".colorize(:red)
-    puts "🟣 Debug: #{e.backtrace.first}".colorize(:magenta)
+    puts "Erro fatal: #{e.message}"
+    puts "Debug: #{e.backtrace.first}"
 end

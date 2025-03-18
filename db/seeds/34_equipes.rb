@@ -1,58 +1,15 @@
-require 'colorize'
-
 begin
-    puts "\n Iniciando criação de equipes...".colorize(:blue)
+    puts "\n Iniciando criação de equipes..."
 
-    # Estatísticas de processamento
     stats = { criadas: 0, existentes: 0, erros: 0 }
 
-    # Função para normalizar strings
-    def normalizar_string(str)
-        return nil if str.nil?
-        str.strip
-           .gsub(/\s+/, ' ')           # Remove espaços múltiplos
-           .gsub(/[áàãâä]/, 'a')       # Normaliza 'a'
-           .gsub(/[éèêë]/, 'e')        # Normaliza 'e'
-           .gsub(/[íìîï]/, 'i')        # Normaliza 'i'
-           .gsub(/[óòõôö]/, 'o')       # Normaliza 'o'
-           .gsub(/[úùûü]/, 'u')        # Normaliza 'u'
-           .gsub(/[ç]/, 'c')           # Normaliza 'c'
-           .gsub(/[^a-zA-Z0-9\s-]/, '') # Remove caracteres especiais
-    end
-
-    # Função para normalizar dados da equipe
-    def normalizar_dados_equipe(equipe_attrs)
-        {
-            nome: normalizar_string(equipe_attrs[:nome]),
-            descricao: normalizar_string(equipe_attrs[:descricao]),
-            tipo_equipe: normalizar_string(equipe_attrs[:tipo_equipe]),
-            regiao_atuacao: normalizar_string(equipe_attrs[:regiao_atuacao])
-        }
-    end
-
-    puts " Iniciando normalização dos dados...".colorize(:cyan)
-
-    # Verifica se existem usuários no sistema
     usuarios = User.all
     if usuarios.empty?
-        puts "\n🟡 ATENÇÃO: Não existem usuários cadastrados.".colorize(:yellow)
-        puts "🟡 Execute primeiro a seed de usuários (#db/seeds/create_users.rb)".colorize(:yellow)
-        puts "⚪ Criando equipes sem líderes definidos...".colorize(:white)
+        puts "\n Não existem usuários cadastrados."
+        puts " Execute primeiro a seed de usuários"
+        puts " Criando equipes sem líderes definidos..."
     end
 
-    # Tipos possíveis de equipes
-    tipos_equipe = [
-        "Vendas", "Atendimento", "Financeiro", 
-        "Administrativo", "Operacional"
-    ]
-
-    # Regiões de atuação
-    regioes = [
-        "Norte", "Nordeste", "Centro-Oeste", 
-        "Sudeste", "Sul", "Nacional"
-    ]
-
-    # Dados das equipes
     equipes = [
         {
             nome: "Equipe Alfa",
@@ -104,43 +61,36 @@ begin
         }
     ]
 
-    # Processamento das equipes com normalização
     equipes.each_with_index do |equipe_attrs, index|
         begin
-            # Normaliza os dados antes de processar
-            dados_normalizados = normalizar_dados_equipe(equipe_attrs)
-            
-            # Seleciona um usuário como líder
             lider = usuarios[index % usuarios.count] if usuarios.present?
             
-            equipe = Equipe.find_or_initialize_by(nome: dados_normalizados[:nome])
+            equipe = Equipe.find_or_initialize_by(nome: equipe_attrs[:nome])
             
             if equipe.new_record?
                 if equipe.update(
-                    descricao: dados_normalizados[:descricao],
+                    descricao: equipe_attrs[:descricao],
                     lider: lider,
-                    tipo_equipe: dados_normalizados[:tipo_equipe],
-                    regiao_atuacao: dados_normalizados[:regiao_atuacao],
+                    tipo_equipe: equipe_attrs[:tipo_equipe],
+                    regiao_atuacao: equipe_attrs[:regiao_atuacao],
                     ativo: true
                 )
-                    puts "🟢 Equipe criada: #{equipe.nome} (#{equipe.tipo_equipe} - #{equipe.regiao_atuacao})".colorize(:green)
+                    puts "Equipe criada: #{equipe.nome}"
                     stats[:criadas] += 1
                 else
-                    puts " Erro ao criar equipe '#{equipe.nome}': #{equipe.errors.full_messages.join(', ')}".colorize(:red)
+                    puts "Erro ao criar equipe '#{equipe.nome}': #{equipe.errors.full_messages.join(', ')}"
                     stats[:erros] += 1
                 end
             else
-                puts "⚪ Equipe já existe: #{equipe.nome}".colorize(:white)
+                puts "Equipe já existe: #{equipe.nome}"
                 stats[:existentes] += 1
             end
         rescue => e
-            puts " Erro ao processar equipe '#{equipe_attrs[:nome]}': #{e.message}".colorize(:red)
-            puts "🟣 Debug: #{e.backtrace[0..2].join("\n")}".colorize(:magenta)
+            puts "Erro ao processar equipe '#{equipe_attrs[:nome]}': #{e.message}"
             stats[:erros] += 1
         end
     end
 
-    # Criação de equipe inativa para demonstração
     if usuarios.present?
         begin
             equipe_inativa = Equipe.create!(
@@ -152,41 +102,25 @@ begin
                 ativo: false,
                 discarded_at: 3.months.ago
             )
-            puts "⚫ Equipe inativa criada: #{equipe_inativa.nome} [INATIVA]".colorize(:light_black)
+            puts "Equipe inativa criada: #{equipe_inativa.nome}"
             stats[:criadas] += 1
         rescue => e
-            puts " Erro ao criar equipe inativa: #{e.message}".colorize(:red)
+            puts "Erro ao criar equipe inativa: #{e.message}"
             stats[:erros] += 1
         end
     end
 
-    # Exibição do resumo da operação
-    puts "\n Resumo da operação:".colorize(:cyan)
-    puts " → Total de equipes processadas: #{equipes.size + 1}".colorize(:blue)
-    puts "🟢 → Equipes criadas: #{stats[:criadas]}".colorize(:green)
-    puts "⚪ → Equipes existentes: #{stats[:existentes]}".colorize(:white)
-    puts " → Erros encontrados: #{stats[:erros]}".colorize(:red)
-    puts "⚫ → Total de equipes no sistema: #{Equipe.count}".colorize(:light_black)
+    puts "\nResumo da operação:"
+    puts "Total de equipes processadas: #{equipes.size + 1}"
+    puts "Equipes criadas: #{stats[:criadas]}"
+    puts "Equipes existentes: #{stats[:existentes]}"
+    puts "Erros encontrados: #{stats[:erros]}"
+    puts "Total de equipes no sistema: #{Equipe.count}"
 
 rescue ActiveRecord::StatementInvalid => e
-    puts "\n Erro de banco de dados:".colorize(:red)
-    puts " → #{e.message}".colorize(:red)
-    puts "\n🟡 Verifique:".colorize(:yellow)
-    puts "    1. A tabela 'equipes' existe".colorize(:yellow)
-    puts "    2. Todas as migrations foram executadas".colorize(:yellow)
-    puts "    3. O banco de dados está acessível".colorize(:yellow)
-    
+    puts "\nErro de banco de dados: #{e.message}"
 rescue NameError => e
-    puts "\n Erro de definição de classe:".colorize(:red)
-    puts " → #{e.message}".colorize(:red)
-    puts "\n🟡 Verifique:".colorize(:yellow)
-    puts "    1. O modelo Equipe está definido em #app/models/equipe.rb".colorize(:yellow)
-    puts "    2. O nome da classe está correto (Equipe)".colorize(:yellow)
-    puts "    3. O arquivo do modelo está no local correto".colorize(:yellow)
-    
+    puts "\nErro de definição de classe: #{e.message}"
 rescue => e
-    puts "\n Erro inesperado:".colorize(:red)
-    puts " → #{e.message}".colorize(:red)
-    puts "\n🟣 Stack trace:".colorize(:magenta)
-    puts e.backtrace[0..5].map { |line| "    #{line}" }.join("\n").colorize(:magenta)
+    puts "\nErro inesperado: #{e.message}"
 end

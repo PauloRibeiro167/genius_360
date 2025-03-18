@@ -1,4 +1,4 @@
-class CreateFinancialTransactions < ActiveRecord::Migration[7.0]
+class CreateFinancialTransactions < ActiveRecord::Migration[8.0]
   def change
     create_table :financial_transactions do |t|
       t.string :tipo, null: false, default: "entrada"
@@ -19,7 +19,7 @@ class CreateFinancialTransactions < ActiveRecord::Migration[7.0]
       t.references :user, foreign_key: true, null: false
       t.references :aprovado_por, foreign_key: { to_table: :users }
       t.references :entidade, polymorphic: true
-      t.string :conta_bancaria  # Alterado de references para string
+      t.string :conta_bancaria
       
       t.string :centro_custo
       t.text :observacoes
@@ -34,6 +34,8 @@ class CreateFinancialTransactions < ActiveRecord::Migration[7.0]
       t.text :justificativa_reembolso
       t.string :comprovante_reembolso_path
 
+      t.string :tags
+
       t.timestamps
     end
     
@@ -43,10 +45,13 @@ class CreateFinancialTransactions < ActiveRecord::Migration[7.0]
     add_index :financial_transactions, :status
     add_index :financial_transactions, :discarded_at
     add_index :financial_transactions, :categoria
-    add_index :financial_transactions, :conta_bancaria  # Adicionado índice para conta_bancaria
+    add_index :financial_transactions, :conta_bancaria
     
     add_index :financial_transactions, :reembolsavel
     add_index :financial_transactions, :status_reembolso
     add_index :financial_transactions, :data_solicitacao_reembolso
+    
+    # Índice para o campo de tags
+    add_index :financial_transactions, :tags
   end
 end

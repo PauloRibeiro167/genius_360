@@ -1,14 +1,10 @@
-require 'colorize'
-
 begin
-    puts "\n Iniciando associações entre Perfis e Permissões...".colorize(:blue)
+    puts "\n Iniciando associações entre Perfis e Permissões..."
 
-    # Estatísticas de processamento
     stats = { criadas: 0, erros: 0, perfis_processados: 0 }
 
-    # Definição do mapeamento de permissões
     perfil_permissions_map = {
-        "Super Admin" => Permission.all.pluck(:name), # Todas as permissões
+        "Super Admin" => Permission.all.pluck(:name),
 
         "Analista De Dados" => [
             "Visualizar métricas",
@@ -42,13 +38,13 @@ begin
             "Visualizar configurações"
         ],
 
-        "Digitador" => [  # Alterado de "Operador" para "Digitador"
+        "Digitador" => [
             "Listar vendas",
             "Visualizar venda",
             "Criar venda"
         ],
 
-        "Gerente De Marketing" => [  # Alterado de "Marketing" para "Gerente De Marketing"
+        "Gerente De Marketing" => [
             "Criar demanda",
             "Listar demandas",
             "Visualizar demanda",
@@ -67,7 +63,7 @@ begin
             "Filtrar métricas"
         ],
 
-        "Monitor De Fraudes" => [  # Ajustado para corresponder ao formato do titleize
+        "Monitor De Fraudes" => [
             "Listar vendas",
             "Visualizar venda",
             "Listar finanças",
@@ -77,25 +73,24 @@ begin
         ]
     }
 
-    # Processamento das associações
     perfil_permissions_map.each do |perfil_name, permission_names|
         begin
             perfil = Perfil.find_by(name: perfil_name)
             
             if perfil.nil?
-                puts " Erro: Perfil '#{perfil_name}' não encontrado".colorize(:red)
+                puts "Erro: Perfil '#{perfil_name}' não encontrado"
                 stats[:erros] += 1
                 next
             end
 
-            puts "\n⚪ Processando perfil: #{perfil_name}".colorize(:white)
+            puts "\nProcessando perfil: #{perfil_name}"
             
             permission_names.each do |permission_name|
                 begin
                     permission = Permission.find_by(name: permission_name)
                     
                     if permission.nil?
-                        puts "🟡 Aviso: Permissão '#{permission_name}' não encontrada".colorize(:yellow)
+                        puts "Aviso: Permissão '#{permission_name}' não encontrada"
                         stats[:erros] += 1
                         next
                     end
@@ -105,15 +100,14 @@ begin
                         permission: permission
                     )
                     
-                    puts "🟢 Associação criada: #{perfil_name} -> #{permission_name}".colorize(:green)
+                    puts "Associação criada: #{perfil_name} -> #{permission_name}"
                     stats[:criadas] += 1
                     
                 rescue ActiveRecord::RecordInvalid => e
-                    puts " Erro de validação: #{e.message}".colorize(:red)
+                    puts "Erro de validação: #{e.message}"
                     stats[:erros] += 1
                 rescue => e
-                    puts " Erro ao criar associação: #{e.message}".colorize(:red)
-                    puts "🟣 Debug: #{e.backtrace[0..2].join("\n")}".colorize(:magenta)
+                    puts "Erro ao criar associação: #{e.message}"
                     stats[:erros] += 1
                 end
             end
@@ -121,29 +115,22 @@ begin
             stats[:perfis_processados] += 1
             
         rescue => e
-            puts " Erro ao processar perfil #{perfil_name}: #{e.message}".colorize(:red)
-            puts "🟣 Debug: #{e.backtrace[0..2].join("\n")}".colorize(:magenta)
+            puts "Erro ao processar perfil #{perfil_name}: #{e.message}"
             stats[:erros] += 1
         end
     end
 
-    # Exibição do resumo da operação
-    puts "\n Resumo da operação:".colorize(:cyan)
-    puts " → Total de perfis processados: #{stats[:perfis_processados]}".colorize(:blue)
-    puts "🟢 → Associações criadas com sucesso: #{stats[:criadas]}".colorize(:green)
-    puts " → Erros encontrados: #{stats[:erros]}".colorize(:red)
-    puts "⚫ → Total de associações no sistema: #{PerfilPermission.count}".colorize(:light_black)
+    puts "\nResumo da operação:"
+    puts "Total de perfis processados: #{stats[:perfis_processados]}"
+    puts "Associações criadas com sucesso: #{stats[:criadas]}"
+    puts "Erros encontrados: #{stats[:erros]}"
+    puts "Total de associações no sistema: #{PerfilPermission.count}"
 
 rescue ActiveRecord::StatementInvalid => e
-    puts "\n Erro de banco de dados:".colorize(:red)
-    puts " → #{e.message}".colorize(:red)
-    puts "\n🟡 Verifique:".colorize(:yellow)
-    puts "    1. As tabelas necessárias existem".colorize(:yellow)
-    puts "    2. Todas as migrations foram executadas".colorize(:yellow)
-    puts "    3. O banco de dados está acessível".colorize(:yellow)
+    puts "\nErro de banco de dados:"
+    puts "#{e.message}"
     
 rescue => e
-    puts "\n Erro inesperado:".colorize(:red)
-    puts " → #{e.message}".colorize(:red)
-    puts "🟣 Debug: #{e.backtrace[0..2].join("\n")}".colorize(:magenta)
+    puts "\nErro inesperado:"
+    puts "#{e.message}"
 end

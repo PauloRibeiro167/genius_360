@@ -1,7 +1,7 @@
 class CreateMeta < ActiveRecord::Migration[8.0]
   def change
     create_table :meta do |t|
-      t.references :user, null: false, foreign_key: true
+      t.references :user , null: false, foreign_key: true
       t.string :tipo_meta
       t.decimal :valor_meta
       t.date :data_inicio

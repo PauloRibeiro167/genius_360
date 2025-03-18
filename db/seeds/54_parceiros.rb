@@ -88,7 +88,11 @@ usuarios_parceiros.each do |usuario|
   
   if is_ativo && data_aprovacao
     # Define o último pagamento (entre a data de aprovação e hoje)
-    ultimo_pagamento = rand(data_aprovacao..data_atual)
+    # Calcular a diferença em dias entre a data de aprovação e hoje
+    dias_desde_aprovacao = (data_atual - data_aprovacao.to_date).to_i
+    # Escolher um número aleatório de dias para adicionar à data de aprovação
+    dias_aleatorios = rand(0..dias_desde_aprovacao)
+    ultimo_pagamento = data_aprovacao.to_date + dias_aleatorios.days
     
     # Define o próximo pagamento com base na periodicidade
     dias_para_proximo = case periodicidade
@@ -133,7 +137,7 @@ usuarios_parceiros.each do |usuario|
   
   # Cria o parceiro
   parceiro = Parceiro.new(
-    user_id: usuario.id,
+    user_id: usuario.id,  # Usar diretamente o ID do usuário
     percentual_comissao: nivel[:comissao],
     chave_pix: tipo_pix == "E-mail" ? email_titular : SecureRandom.uuid.first(20),
     banco: banco_selecionado,
@@ -192,7 +196,8 @@ if parceiros_criados > 0
     valor_total_comissoes = indicacoes_convertidas * rand(200..500)
     
     parceiro_destaque = Parceiro.create!(
-      user_id: usuario.id,
+      user_id: usuario.id,  # Usar diretamente o ID do usuário
+      # outros atributos permanecem iguais
       percentual_comissao: nivel[:comissao],
       chave_pix: usuario.email,
       banco: bancos.sample,
@@ -234,7 +239,8 @@ puts "- Parceiros inativos: #{parceiros_inativos}"
 # Distribuição por nível
 niveis_parceiros.each do |nivel_info|
   count = Parceiro.where(nivel_parceiro: nivel_info[:nivel]).count
-  puts "- Nível #{nivel_info[:nome]}: #{count} parceiros (#{(count.to_f / parceiros_criados * 100).round(1)}%)"
+  percentage = parceiros_criados > 0 ? (count.to_f / parceiros_criados * 100).round(1) : 0
+  puts "- Nível #{nivel_info[:nome]}: #{count} parceiros (#{percentage}%)"
 end
 
 # Total de indicações e valores

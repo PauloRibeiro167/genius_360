@@ -1,12 +1,10 @@
 require 'colorize'
 
 begin
-    puts "\n Iniciando criação de hierarquias...".colorize(:blue)
+    puts "\n Iniciando criação de hierarquias..."
 
-    # Estatísticas de processamento
     stats = { criadas: 0, existentes: 0, erros: 0 }
 
-    # Definição das hierarquias
     hierarquias = [
         { nome: "Diretoria", nivel: 1, descricao: "Nível executivo" },
         { nome: "Gerência", nivel: 2, descricao: "Nível gerencial" },
@@ -14,61 +12,59 @@ begin
         { nome: "Operacional", nivel: 4, descricao: "Nível operacional" }
     ]
 
-    # Processamento das hierarquias
     hierarquias.each do |h|
         begin
             hierarquia = Hierarquia.find_or_initialize_by(nome: h[:nome])
             
             if hierarquia.new_record?
                 if hierarquia.update(h)
-                    puts "🟢 Hierarquia criada: #{h[:nome]}".colorize(:green)
+                    puts "Hierarquia criada: #{h[:nome]}"
                     stats[:criadas] += 1
                 else
-                    puts " Erro ao criar hierarquia '#{h[:nome]}': #{hierarquia.errors.full_messages.join(', ')}".colorize(:red)
+                    puts "Erro ao criar hierarquia '#{h[:nome]}': #{hierarquia.errors.full_messages.join(', ')}"
                     stats[:erros] += 1
                 end
             else
-                puts "⚪ Hierarquia já existe: #{h[:nome]}".colorize(:white)
+                puts "Hierarquia já existe: #{h[:nome]}"
                 stats[:existentes] += 1
             end
             
         rescue ActiveRecord::RecordInvalid => e
-            puts " Erro de validação ao criar hierarquia '#{h[:nome]}': #{e.message}".colorize(:red)
+            puts "Erro de validação ao criar hierarquia '#{h[:nome]}': #{e.message}"
             stats[:erros] += 1
         rescue => e
-            puts " Erro inesperado ao criar hierarquia '#{h[:nome]}': #{e.message}".colorize(:red)
-            puts "🟣 Debug: #{e.backtrace[0..2].map(&:to_s).join("\n")}".colorize(:magenta)
+            puts "Erro inesperado ao criar hierarquia '#{h[:nome]}': #{e.message}"
+            puts "Debug: #{e.backtrace[0..2].map(&:to_s).join("\n")}"
             stats[:erros] += 1
         end
     end
 
-    # Exibição do resumo da operação
-    puts "\n Resumo da operação:".colorize(:cyan)
-    puts " → Total de hierarquias processadas: #{hierarquias.size}".colorize(:blue)
-    puts "🟢 → Hierarquias criadas: #{stats[:criadas]}".colorize(:green)
-    puts "⚪ → Hierarquias existentes: #{stats[:existentes]}".colorize(:white)
-    puts " → Erros encontrados: #{stats[:erros]}".colorize(:red)
-    puts " → Total de hierarquias no sistema: #{Hierarquia.count}".colorize(:blue)
+    puts "\nResumo da operação:"
+    puts "Total de hierarquias processadas: #{hierarquias.size}"
+    puts "Hierarquias criadas: #{stats[:criadas]}"
+    puts "Hierarquias existentes: #{stats[:existentes]}"
+    puts "Erros encontrados: #{stats[:erros]}"
+    puts "Total de hierarquias no sistema: #{Hierarquia.count}"
 
 rescue ActiveRecord::StatementInvalid => e
-    puts "\n Erro de banco de dados:".colorize(:red)
-    puts " → #{e.message}".colorize(:red)
-    puts "\n🟡 Verifique:".colorize(:yellow)
-    puts "    1. A tabela 'hierarquias' existe".colorize(:yellow)
-    puts "    2. Todas as migrations foram executadas".colorize(:yellow)
-    puts "    3. O banco de dados está acessível".colorize(:yellow)
+    puts "\nErro de banco de dados:"
+    puts "#{e.message}"
+    puts "\nVerifique:"
+    puts "1. A tabela 'hierarquias' existe"
+    puts "2. Todas as migrations foram executadas"
+    puts "3. O banco de dados está acessível"
     
 rescue NameError => e
-    puts "\n Erro de definição de classe:".colorize(:red)
-    puts " → #{e.message}".colorize(:red)
-    puts "\n🟡 Verifique:".colorize(:yellow)
-    puts "    1. O modelo Hierarquia está definido em #app/models/hierarquia.rb".colorize(:yellow)
-    puts "    2. O nome da classe está correto (Hierarquia)".colorize(:yellow)
-    puts "    3. O arquivo do modelo está no local correto".colorize(:yellow)
+    puts "\nErro de definição de classe:"
+    puts "#{e.message}"
+    puts "\nVerifique:"
+    puts "1. O modelo Hierarquia está definido em app/models/hierarquia.rb"
+    puts "2. O nome da classe está correto (Hierarquia)"
+    puts "3. O arquivo do modelo está no local correto"
     
 rescue => e
-    puts "\n Erro inesperado:".colorize(:red)
-    puts " → #{e.message}".colorize(:red)
-    puts "\n🟣 Stack trace:".colorize(:magenta)
-    puts e.backtrace[0..5].map { |line| "    #{line}" }.join("\n").colorize(:magenta)
+    puts "\nErro inesperado:"
+    puts "#{e.message}"
+    puts "\nStack trace:"
+    puts e.backtrace[0..5].map { |line| "#{line}" }.join("\n")
 end

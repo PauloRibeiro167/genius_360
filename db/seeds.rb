@@ -1,9 +1,11 @@
 require 'colorize'
 require 'benchmark'
+require_relative './seeds/logger'
+
+SeedLogger.info("Iniciando limpeza do banco de dados...")
 
 begin
   start_time = Time.now
-  puts "\n[#{start_time.strftime('%H:%M:%S')}] Iniciando limpeza do banco de dados...".colorize(:cyan)
   
   models = {
     PerfilPermission => "Permissões de perfis",
@@ -20,10 +22,10 @@ begin
   }
 
   # Verificação de dependências
-  puts "\nVerificando dependências...".colorize(:yellow)
+  SeedLogger.info("Verificando dependências...")
   models.each_key do |model|
     unless defined?(model)
-      puts "⚠️  Modelo #{model} não encontrado!".colorize(:red)
+      SeedLogger.erro("Modelo #{model} não encontrado!")
       exit 1
     end
   end
@@ -32,49 +34,51 @@ begin
   models.each do |model, name|
     begin
       count = model.count
-      print "→ Removendo #{name}... ".colorize(:blue)
+      SeedLogger.info("Removendo #{name}...")
       model.destroy_all
       stats[:removidos] += count
       stats[:modelos_processados] += 1
-      puts "✓ (#{count} registros)".colorize(:green)
+      SeedLogger.sucesso("#{count} registros removidos")
     rescue => e
       stats[:erros] += 1
-      puts "✗".colorize(:red)
-      puts "  #{e.message}".colorize(:red)
+      SeedLogger.erro("Falha ao remover #{name}: #{e.message}")
     end
   end
 
-  puts "\nResumo da limpeza:".colorize(:blue)
-  puts "→ Registros removidos: #{stats[:removidos]}".colorize(:green)
-  puts "→ Erros encontrados: #{stats[:erros]}".colorize(:red)
-
-  puts "\nCarregando seeds...".colorize(:blue)
-  Dir[Rails.root.join('db', 'seeds', '*.rb')].sort.each do |file|
+  # Carregando seeds
+  SeedLogger.info("\nCarregando seeds...")
+  total_seeds = Dir[Rails.root.join('db', 'seeds', '*.rb')].size
+  
+  Dir[Rails.root.join('db', 'seeds', '*.rb')].sort.each_with_index do |file, index|
     begin
-      print "→ Processando #{File.basename(file)}... ".colorize(:blue)
+      SeedLogger.info("Processando #{File.basename(file)}...")
       require file
       stats[:seeds_carregados] += 1
-      puts "✓".colorize(:green)
+      SeedLogger.exibir_barra_progresso(index + 1, total_seeds, "Seeds")
     rescue => e
       stats[:erros] += 1
-      puts "✗".colorize(:red)
-      puts "  Erro: #{e.message}".colorize(:red)
+      SeedLogger.erro("Erro ao processar #{File.basename(file)}: #{e.message}")
     end
   end
 
-  # Adicionar resumo final melhorado
+  # Relatório Final
   end_time = Time.now
   duration = (end_time - start_time).round(2)
   
-  puts "\n📊 Relatório Final:".colorize(:cyan)
-  puts "→ Tempo total: #{duration}s".colorize(:blue)
-  puts "→ Modelos processados: #{stats[:modelos_processados]}/#{models.size}".colorize(:blue)
-  puts "→ Registros removidos: #{stats[:removidos]}".colorize(:green)
-  puts "→ Seeds carregados: #{stats[:seeds_carregados]}".colorize(:green)
-  puts "→ Erros encontrados: #{stats[:erros]}".colorize(stats[:erros] > 0 ? :red : :green)
+  SeedLogger.info("\n=== Relatório Final ===")
+  SeedLogger.info("Tempo total: #{duration}s")
+  SeedLogger.info("Modelos processados: #{stats[:modelos_processados]}/#{models.size}")
+  SeedLogger.sucesso("Registros removidos: #{stats[:removidos]}")
+  SeedLogger.sucesso("Seeds carregados: #{stats[:seeds_carregados]}")
+  
+  if stats[:erros] > 0
+    SeedLogger.erro("Erros encontrados: #{stats[:erros]}")
+  else
+    SeedLogger.sucesso("Nenhum erro encontrado")
+  end
 
 rescue => e
-  puts "\n❌ Erro fatal durante o seed:".colorize(:red)
-  puts "→ #{e.message}".colorize(:red)
-  puts e.backtrace[0..2].map { |line| "  #{line}".colorize(:red) }
+  SeedLogger.erro("Erro fatal durante o seed:")
+  SeedLogger.erro(e.message)
+  SeedLogger.erro(e.backtrace[0..2].join("\n"))
 end

@@ -6,6 +6,7 @@ class CreateAcessos < ActiveRecord::Migration[8.0]
       t.datetime :data_acesso
       t.string :ip
       t.string :modelo_dispositivo
+      t.datetime :discarded_at
 
       t.timestamps
     end

@@ -137,7 +137,7 @@ incident_details = {
 }
 
 # Período para os incidentes
-data_inicial = 1.year.ago
+data_inicial = 1.year.ago.to_date
 data_final = Date.today
 
 # Número de incidentes a serem criados
@@ -168,8 +168,10 @@ total_incidentes.times do
   # Seleciona um detalhe específico para o tipo de incidente
   details = incident_details[incident_type].sample
   
-  # Define a data do incidente
-  created_at = rand(data_inicial..data_final)
+  # Define a data do incidente - CORREÇÃO AQUI
+  days_diff = (data_final - data_inicial).to_i
+  random_days = rand(0..days_diff)
+  created_at = data_inicial + random_days.days
   
   # Cria o incidente
   incident = SecurityIncident.new(

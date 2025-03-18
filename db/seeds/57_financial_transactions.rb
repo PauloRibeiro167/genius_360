@@ -3,8 +3,14 @@
 
 puts "Criando transações financeiras..."
 
+# Verifica se existem usuários
+if User.count == 0
+  puts "ERRO: Não existem usuários cadastrados. Execute primeiro a seed de usuários."
+  exit
+end
+
 # Criando registros de transações financeiras
-FinancialTransaction.create([
+FinancialTransaction.create!([
   {
     tipo: "entrada",
     valor: 1000.00,
@@ -12,10 +18,10 @@ FinancialTransaction.create([
     categoria: "Vendas",
     data_competencia: Date.today,
     forma_pagamento: "Transferência",
-    status: "confirmado",
+    status: "pago", # Corrigido de "confirmado" para "pago"
     numero_documento: "DOC123456",
     user_id: User.first.id,
-    conta_bancaria_id: ContaBancaria.first.id,
+    conta_bancaria: "Conta Principal", # Corrigido de conta_bancaria_id para conta_bancaria
     centro_custo: "Vendas Gerais",
     observacoes: "Transação realizada com sucesso",
     numero_parcela: "1",
@@ -31,22 +37,19 @@ FinancialTransaction.create([
     status: "pendente",
     numero_documento: "DOC654321",
     user_id: User.first.id,
-    conta_bancaria_id: ContaBancaria.first.id,
+    conta_bancaria: "Conta Secundária", # Corrigido de conta_bancaria_id para conta_bancaria
     centro_custo: "Materiais",
     observacoes: "Aguardando pagamento",
     numero_parcela: "1",
     reembolsavel: true,
-    status_reembolso: "pendente",
-    data_solicitacao_reembolso: nil,
-    justificativa_reembolso: nil,
+    status_reembolso: "solicitado", # Corrigido para um valor válido conforme enum
+    data_solicitacao_reembolso: Date.today,
+    justificativa_reembolso: "Despesa pessoal para cliente",
     comprovante_reembolso_path: nil
   }
 ])
 
-FinancialTransaction.create!(
-  amount: 100.0,
-  transaction_type: "credit",
-  user_id: User.first.id
-)
-
-# Adicione mais transações conforme necessário
+puts "Transações financeiras criadas com sucesso!"
+puts "Total de transações: #{FinancialTransaction.count}"
+puts "Entradas: #{FinancialTransaction.entradas.count}"
+puts "Saídas: #{FinancialTransaction.saidas.count}"

@@ -1,16 +1,11 @@
 puts "Criando registros de acesso para demonstração..."
 
-# Limpa registros existentes para evitar duplicações
-# Acesso.destroy_all (descomente se quiser limpar a tabela antes)
-
-# Verifica se existem usuários no sistema
 users = User.all
 if users.empty?
   puts "ATENÇÃO: Não existem usuários cadastrados. Execute primeiro a seed de usuários."
   puts "Criando apenas registros de acesso sem usuário associado."
 end
 
-# Dispositivos comuns para simulação
 dispositivos = [
   "iPhone 14 Pro",
   "Samsung Galaxy S23",
@@ -24,21 +19,19 @@ dispositivos = [
   "Windows Desktop"
 ]
 
-# IPs fictícios para simulação
 ips = [
   "187.45.123.45",
   "200.147.89.123",
   "189.75.34.212",
   "177.154.23.78",
   "201.33.65.198",
-  "192.168.0.1", # IP local
-  "10.0.0.15",   # IP local
+  "192.168.0.1",
+  "10.0.0.15",
   "186.221.45.67",
   "179.124.236.54",
   "45.188.73.124"
 ]
 
-# Tipos de descrição de acesso
 descricoes = [
   "Login no sistema",
   "Acesso ao módulo de consignados",
@@ -52,21 +45,17 @@ descricoes = [
   "Recuperação de senha"
 ]
 
-# Cria registros de acesso para os últimos 30 dias
 data_inicial = 30.days.ago
 data_final = Time.now
 
-# Número de registros a serem criados
 quantidade = 150
 registros_criados = 0
 
 puts "Gerando #{quantidade} registros de acesso..."
 
 quantidade.times do
-  # Define se o acesso terá um usuário associado ou não
-  user = users.sample if users.present? && rand < 0.9 # 90% dos acessos têm usuário associado
+  user = users.sample if users.present? && rand < 0.9
   
-  # Dados do acesso
   acesso = Acesso.new(
     user_id: user&.id,
     descricao: descricoes.sample,
@@ -77,7 +66,7 @@ quantidade.times do
   
   if acesso.save
     registros_criados += 1
-    if (registros_criados % 25).zero? # Exibe progresso a cada 25 registros
+    if (registros_criados % 25).zero?
       puts "... criados #{registros_criados} registros"
     end
   else
@@ -85,12 +74,9 @@ quantidade.times do
   end
 end
 
-# Cria alguns registros específicos para demonstração de análise
 if users.present?
-  # Seleciona um usuário para criar padrões de acesso
   user_demo = users.first
   
-  # Cria uma sequência de logins diários para este usuário
   (1..7).each do |dias_atras|
     Acesso.create!(
       user_id: user_demo.id,
@@ -100,7 +86,6 @@ if users.present?
       modelo_dispositivo: "MacBook Pro"
     )
     
-    # Simula um logout no fim do expediente
     Acesso.create!(
       user_id: user_demo.id,
       descricao: "Logout do sistema",

@@ -1,9 +1,5 @@
 puts "Criando registros de acompanhamentos de leads para demonstração..."
 
-# Limpa registros existentes para evitar duplicações
-# Acompanhamento.destroy_all (descomente se quiser limpar a tabela antes)
-
-# Verifica se existem leads e usuários no sistema
 leads = defined?(Lead) ? Lead.all : []
 usuarios = User.all
 
@@ -17,7 +13,6 @@ if usuarios.empty?
   exit
 end
 
-# Tipos de acompanhamento possíveis
 tipos_acompanhamento = [
   "Ligação telefônica",
   "E-mail",
@@ -28,7 +23,6 @@ tipos_acompanhamento = [
   "Redes sociais"
 ]
 
-# Status possíveis para os acompanhamentos
 status = [
   "Pendente",
   "Concluído",
@@ -37,7 +31,6 @@ status = [
   "Convertido em venda"
 ]
 
-# Resultados possíveis para os acompanhamentos
 resultados = [
   "Cliente interessado, solicitou mais informações",
   "Cliente solicitou contato em outro momento",
@@ -55,69 +48,56 @@ resultados = [
   "Cliente precisou remarcar"
 ]
 
-# Período para os acompanhamentos
-data_inicial = 6.months.ago
-data_final = Date.today + 2.weeks # Inclui alguns agendamentos futuros
+data_inicial = 6.months.ago.to_date
+data_final = Date.today + 2.weeks
 
-# Contador de acompanhamentos criados
 acompanhamentos_criados = 0
-total_acompanhamentos = 500 # Número total a ser criado
+total_acompanhamentos = 500
 
 puts "Gerando #{total_acompanhamentos} registros de acompanhamentos..."
 
-# Para cada lead, cria uma série de acompanhamentos
+dias_totais = (data_final - data_inicial).to_i
+
 leads.each do |lead|
-  # Número de acompanhamentos para este lead (de 1 a 5)
   qtd_acompanhamentos = rand(1..5)
   
-  # Usuário responsável pelo lead (mantém o mesmo para todos os acompanhamentos)
   usuario_responsavel = usuarios.sample
   
-  # Datas ordenadas para os acompanhamentos deste lead
   datas = []
   qtd_acompanhamentos.times do
-    datas << rand(data_inicial..data_final)
+    dias_aleatorios = rand(0..dias_totais)
+    datas << data_inicial + dias_aleatorios
   end
-  datas.sort! # Ordena as datas cronologicamente
+  datas.sort!
   
-  # Status do último acompanhamento
   ultimo_status = nil
   
-  # Cria os acompanhamentos em ordem cronológica
   datas.each_with_index do |data, idx|
-    # Define o status com base na data e sequência
     if data > Date.today
-      # Acompanhamento futuro
       status_atual = "Pendente"
     elsif idx == datas.size - 1
-      # Último acompanhamento do lead - maior chance de conclusão
       status_atual = ["Concluído", "Convertido em venda", "Pendente"].sample
     else
-      # Acompanhamentos intermediários
       status_atual = ["Concluído", "Remarcado", "Concluído", "Cancelado"].sample
     end
     
-    # Define se terá próxima data
     proxima_data = nil
     if status_atual == "Remarcado" || status_atual == "Pendente"
       proxima_data = data + rand(2..10).days
     end
     
-    # Define a prioridade (1 - Alta, 2 - Média, 3 - Baixa)
     if status_atual == "Pendente"
       prioridade = rand(1..3)
     else
-      prioridade = nil # Não precisa de prioridade se já concluído/cancelado
+      prioridade = nil
     end
     
-    # Define duração estimada ou real
     if status_atual == "Pendente"
-      duracao = [15, 30, 45, 60].sample # Duração estimada
+      duracao = [15, 30, 45, 60].sample
     else
-      duracao = rand(5..90) # Duração real, mais variada
+      duracao = rand(5..90)
     end
     
-    # Resultado depende do status
     if status_atual == "Pendente"
       resultado = nil
     elsif status_atual == "Convertido em venda"
@@ -128,16 +108,14 @@ leads.each do |lead|
       resultado = resultados.sample
     end
     
-    # Tipo de acompanhamento - ligações são mais frequentes
     tipo = rand < 0.6 ? "Ligação telefônica" : tipos_acompanhamento.sample
     
-    # Cria o acompanhamento
     acompanhamento = Acompanhamento.create!(
       lead_id: lead.id,
       data_acompanhamento: data,
       resultado: resultado,
       tipo_acompanhamento: tipo,
-      usuario_id: usuario_responsavel.id,
+      user_id: usuario_responsavel.id,
       status: status_atual,
       proxima_data: proxima_data,
       prioridade: prioridade,
@@ -147,20 +125,16 @@ leads.each do |lead|
     acompanhamentos_criados += 1
     ultimo_status = status_atual
     
-    # Mostra progresso a cada 50 acompanhamentos
     if (acompanhamentos_criados % 50).zero?
       puts "... #{acompanhamentos_criados} acompanhamentos criados"
     end
     
-    # Se atingimos o total desejado, paramos
     break if acompanhamentos_criados >= total_acompanhamentos
   end
   
-  # Se atingimos o total desejado, paramos
   break if acompanhamentos_criados >= total_acompanhamentos
 end
 
-# Calcula algumas estatísticas
 pending_count = Acompanhamento.where(status: "Pendente").count
 completed_count = Acompanhamento.where(status: "Concluído").count
 rescheduled_count = Acompanhamento.where(status: "Remarcado").count
@@ -175,14 +149,12 @@ puts "- Remarcados: #{rescheduled_count} (#{(rescheduled_count.to_f / acompanham
 puts "- Cancelados: #{canceled_count} (#{(canceled_count.to_f / acompanhamentos_criados * 100).round(1)}%)"
 puts "- Convertidos em venda: #{converted_count} (#{(converted_count.to_f / acompanhamentos_criados * 100).round(1)}%)"
 
-# Acompanhamentos por tipo
 puts "\nAcompanhamentos por tipo:"
 tipos_acompanhamento.each do |tipo|
   count = Acompanhamento.where(tipo_acompanhamento: tipo).count
   puts "- #{tipo}: #{count}" if count > 0
 end
 
-# Acompanhamentos por período
 puts "\nAcompanhamentos por período:"
 meses = (0..5).map { |i| (Date.today - i.months).beginning_of_month }
 
