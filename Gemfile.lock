@@ -458,7 +458,7 @@ GEM
       sorbet-runtime (>= 0.5.10782)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
-    secure_headers (6.7.0)
+    secure_headers (7.1.0)
     securerandom (0.4.1)
     selenium-webdriver (4.10.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -635,7 +635,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rails-omakase
   ruby-lsp
-  secure_headers (~> 6.5)
+  secure_headers (~> 7.1)
   selenium-webdriver (~> 4.10.0)
   shoulda-matchers (~> 5.0)
   sidekiq
