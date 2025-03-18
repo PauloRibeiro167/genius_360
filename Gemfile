@@ -103,7 +103,7 @@ group :development, :test do
   gem "simplecov", require: false
   gem "rspec-rails", "~> 6.1.0"
   gem "factory_bot_rails", "~> 6.4.0"
-  gem "faker", "~> 3.2.0"
+  gem "faker", "~> 3.5.1"
 end
 
 group :development do
