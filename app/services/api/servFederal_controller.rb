@@ -3,94 +3,96 @@ require "json"
 require "fileutils"
 require "date"
 
-class ServFederalController
-  previous_month = Date.today.prev_month
-  MES = previous_month.strftime("%m")
-  ANO = previous_month.strftime("%Y")
-
+class ServFederalService
   API_KEY = "f815d9928ae9a6509cd96704fd021028"
-  CPF = "07362196334"
-
-  def fetch_data(page)
-    url = URI("https://api.portaldatransparencia.gov.br/api-de-dados/servidores?cpf=#{CPF}&pagina=#{page}")
-    puts "Fetching URL: #{url}"
-    request = Net::HTTP::Get.new(url)
-    request["chave-api-dados"] = API_KEY
-    request["accept"] = "*/*"
-    puts "Using API Key: #{API_KEY}"
-    response = Net::HTTP.start(url.hostname, url.port, use_ssl: true) do |http|
-      http.request(request)
-    end
-    puts "Response Code: #{response.code}"
-    puts "Response Body: #{response.body}"
-    return nil if response.code == "404"
-    data = JSON.parse(response.body)
-    return nil if data.nil? || data.empty?
-    data
-  rescue StandardError => e
-    puts "Erro ao buscar dados: #{e.message}"
-    nil
-  end
-
-  def save_test_cpfs(cpf)
-    cpfs = []
-    file_path = "/home/paulo/Documentos/projetos_de_teste/fetch_PDTCE/cfs/cpfs_testados.json"
-    if File.exist?(file_path)
-      file = File.read(file_path)
-      cpfs = JSON.parse(file)
-    end
-    cpfs << cpf
-    File.open(file_path, "w") do |file|
-      file.write(JSON.pretty_generate(cpfs))
-    end
-  end
-
-  def save_not_found_cpfs(cpf)
-    cpfs = []
-    file_path = "/home/paulo/Documentos/projetos_de_teste/fetch_PDTCE/cfs/cpfs_not_found.json"
-    if File.exist?(file_path)
-      file = File.read(file_path)
-      cpfs = JSON.parse(file)
-    end
-    cpfs << cpf
-    File.open(file_path, "w") do |file|
-      file.write(JSON.pretty_generate(cpfs))
-    end
-  end
-
-  def run
-    dir_name = "/workspaces/sispred/app/services/database"
-    FileUtils.mkdir_p(dir_name)
-
-    save_test_cpfs(CPF)
-
+  
+  def fetch_data_by_cpf(cpf)
     page = 1
     all_data = []
 
     loop do
-      data = fetch_data(page)
-      if data.nil?
-        save_not_found_cpfs(CPF)
-        break
-      end
-
-      ids_count = data.size
-      break if ids_count == 0
-
+      data = fetch_data(cpf, page)
+      break if data.nil? || data.empty?
+      
       all_data.concat(data)
-
-      puts "Número de IDs retornados na página #{page}: #{ids_count}"
-
       page += 1
+      
+      # Limite de páginas para evitar loops infinitos
+      break if page > 10
     end
 
-    if all_data.empty?
-      puts "Nenhum dado foi retornado pela API."
-    else
-      File.open("#{dir_name}/SFEDERAL.json", "w") do |file|
-        file.write(JSON.pretty_generate(all_data))
-      end
-      puts "Todos os dados foram armazenados em #{dir_name}/SFEDERAL.json"
+    return all_data
+  end
+
+  def fetch_data(cpf, page = 1)
+    url = URI("https://api.portaldatransparencia.gov.br/api-de-dados/servidores?cpf=#{cpf}&pagina=#{page}")
+    
+    request = Net::HTTP::Get.new(url)
+    request["chave-api-dados"] = API_KEY
+    request["accept"] = "*/*"
+    
+    Rails.logger.info("Consultando API de Servidores Federais: #{url}")
+    
+    response = Net::HTTP.start(url.hostname, url.port, use_ssl: true) do |http|
+      http.request(request)
     end
+    
+    return nil if response.code == "404"
+    
+    begin
+      data = JSON.parse(response.body)
+      return data unless data.nil? || data.empty?
+    rescue => e
+      Rails.logger.error("Erro ao processar resposta da API: #{e.message}")
+    end
+    
+    nil
+  end
+  
+  def save_data(data)
+    # Define diretório para salvar os dados
+    dir_name = Rails.root.join("storage", "servidores_federais")
+    FileUtils.mkdir_p(dir_name)
+    
+    # Gera um nome de arquivo único com timestamp
+    timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+    
+    # Extrai CPF do primeiro registro se disponível
+    cpf = data.first&.dig("cpf") || "desconhecido"
+    
+    # Salva o arquivo
+    filename = "#{dir_name}/servidor_#{cpf}_#{timestamp}.json"
+    File.open(filename, "w") do |file|
+      file.write(JSON.pretty_generate(data))
+    end
+    
+    Rails.logger.info("Dados do servidor salvos em: #{filename}")
+    
+    return filename
+  end
+end
+
+# Código para teste direto
+if __FILE__ == $0
+  # CPF para teste
+  cpf_teste = "71449159320"
+  
+  # Instanciar o serviço e fazer a consulta
+  servico = ServFederalService.new
+  puts "Consultando CPF: #{cpf_teste}..."
+  
+  # Executar a consulta
+  resultado = servico.fetch_data_by_cpf(cpf_teste)
+  
+  # Exibir resultados
+  if resultado && !resultado.empty?
+    puts "Encontrados #{resultado.size} registros!"
+    puts JSON.pretty_generate(resultado.first)
+    
+    # Salvar em arquivo
+    arquivo = servico.save_data(resultado)
+    puts "Dados salvos em: #{arquivo}"
+  else
+    puts "Nenhum dado encontrado para este CPF"
   end
 end

@@ -8,7 +8,7 @@ class Admin::DashboardController < ApplicationController
                               .distinct.count rescue 0
     
     # Garantir que o dashboard tenha dados mesmo se o modelo Order não existir ainda
-    @monthly_orders = if defined?(Order)
+    @monthly_orders = if defined?(Order) && ActiveRecord::Base.connection.table_exists?('orders') && Order.respond_to?(:by_month)
       {
         'Janeiro' => Order.by_month('January').count,
         'Fevereiro' => Order.by_month('February').count,
@@ -22,7 +22,8 @@ class Admin::DashboardController < ApplicationController
         'Outubro' => Order.by_month('October').count
       }
     else
-      Hash.new(0)
+      # Use os dados mockados quando Orders não estiver disponível
+      mock_monthly_data
     end
 
     @monthly_data = mock_monthly_data

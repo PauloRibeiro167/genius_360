@@ -4,7 +4,6 @@ class Users::SessionsController < Devise::SessionsController
   before_action :log_request_info
   respond_to :html, :json, :turbo_stream
 
-  # Adiciona os helpers do Devise
   helper_method :resource_name, :resource, :devise_mapping, :resource_class
 
   def resource_name
@@ -25,41 +24,33 @@ class Users::SessionsController < Devise::SessionsController
 
   def new
     @resource = User.new
-    Rails.logger.info "==== Acessando action NEW do SessionsController ===="
-    Rails.logger.info "Após o login, o usuário será redirecionado para: #{after_sign_in_path_for(resource)}"
     begin
       render "devise/sessions/new"
     rescue => e
-      Rails.logger.error "Erro ao renderizar login: #{e.message}"
-      Rails.logger.error e.backtrace.join("\n")
       flash[:alert] = "Erro ao carregar página de login. Por favor, tente novamente."
       redirect_to root_path
     end
   end
 
   def create
-    Rails.logger.info "==== Tentando autenticar usuário ===="
-    Rails.logger.info "Email tentando login: #{params[:user][:email]}"
-    
     begin
-      # Verificar se o usuário existe
       user = User.find_by(email: params[:user][:email])
       
       if user
-        Rails.logger.info "Usuário encontrado no banco"
-        Rails.logger.info "Perfil do usuário: #{user.perfil.try(:name)}"
+        valid_password = user.valid_password?(params[:user][:password])
         
-        # Verificar se é um usuário público
-        if user.public_user?  # Você precisa adicionar este método ao modelo User
-          Rails.logger.info "Usuário público detectado - permitindo acesso"
-          sign_in(user)
-          flash[:notice] = "Bem-vindo, #{user.full_name}!"
+        if (user.respond_to?(:public_user?) && user.public_user?) || valid_password
+          sign_in(resource_name, user)  
+          set_flash_message!(:notice, :signed_in)
+          flash[:welcome_message] = "Bem-vindo de volta, #{user.full_name}!" if is_navigational_format?
           return respond_with user, location: after_sign_in_path_for(user)
+        else
+          handle_failed_authentication
+          return
         end
-        
-        Rails.logger.info "Verificando senha..."
       else
-        Rails.logger.info "Usuário não encontrado no banco"
+        handle_failed_authentication
+        return
       end
 
       self.resource = warden.authenticate!(auth_options)
@@ -67,12 +58,10 @@ class Users::SessionsController < Devise::SessionsController
       sign_in(resource_name, resource)
       flash[:welcome_message] = "Bem-vindo de volta, #{current_user.full_name}!" if is_navigational_format?
       respond_with resource, location: after_sign_in_path_for(resource)
+    rescue Warden::AuthenticationError => e
+      handle_failed_authentication
     rescue => e
-      Rails.logger.error "==== Erro ao tentar logar ===="
-      Rails.logger.error "Mensagem: #{e.message}"
-      Rails.logger.error "Backtrace: #{e.backtrace.join("\n")}"
-      
-      handle_authentication_error(e)
+      handle_standard_error(e)
     end
   end
 
@@ -103,19 +92,9 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def log_request_info
-    Rails.logger.info "==== Informações da Requisição ===="
-    Rails.logger.info "Controller: #{controller_name}"
-    Rails.logger.info "Action: #{action_name}"
-    Rails.logger.info "Format: #{request.format}"
-    Rails.logger.info "Path: #{request.path}"
-    Rails.logger.info "=================================="
   end
 
   def handle_authentication_error(error)
-    Rails.logger.error "==== Erro de autenticação DETALHADO ===="
-    Rails.logger.error "Mensagem: #{error.message}"
-    Rails.logger.error "Backtrace: #{error.backtrace.join("\n")}"
-    
     respond_to do |format|
       format.html do
         flash[:alert] = "Email ou senha inválidos. Por favor, verifique suas credenciais."
@@ -135,6 +114,14 @@ class Users::SessionsController < Devise::SessionsController
         render json: { error: "Erro ao tentar logar: #{error.message}" }, 
         status: :unprocessable_entity 
       }
+    end
+  end
+
+  def handle_failed_authentication
+    flash[:alert] = "Email ou senha inválidos"
+    respond_to do |format|
+      format.html { redirect_to new_user_session_path }
+      format.json { render json: { error: "Credenciais inválidas" }, status: :unauthorized }
     end
   end
 end
