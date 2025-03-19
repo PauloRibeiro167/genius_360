@@ -1,5 +1,71 @@
 # frozen_string_literal: true
 
+# Define a classe CustomFailureApp ANTES da configuração do Devise
+class CustomFailureApp < Devise::FailureApp
+  # Sobrescreva o método respond para evitar usar failure_message diretamente
+  def respond
+    if http_auth?
+      http_auth
+    elsif warden_options[:recall]
+      recall
+    else
+      redirect
+    end
+  end
+
+  # Garante que o método redirect não depende de failure_message
+  def redirect
+    store_location!
+    if flash[:timedout] && flash[:alert]
+      flash.keep(:timedout)
+      flash.keep(:alert)
+    else
+      # Aqui está a mudança: não passamos nenhum argumento
+      flash[:alert] = i18n_message
+    end
+    redirect_to redirect_url
+  end
+
+  # Sobrescreva o método store_location! para garantir compatibilidade com a classe pai
+  def store_location!
+    return if skip_storage?
+
+    store_location_for(scope, attempted_path) if request.get? && !http_auth?
+  end
+
+  # Adicione este método
+  def skip_storage?
+    # Implementação padrão do Devise::FailureApp
+    request.format.nil? || request.format.to_sym != :html || 
+    request.xhr? || 
+    request.path.match(/\.json|\.xml/)
+  end
+
+  protected
+
+  # Modificamos o método i18n_message para ser compatível com a superclasse
+  def i18n_message(default = nil)
+    message = warden_message || :unauthenticated
+    
+    options = { 
+      scope: scope,
+      default: default || message.to_s,
+      resource_name: scope,
+      authentication_keys: authentication_keys.join(', ')
+    }
+
+    I18n.t(message, **options)
+  end
+
+  def scope
+    @scope ||= Devise.mappings.keys.first || :user
+  end
+
+  def authentication_keys
+    @authentication_keys ||= [:email]
+  end
+end
+
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
 # are not: uncommented lines are intended to protect your configuration from
@@ -277,10 +343,10 @@ Devise.setup do |config|
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
   #
-  # config.warden do |manager|
-  #   manager.intercept_401 = false
-  #   manager.default_strategies(scope: :user).unshift :some_external_strategy
-  # end
+  config.warden do |manager|
+    manager.default_strategies(scope: :user).unshift :database_authenticatable
+    manager.failure_app = CustomFailureApp
+  end
 
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine

@@ -1,0 +1,55 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cpf: MyString
+  nome: MyString
+  cargo: MyString
+  orgao: MyString
+  salario: MyString
+  situacao: MyString
+  tipo_servidor: MyString
+  codigo_matricula_formatado: MyString
+  flag_afastado: 1
+  orgao_lotacao_codigo: MyString
+  orgao_lotacao_nome: MyString
+  orgao_lotacao_sigla: MyString
+  orgao_exercicio_codigo: MyString
+  orgao_exercicio_nome: MyString
+  orgao_exercicio_sigla: MyString
+  estado_exercicio_sigla: MyString
+  estado_exercicio_nome: MyString
+  codigo_funcao_cargo: MyString
+  descricao_funcao_cargo: MyString
+  cpf_instituidor_pensao: MyString
+  nome_instituidor_pensao: MyString
+  cpf_representante_pensao: MyString
+  nome_representante_pensao: MyString
+  remuneracao_bruta: 9.99
+  remuneracao_apos_deducoes: 9.99
+
+two:
+  cpf: MyString
+  nome: MyString
+  cargo: MyString
+  orgao: MyString
+  salario: MyString
+  situacao: MyString
+  tipo_servidor: MyString
+  codigo_matricula_formatado: MyString
+  flag_afastado: 1
+  orgao_lotacao_codigo: MyString
+  orgao_lotacao_nome: MyString
+  orgao_lotacao_sigla: MyString
+  orgao_exercicio_codigo: MyString
+  orgao_exercicio_nome: MyString
+  orgao_exercicio_sigla: MyString
+  estado_exercicio_sigla: MyString
+  estado_exercicio_nome: MyString
+  codigo_funcao_cargo: MyString
+  descricao_funcao_cargo: MyString
+  cpf_instituidor_pensao: MyString
+  nome_instituidor_pensao: MyString
+  cpf_representante_pensao: MyString
+  nome_representante_pensao: MyString
+  remuneracao_bruta: 9.99
+  remuneracao_apos_deducoes: 9.99

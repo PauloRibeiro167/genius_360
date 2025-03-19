@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_18_164827) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -520,6 +520,71 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_013638) do
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "servidor_federals", force: :cascade do |t|
+    t.string "cpf"
+    t.string "nome"
+    t.string "cargo"
+    t.string "orgao"
+    t.string "salario"
+    t.string "situacao"
+    t.string "tipo_servidor"
+    t.string "codigo_matricula_formatado"
+    t.integer "flag_afastado", default: 0
+    t.string "orgao_lotacao_codigo"
+    t.string "orgao_lotacao_nome"
+    t.string "orgao_lotacao_sigla"
+    t.string "orgao_exercicio_codigo"
+    t.string "orgao_exercicio_nome"
+    t.string "orgao_exercicio_sigla"
+    t.string "estado_exercicio_sigla"
+    t.string "estado_exercicio_nome"
+    t.string "codigo_funcao_cargo"
+    t.string "descricao_funcao_cargo"
+    t.string "cpf_instituidor_pensao"
+    t.string "nome_instituidor_pensao"
+    t.string "cpf_representante_pensao"
+    t.string "nome_representante_pensao"
+    t.decimal "remuneracao_bruta", precision: 15, scale: 2
+    t.decimal "remuneracao_apos_deducoes", precision: 15, scale: 2
+    t.decimal "valor_jetons", precision: 15, scale: 2
+    t.decimal "valor_honorarios_advocaticios", precision: 15, scale: 2
+    t.date "data_referencia"
+    t.string "mes_ano_referencia"
+    t.text "observacoes"
+    t.decimal "remuneracao_basica_bruta", precision: 15, scale: 2
+    t.decimal "abate_remuneracao_basica_bruta", precision: 15, scale: 2
+    t.decimal "gratificacao_natalina", precision: 15, scale: 2
+    t.decimal "ferias", precision: 15, scale: 2
+    t.decimal "outras_remuneracoes_eventuais", precision: 15, scale: 2
+    t.decimal "imposto_retido_fonte", precision: 15, scale: 2
+    t.decimal "previdencia_oficial", precision: 15, scale: 2
+    t.decimal "outras_deducoes_obrigatorias", precision: 15, scale: 2
+    t.decimal "pensao_militar", precision: 15, scale: 2
+    t.decimal "fundo_saude", precision: 15, scale: 2
+    t.decimal "taxa_ocupacao_imovel_funcional", precision: 15, scale: 2
+    t.decimal "verbas_indenizatorias_civil", precision: 15, scale: 2
+    t.decimal "verbas_indenizatorias_militar", precision: 15, scale: 2
+    t.decimal "verbas_indenizatorias_pdv", precision: 15, scale: 2
+    t.boolean "remuneracao_empresa_publica", default: false
+    t.boolean "existe_valor_mes", default: true
+    t.json "dados_brutos"
+    t.json "rubricas"
+    t.json "jetons"
+    t.json "honorarios_advocaticios"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cpf"], name: "index_servidor_federals_on_cpf", unique: true
+    t.index ["data_referencia"], name: "index_servidor_federals_on_data_referencia"
+    t.index ["estado_exercicio_sigla"], name: "index_servidor_federals_on_estado_exercicio_sigla"
+    t.index ["nome"], name: "index_servidor_federals_on_nome"
+    t.index ["orgao"], name: "index_servidor_federals_on_orgao"
+    t.index ["orgao_exercicio_codigo"], name: "index_servidor_federals_on_orgao_exercicio_codigo"
+    t.index ["orgao_lotacao_codigo"], name: "index_servidor_federals_on_orgao_lotacao_codigo"
+    t.index ["remuneracao_apos_deducoes"], name: "index_servidor_federals_on_remuneracao_apos_deducoes"
+    t.index ["situacao"], name: "index_servidor_federals_on_situacao"
+    t.index ["tipo_servidor"], name: "index_servidor_federals_on_tipo_servidor"
   end
 
   create_table "taxas_beneficios", force: :cascade do |t|

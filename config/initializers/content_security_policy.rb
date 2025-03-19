@@ -1,29 +1,28 @@
-# Be sure to restart your server when you modify this file.
+# Configuração da Política de Segurança de Conteúdo
 
-# Define a política de segurança de conteúdo para a aplicação
-Rails.application.config.content_security_policy do |policy|
-  policy.default_src :self, :https
-  policy.font_src    :self, :https, :data, :unsafe_inline
-  policy.img_src     :self, :https, :data
-  policy.object_src  :none
-  policy.script_src  :self, :https, :unsafe_inline
-  policy.style_src   :self, :https, :unsafe_inline
+Rails.application.configure do
+  config.content_security_policy do |policy|
+    policy.default_src :self
+    policy.font_src    :self, :https
+    policy.img_src     :self, :https
+    policy.object_src  :none
+    policy.script_src  :self, :https, :unsafe_inline, :unsafe_eval
+    policy.style_src   :self, :https, :unsafe_inline
+    policy.media_src   :self, :https, :data
+
+    # Se você estiver usando versões mais recentes do webpack-dev-server, 
+    # pode ser necessário especificar o porta aqui
+    if Rails.env.development?
+      policy.connect_src :self, :https, 'http://localhost:3035', 'ws://localhost:3035'
+    end
+
+    # Especifica a política de URI para relatórios de violação
+    policy.report_uri "/csp/violation_report"
+  end
+
+  # Gera nonces para permitir scripts e estilos inline específicos
+  config.content_security_policy_nonce_generator = -> request { SecureRandom.base64(16) }
   
-  # Permitir frames do Google Maps
-  policy.frame_src   :self, 'https://www.google.com', 'https://*.google.com'
-  
-  # Permitir conexões com fontes externas
-  policy.connect_src :self, :https
-  
-  # Reportar violações CSP - opcional
-  # policy.report_uri "/csp-violation-report-endpoint"
+  # Configurar como "report-only" apenas em desenvolvimento
+  config.content_security_policy_report_only = Rails.env.development?
 end
-
-# Gera nonces para permitir scripts inline específicos
-Rails.application.config.content_security_policy_nonce_generator = -> request { SecureRandom.base64(16) }
-
-# Permite que elementos específicos usem um nonce CSP
-Rails.application.config.content_security_policy_nonce_directives = %w(script-src style-src)
-
-# Descomente para ativar o modo de relatório sem bloqueio
-Rails.application.config.content_security_policy_report_only = true

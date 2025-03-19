@@ -53,5 +53,14 @@ module Genius360
     if Rails.env.development?
       config.middleware.delete Browser::Middleware
     end
+
+    # Configuração para o Chartkick
+    config.after_initialize do
+      # Se estiver usando o propshaft
+      if defined?(Propshaft)
+        # Chartkick e Chart.js são carregados como ativos principais
+        config.assets.paths << Rails.root.join('app', 'assets', 'vendor')
+      end
+    end
   end
 end

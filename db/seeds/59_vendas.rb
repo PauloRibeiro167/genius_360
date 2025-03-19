@@ -1,4 +1,3 @@
-require_relative './seeds/logger'
 puts "Criando registros de vendas para demonstração..."
 
 # Limpa registros existentes para evitar duplicações

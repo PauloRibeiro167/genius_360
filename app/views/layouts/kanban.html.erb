@@ -16,7 +16,7 @@
   <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
 </head>
 <body class="h-full">
-  <aside id="default-sidebar" class="fixed top-0 left-0 z-40 h-screen h-screen" aria-label="Sidebar" data-controller="sidebar" data-sidebar-target="sidebar">
+  <aside id="default-sidebar" class="fixed top-0 left-0 z-40 h-screen" aria-label="Sidebar" data-controller="sidebar" data-sidebar-target="sidebar">
     <div class="h-full px-3 py-4 overflow-y-auto">
       <ul class="space-y-2 font-medium">
         <%= render "shared/sidebar" %>
@@ -25,7 +25,9 @@
   </aside>
 
   <div class="ml-4 sm:ml-12">
-    <%= yield %>
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-900 h-screen">
+      <%= yield %>
+    </main>
   </div>
 
   <%= render "shared/flash" %>

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  namespace :consulta do
+    resources :servidor_federals
+  end
   # Configuração do Devise com controller customizado e novas rotas de sign_out
   devise_for :users, controllers: { 
     sessions: 'users/sessions',
@@ -158,4 +161,6 @@ Rails.application.routes.draw do
       patch :undiscard
     end
   end
+
+  post '/csp-violation-report', to: 'csp#violation_report'
 end
