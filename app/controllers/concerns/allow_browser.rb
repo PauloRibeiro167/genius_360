@@ -17,3 +17,8 @@ module AllowBrowser
     render 'public/406-unsupported-browser', layout: false, status: :not_acceptable
   end
 end
+
+
+# Uma alternativa moderna seria usar bibliotecas JavaScript como Modernizr
+# para detectar recursos específicos, permitindo uma degradação graceful 
+# para navegadores mais antigos em vez de bloqueá-los completamente.
