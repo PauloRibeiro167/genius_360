@@ -1,0 +1,343 @@
+<div class="flex items-center justify-center min-h-[60vh] bg-gray-900">
+  <div class="col-span-12">
+    <div class="relative overflow-x-auto sm:rounded-lg md:p-8">
+      <div class="flex justify-end mb-2">
+        <%= link_to new_consulta_servidor_federal_path, class: "bg-purple-900 font-medium text-black dark:text-gray-500 hover:underline rounded-lg bg-purple-200 px-2 py-1", title: "Criar Novo" do %>
+          <span class="material-icons font-normal text-gray-600">
+            <span class="text-lg text-white">add</span>
+          </span>
+          <span class="text-white">Novo Servidor federal</span>
+        <% end %>
+      </div>
+
+      <div class="bg-gray-800 dark:bg-gray-800 sm:rounded-lg dark:text-white p-12">
+        <%= search_form_for @q, class: "rounded-lg" do |f| %>
+          <table class="w-full rounded-lg shadow-lg text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase dark:text-gray-100 rounded-lg">
+              <tr>
+                <th scope="col" class="px-6 py-3">
+                  <div class="flex rounded-lg flex-col">
+                    <%= sort_link(@q, :id, 'ID', default_order: :asc) %>
+                    <%= f.search_field :id_eq, 
+                        placeholder: "Buscar ID...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :cpf, "Cpf", default_order: :asc) %>
+                    <%= f.search_field :cpf_cont, 
+                        placeholder: "Buscar cpf...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :nome, "Nome", default_order: :asc) %>
+                    <%= f.search_field :nome_cont, 
+                        placeholder: "Buscar nome...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :cargo, "Cargo", default_order: :asc) %>
+                    <%= f.search_field :cargo_cont, 
+                        placeholder: "Buscar cargo...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :orgao, "Orgao", default_order: :asc) %>
+                    <%= f.search_field :orgao_cont, 
+                        placeholder: "Buscar orgao...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :salario, "Salario", default_order: :asc) %>
+                    <%= f.search_field :salario_cont, 
+                        placeholder: "Buscar salario...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :situacao, "Situacao", default_order: :asc) %>
+                    <%= f.search_field :situacao_cont, 
+                        placeholder: "Buscar situacao...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :tipo_servidor, "Tipo servidor", default_order: :asc) %>
+                    <%= f.search_field :tipo_servidor_cont, 
+                        placeholder: "Buscar tipo servidor...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :codigo_matricula_formatado, "Codigo matricula formatado", default_order: :asc) %>
+                    <%= f.search_field :codigo_matricula_formatado_cont, 
+                        placeholder: "Buscar codigo matricula formatado...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :flag_afastado, "Flag afastado", default_order: :asc) %>
+                    <%= f.search_field :flag_afastado_cont, 
+                        placeholder: "Buscar flag afastado...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :orgao_lotacao_codigo, "Orgao lotacao codigo", default_order: :asc) %>
+                    <%= f.search_field :orgao_lotacao_codigo_cont, 
+                        placeholder: "Buscar orgao lotacao codigo...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :orgao_lotacao_nome, "Orgao lotacao nome", default_order: :asc) %>
+                    <%= f.search_field :orgao_lotacao_nome_cont, 
+                        placeholder: "Buscar orgao lotacao nome...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :orgao_lotacao_sigla, "Orgao lotacao sigla", default_order: :asc) %>
+                    <%= f.search_field :orgao_lotacao_sigla_cont, 
+                        placeholder: "Buscar orgao lotacao sigla...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :orgao_exercicio_codigo, "Orgao exercicio codigo", default_order: :asc) %>
+                    <%= f.search_field :orgao_exercicio_codigo_cont, 
+                        placeholder: "Buscar orgao exercicio codigo...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :orgao_exercicio_nome, "Orgao exercicio nome", default_order: :asc) %>
+                    <%= f.search_field :orgao_exercicio_nome_cont, 
+                        placeholder: "Buscar orgao exercicio nome...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :orgao_exercicio_sigla, "Orgao exercicio sigla", default_order: :asc) %>
+                    <%= f.search_field :orgao_exercicio_sigla_cont, 
+                        placeholder: "Buscar orgao exercicio sigla...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :estado_exercicio_sigla, "Estado exercicio sigla", default_order: :asc) %>
+                    <%= f.search_field :estado_exercicio_sigla_cont, 
+                        placeholder: "Buscar estado exercicio sigla...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :estado_exercicio_nome, "Estado exercicio nome", default_order: :asc) %>
+                    <%= f.search_field :estado_exercicio_nome_cont, 
+                        placeholder: "Buscar estado exercicio nome...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :codigo_funcao_cargo, "Codigo funcao cargo", default_order: :asc) %>
+                    <%= f.search_field :codigo_funcao_cargo_cont, 
+                        placeholder: "Buscar codigo funcao cargo...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :descricao_funcao_cargo, "Descricao funcao cargo", default_order: :asc) %>
+                    <%= f.search_field :descricao_funcao_cargo_cont, 
+                        placeholder: "Buscar descricao funcao cargo...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :cpf_instituidor_pensao, "Cpf instituidor pensao", default_order: :asc) %>
+                    <%= f.search_field :cpf_instituidor_pensao_cont, 
+                        placeholder: "Buscar cpf instituidor pensao...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :nome_instituidor_pensao, "Nome instituidor pensao", default_order: :asc) %>
+                    <%= f.search_field :nome_instituidor_pensao_cont, 
+                        placeholder: "Buscar nome instituidor pensao...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :cpf_representante_pensao, "Cpf representante pensao", default_order: :asc) %>
+                    <%= f.search_field :cpf_representante_pensao_cont, 
+                        placeholder: "Buscar cpf representante pensao...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :nome_representante_pensao, "Nome representante pensao", default_order: :asc) %>
+                    <%= f.search_field :nome_representante_pensao_cont, 
+                        placeholder: "Buscar nome representante pensao...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :remuneracao_bruta, "Remuneracao bruta", default_order: :asc) %>
+                    <%= f.search_field :remuneracao_bruta_cont, 
+                        placeholder: "Buscar remuneracao bruta...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <%= sort_link(@q, :remuneracao_apos_deducoes, "Remuneracao apos deducoes", default_order: :asc) %>
+                    <%= f.search_field :remuneracao_apos_deducoes_cont, 
+                        placeholder: "Buscar remuneracao apos deducoes...",
+                        class: 'mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-lg' %>
+                  </div>
+                </th>
+                                <th scope="col" class="px-6 py-3">
+                  <div class="flex flex-col">
+                    <span>Ações</span>
+                    <%= f.submit 'Pesquisar', 
+                        class: 'mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-lg' %>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @consulta_servidor_federals.each do |consulta_servidor_federal| %>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <%= consulta_servidor_federal.id %>
+                  </th>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.cpf %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.nome %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.cargo %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.orgao %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.salario %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.situacao %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.tipo_servidor %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.codigo_matricula_formatado %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.flag_afastado %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.orgao_lotacao_codigo %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.orgao_lotacao_nome %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.orgao_lotacao_sigla %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.orgao_exercicio_codigo %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.orgao_exercicio_nome %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.orgao_exercicio_sigla %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.estado_exercicio_sigla %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.estado_exercicio_nome %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.codigo_funcao_cargo %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.descricao_funcao_cargo %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.cpf_instituidor_pensao %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.nome_instituidor_pensao %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.cpf_representante_pensao %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.nome_representante_pensao %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.remuneracao_bruta %></td>
+                                    <td class="px-6 py-4"><%= consulta_servidor_federal.remuneracao_apos_deducoes %></td>
+                                    <td class="px-6 py-4">
+                    <%= link_to consulta_servidor_federal, class: "text-blue-600 dark:text-blue-500 hover:underline material-icons text-xl", :aria => {:label => "Visualizar"} do %>
+                      visibility
+                    <% end %>
+                    
+                    <%= link_to edit_consulta_servidor_federal_path(consulta_servidor_federal), class: "font-medium text-gray-600 dark:text-gray-500 hover:underline material-icons text-xl", :aria => {:label => "Editar"} do %>
+                      edit
+                    <% end %>
+                    
+                    <button data-modal-target="popup-modal-<%= consulta_servidor_federal.id %>" 
+                            data-modal-toggle="popup-modal-<%= consulta_servidor_federal.id %>"
+                            type="button"
+                            class="font-medium text-red-600 dark:text-red-500 hover:underline material-icons text-xl">
+                      delete_outline
+                    </button>
+
+                    <%= link_to discard_consulta_servidor_federal_path(consulta_servidor_federal), 
+                      class: "font-medium text-gray-600 dark:text-gray-500 hover:underline",
+                      data: {
+                        controller: "sweet-alert",
+                        action: "click->sweet-alert#confirmAlert",
+                        sweet_alert_confirm: "Tem certeza que deseja desativar?",
+                        sweet_alert_method: "patch",
+                        sweet_alert_url: discard_consulta_servidor_federal_path(consulta_servidor_federal)
+                      }, :aria => {:label => "Desativar"} do %>
+                      <svg class="w-6 h-6 text-gray-800 dark:text-white inline-block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M10 12v1h4v-1m4 7H6a1 1 0 0 1-1-1V9h14v9a1 1 0 0 1-1 1ZM4 5h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+                      </svg>
+                    <% end %>
+                  </td>
+                </tr>
+
+                <!-- Modal de confirmação para cada consulta_servidor_federal -->
+                <div id="popup-modal-<%= consulta_servidor_federal.id %>" 
+                     tabindex="-1" 
+                     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                  <div class="relative p-4 w-full max-w-md max-h-full">
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                      <button type="button" 
+                              class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" 
+                              data-modal-hide="popup-modal-<%= consulta_servidor_federal.id %>">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Fechar modal</span>
+                      </button>
+                      <div class="p-4 md:p-5 text-center">
+                        <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                        </svg>
+                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Tem certeza que deseja excluir?</h3>
+                        <%= link_to "Sim, tenho certeza",
+                            consulta_servidor_federal_path(consulta_servidor_federal), 
+                            class: "text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2",
+                            data: {
+                              turbo_method: :delete,
+                              modal_hide: "popup-modal-#{consulta_servidor_federal.id}"
+                            } %>
+                        <button type="button" 
+                                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                                data-modal-hide="popup-modal-<%= consulta_servidor_federal.id %>">
+                          Não, cancelar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+        <div class="mt-4">
+          <%= paginate @consulta_servidor_federals %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

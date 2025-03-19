@@ -1,27 +1,101 @@
-<h2>Change your password</h2>
+<section class="container mx-auto p-4 w-1/2 min-h-[30vh] flex items-center justify-center">
+  <div class="p-6 bg-purple-900 rounded-3xl w-full max-w-2xl">
+    <div class="mb-7">
+      <h2 class="font-semibold text-2xl text-gray-100 text-center">Alterar sua senha</h2>
+    </div>
+    <%= render "devise/shared/error_messages", resource: resource %>
+    <div class="space-y-6 px-8" data-controller="registratiom--login-mask">
+      <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, data: { turbo: false } }) do |f| %>
+        <%= f.error_notification %>
 
-<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= f.error_notification %>
+        <%= f.input :reset_password_token, as: :hidden %>
+        <%= f.full_error :reset_password_token %>
 
-  <%= f.input :reset_password_token, as: :hidden %>
-  <%= f.full_error :reset_password_token %>
+        <div class="grid grid-cols-1 gap-4">
+          <div class="mb-5">
+            <%= f.input :password,
+                      label: "Nova senha",
+                      required: false,
+                      required_mark: "",
+                      autofocus: true,
+                      input_html: { 
+                        class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                        autocomplete: "new-password",
+                        data: { 
+                          registratiom__login_mask_target: "password input"
+                        }
+                      },
+                      wrapper_html: { class: 'mb-0 relative' },
+                      label_html: { 
+                        class: "block mb-2 text-sm font-medium text-gray-100",
+                        data: { registratiom__login_mask_target: "label" }
+                      } %>
+          </div>
+          <div class="mb-5">
+            <%= f.input :password_confirmation,
+                      label: "Confirme sua nova senha",
+                      required: false,
+                      required_mark: "",
+                      input_html: { 
+                        class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                        autocomplete: "new-password",
+                        data: { 
+                          registratiom__login_mask_target: "password_confirmation input"
+                        }
+                      },
+                      wrapper_html: { class: 'mb-0 relative' },
+                      label_html: { 
+                        class: "block mb-2 text-sm font-medium text-gray-100",
+                        data: { registratiom__login_mask_target: "label" }
+                      } %>
+          </div>
+        </div>
 
-  <div class="form-inputs">
-    <%= f.input :password,
-                label: "New password",
-                required: true,
-                autofocus: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                label: "Confirm your new password",
-                required: true,
-                input_html: { autocomplete: "new-password" } %>
+        <% if @minimum_password_length %>
+          <div class="password-rules mt-3 mb-2 text-gray-300 text-sm">
+            <div id="length-rule" class="flex items-center space-x-2 transition-all duration-300">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8"/>
+              </svg>
+              <span>Mínimo de <%= @minimum_password_length %> caracteres</span>
+            </div>
+            <div id="uppercase-rule" class="flex items-center space-x-2 transition-all duration-300">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8"/>
+              </svg>
+              <span>Pelo menos uma letra maiúscula</span>
+            </div>
+            <div id="lowercase-rule" class="flex items-center space-x-2 transition-all duration-300">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8"/>
+              </svg>
+              <span>Pelo menos uma letra minúscula</span>
+            </div>
+            <div id="number-rule" class="flex items-center space-x-2 transition-all duration-300">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8"/>
+              </svg>
+              <span>Pelo menos um número</span>
+            </div>
+            <div id="special-rule" class="flex items-center space-x-2 transition-all duration-300">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8"/>
+              </svg>
+              <span>Pelo menos um caractere especial</span>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="h-2 bg-gray-700 rounded-full mt-2">
+          <div data-registratiom--login-mask-target="strengthMeter" class="h-2"></div>
+        </div>
+
+        <div class="mt-7">
+          <%= f.button :submit, "Alterar minha senha", class: "w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 font-semibold py-2 px-4 rounded-lg" %>
+        </div>
+      <% end %>
+    </div>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Change my password" %>
-  </div>
-<% end %>
+</section>
 
 <%= render "devise/shared/links" %>

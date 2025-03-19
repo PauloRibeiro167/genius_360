@@ -1,0 +1,14 @@
+<div class="p-12 bg-purple-900 mx-auto rounded-3xl w-96">
+  <div class="mb-7">
+    <h3 class="font-semibold text-2xl text-gray-100">Editar servidor federal</h3>
+  </div>
+
+  <div class="space-y-6">
+    <%= render "form", consulta_servidor_federal: @consulta_servidor_federal, data: {controller: "sweetalert", action: "click->sweetalert#confirmAlertEdit", sweetalert_confirm: "Tem Certeza ?", turbo_method: :patch} %>
+    
+    <div class="mt-7">
+      <%= link_to "Voltar para servidor federals", consulta_servidor_federals_path, 
+          class: 'w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500' %>
+    </div>
+  </div>
+</div>

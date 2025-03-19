@@ -1,0 +1,313 @@
+<%= simple_form_for(@consulta_servidor_federal, html: { class: "w-full" }) do |form| %>
+  <%= form.error_notification %>
+  <%= form.error_notification message: form.object.errors[:base].to_sentence if form.object.errors[:base].present? %>
+
+  <div class="space-y-6">
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_cpf" class="block mb-2 text-sm font-medium text-gray-100">
+        Cpf
+      </label>
+      <%= form.input :cpf,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_nome" class="block mb-2 text-sm font-medium text-gray-100">
+        Nome
+      </label>
+      <%= form.input :nome,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_cargo" class="block mb-2 text-sm font-medium text-gray-100">
+        Cargo
+      </label>
+      <%= form.input :cargo,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_orgao" class="block mb-2 text-sm font-medium text-gray-100">
+        Orgao
+      </label>
+      <%= form.input :orgao,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_salario" class="block mb-2 text-sm font-medium text-gray-100">
+        Salario
+      </label>
+      <%= form.input :salario,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_situacao" class="block mb-2 text-sm font-medium text-gray-100">
+        Situacao
+      </label>
+      <%= form.input :situacao,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_tipo_servidor" class="block mb-2 text-sm font-medium text-gray-100">
+        Tipo servidor
+      </label>
+      <%= form.input :tipo_servidor,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_codigo_matricula_formatado" class="block mb-2 text-sm font-medium text-gray-100">
+        Codigo matricula formatado
+      </label>
+      <%= form.input :codigo_matricula_formatado,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_flag_afastado" class="block mb-2 text-sm font-medium text-gray-100">
+        Flag afastado
+      </label>
+      <%= form.input :flag_afastado,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_orgao_lotacao_codigo" class="block mb-2 text-sm font-medium text-gray-100">
+        Orgao lotacao codigo
+      </label>
+      <%= form.input :orgao_lotacao_codigo,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_orgao_lotacao_nome" class="block mb-2 text-sm font-medium text-gray-100">
+        Orgao lotacao nome
+      </label>
+      <%= form.input :orgao_lotacao_nome,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_orgao_lotacao_sigla" class="block mb-2 text-sm font-medium text-gray-100">
+        Orgao lotacao sigla
+      </label>
+      <%= form.input :orgao_lotacao_sigla,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_orgao_exercicio_codigo" class="block mb-2 text-sm font-medium text-gray-100">
+        Orgao exercicio codigo
+      </label>
+      <%= form.input :orgao_exercicio_codigo,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_orgao_exercicio_nome" class="block mb-2 text-sm font-medium text-gray-100">
+        Orgao exercicio nome
+      </label>
+      <%= form.input :orgao_exercicio_nome,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_orgao_exercicio_sigla" class="block mb-2 text-sm font-medium text-gray-100">
+        Orgao exercicio sigla
+      </label>
+      <%= form.input :orgao_exercicio_sigla,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_estado_exercicio_sigla" class="block mb-2 text-sm font-medium text-gray-100">
+        Estado exercicio sigla
+      </label>
+      <%= form.input :estado_exercicio_sigla,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_estado_exercicio_nome" class="block mb-2 text-sm font-medium text-gray-100">
+        Estado exercicio nome
+      </label>
+      <%= form.input :estado_exercicio_nome,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_codigo_funcao_cargo" class="block mb-2 text-sm font-medium text-gray-100">
+        Codigo funcao cargo
+      </label>
+      <%= form.input :codigo_funcao_cargo,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_descricao_funcao_cargo" class="block mb-2 text-sm font-medium text-gray-100">
+        Descricao funcao cargo
+      </label>
+      <%= form.input :descricao_funcao_cargo,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_cpf_instituidor_pensao" class="block mb-2 text-sm font-medium text-gray-100">
+        Cpf instituidor pensao
+      </label>
+      <%= form.input :cpf_instituidor_pensao,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_nome_instituidor_pensao" class="block mb-2 text-sm font-medium text-gray-100">
+        Nome instituidor pensao
+      </label>
+      <%= form.input :nome_instituidor_pensao,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_cpf_representante_pensao" class="block mb-2 text-sm font-medium text-gray-100">
+        Cpf representante pensao
+      </label>
+      <%= form.input :cpf_representante_pensao,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_nome_representante_pensao" class="block mb-2 text-sm font-medium text-gray-100">
+        Nome representante pensao
+      </label>
+      <%= form.input :nome_representante_pensao,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_remuneracao_bruta" class="block mb-2 text-sm font-medium text-gray-100">
+        Remuneracao bruta
+      </label>
+      <%= form.input :remuneracao_bruta,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+    <div class="flex flex-col">
+      <label for="consulta_servidor_federal_remuneracao_apos_deducoes" class="block mb-2 text-sm font-medium text-gray-100">
+        Remuneracao apos deducoes
+      </label>
+      <%= form.input :remuneracao_apos_deducoes,
+          wrapper: false,
+          label: false,
+          input_html: {
+            class: "bg-purple-950 border border-purple-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          }
+      %>
+    </div>
+
+    <div class="flex justify-center">
+      <%= form.submit 'Salvar',
+          class: "bg-blue-600 hover:bg-blue-700 text-gray-100 px-8 py-2.5 rounded-lg font-medium text-sm transition duration-300 ease-in-out w-full"
+      %>
+    </div>
+  </div>
+<% end %>
