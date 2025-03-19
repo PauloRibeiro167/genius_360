@@ -3,7 +3,7 @@ class FinancialTransaction < ApplicationRecord
   
   # Corrigindo a definição dos enums - eles precisam de um hash como argumento
   enum :tipo, { entrada: 'entrada', saida: 'saida' }
-  enum :status, { pendente: 'pendente', pago: 'pago', cancelado: 'cancelado' }, prefix: true
+  enum :status, { pendente: 'pendente', pago: 'pago', cancelado: 'cancelado' }
   enum :status_reembolso, { solicitado: 'solicitado', aprovado: 'aprovado', negado: 'negado' }, prefix: true, allow_nil: true
   
   # Associações
