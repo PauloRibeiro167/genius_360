@@ -19,15 +19,11 @@ class Devise::SessionsController < ApplicationController
       end
     else
       Rails.logger.error "Falha na autenticação para email: #{params[:user][:email]}"
+      flash[:alert] = "Email ou senha inválidos."
+      
       respond_to do |format|
-        format.turbo_stream {
-          flash[:alert] = "Email ou senha inválidos."
-          redirect_to new_user_session_path
-        }
-        format.html {
-          flash[:alert] = "Email ou senha inválidos."
-          redirect_to new_user_session_path
-        }
+        format.turbo_stream { redirect_to new_user_session_path }
+        format.html { redirect_to new_user_session_path }
         format.json { render json: { error: "Credenciais inválidas" }, status: :unauthorized }
       end
     end
@@ -41,6 +37,10 @@ class Devise::SessionsController < ApplicationController
 
   def resource_name
     :user
+  end
+
+  def configure_sign_in_params
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:email, :password, :remember_me])
   end
 
   helper_method :resource, :resource_name

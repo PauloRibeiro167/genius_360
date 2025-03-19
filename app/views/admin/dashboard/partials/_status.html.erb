@@ -26,9 +26,48 @@
         </div>
       </div>
     </div>
-    <div class="bg-gray-700 p-4 rounded-lg">
+    <div class="bg-gray-700 grid-cols-3 p-4 rounded-lg space-y-6">
       <h3 class="text-lg font-semibold">Estatísticas Gerais</h3>
-      <p>Aqui você pode adicionar gráficos ou informações mais detalhadas.</p>
+      
+      <div class=" tese  gap-4">
+        <h4 class="text-md font-semibold mb-2">Usuários por dia</h4>
+        <%= line_chart User.group_by_day(:created_at).count, 
+            colors: ["#4ade80"],
+            height: "200px",
+            library: { 
+              scales: { 
+                x: { ticks: { color: '#ffffff' } },
+                y: { ticks: { color: '#ffffff' } }
+              }
+            } %>
+      </div>
+      
+      <div>
+        <h4 class="text-md font-semibold mb-2">Propostas por mês</h4>
+        <%= pie_chart Proposta.group_by_month(:created_at, last: 6).count, 
+            colors: ["#3b82f6", "#ef4444", "#f59e0b", "#10b981", "#8b5cf6", "#8456e1"],
+            height: "200px",
+            library: { 
+              plugins: { 
+                legend: { 
+                  labels: { color: '#ffffff' } 
+                } 
+              } 
+            } %>
+      </div>
+      
+      <div>
+        <h4 class="text-md font-semibold mb-2">Vendas mensais</h4>
+        <%= column_chart Venda.group_by_month(:data_venda, last: 12).sum(:valor_venda),
+            colors: ["#f59e0b"],
+            height: "200px",
+            library: { 
+              scales: { 
+                x: { ticks: { color: '#ffffff' } },
+                y: { ticks: { color: '#ffffff' } }
+              }
+            } %>
+      </div>
     </div>
   </div>
 </div>

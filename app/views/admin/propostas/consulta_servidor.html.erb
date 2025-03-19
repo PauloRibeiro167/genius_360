@@ -1,28 +1,67 @@
-<div class="container mt-4">
-  <h2>Consulta de Servidor Federal</h2>
-
-  <%= form_tag buscar_servidor_admin_propostas_path, method: :post do %>
-    <div class="form-group">
-      <%= label_tag :cpf, "CPF do Servidor" %>
-      <%= text_field_tag :cpf, params[:cpf], class: "form-control", 
-                        placeholder: "Digite o CPF (apenas números)" %>
+<section class="container mx-auto p-4 w-1/2 min-h-[30vh] flex items-center justify-center">
+  <div class="p-6 bg-purple-900 rounded-3xl w-full max-w-2xl">
+    <div class="mb-7">
+      <h2 class="font-semibold text-2xl text-gray-100 text-center">Consulta de Servidor Federal</h2>
     </div>
+    
+    <div class="space-y-6 px-8">
+      <%= form_tag buscar_servidor_admin_propostas_path, method: :post do %>
+        <div class="mb-5">
+          <%= label_tag :cpf, "CPF do Servidor", class: "block mb-2 text-sm font-medium text-gray-100" %>
+          <%= text_field_tag :cpf, params[:cpf], 
+                          class: "bg-purple-800 border border-purple-700 text-gray-100 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5",
+                          placeholder: "Digite o CPF (apenas números)" %>
+        </div>
 
-    <div class="form-group mt-3">
-      <%= submit_tag "Consultar", class: "btn btn-primary" %>
-    </div>
-  <% end %>
+        <div class="mt-7">
+          <%= submit_tag "Consultar", 
+                      class: "w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500" %>
+        </div>
+      <% end %>
 
-  <% if @resultado %>
-    <div class="mt-4">
-      <h3>Resultados da Consulta</h3>
-      <pre><%= JSON.pretty_generate(@resultado) %></pre>
-    </div>
-  <% end %>
+      <% if @resultado %>
+        <div class="mt-7">
+          <h3 class="font-semibold text-xl text-gray-100 mb-4">Resultados da Consulta</h3>
+          
+          <% if @resultado.is_a?(Array) && @resultado.any? %>
+            <div class="bg-purple-800 border border-purple-700 rounded-lg p-4 text-gray-100 text-sm overflow-auto max-h-96">
+              <% @resultado.each_with_index do |servidor, index| %>
+                <div class="<%= index > 0 ? 'mt-4 pt-4 border-t border-purple-600' : '' %>">
+                  <h4 class="font-medium text-lg"><%= servidor["nome"] || "Nome não disponível" %></h4>
+                  <div class="grid grid-cols-2 gap-2 mt-2">
+                    <div>
+                      <span class="text-gray-300">CPF:</span> 
+                      <%= servidor["cpf"] || "N/A" %>
+                    </div>
+                    <div>
+                      <span class="text-gray-300">Cargo:</span> 
+                      <%= servidor["cargo"] || "N/A" %>
+                    </div>
+                    <div>
+                      <span class="text-gray-300">Órgão:</span> 
+                      <%= servidor["orgao"] || servidor["orgaoLotacao"] || "N/A" %>
+                    </div>
+                    <div>
+                      <span class="text-gray-300">Remuneração:</span> 
+                      <%= servidor["remuneracao"] || "Não informado" %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="bg-purple-800 border border-purple-700 rounded-lg p-4 text-gray-100 text-sm">
+              <pre><%= JSON.pretty_generate(@resultado) %></pre>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
 
-  <% if flash[:error] %>
-    <div class="alert alert-danger mt-3">
-      <%= flash[:error] %>
+      <% if flash[:error] %>
+        <div class="mt-4 p-3 bg-red-900 border border-red-700 text-gray-100 text-sm rounded-lg">
+          <%= flash[:error] %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-</div>
+  </div>
+</section>

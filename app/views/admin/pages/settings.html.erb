@@ -57,10 +57,10 @@
           <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white mt-2"><%= current_user.full_name %></h5>
           <span class="text-sm text-gray-500 dark:text-gray-400"><%= current_user.perfil.name %></span>
           
-          <div class="flex mt-4 space-x-3">
+          <div class="flex justify-center items-center w-full mt-4">
             <%= link_to "Editar Perfil", "#dados-pessoais", 
-                class: "inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300",
-                data: { tab: "dados-pessoais" } %>
+              class: "inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300",
+              data: { tab: "dados-pessoais" } %>
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@
                       data: { profile_form_target: "field" } %>
                 </div>
 
-                <div class="flex justify-end space-x-3 pt-4">
+                <div class="flex justify-center mb-3 space-x-3 pt-4">
                   <button type="button" 
                           data-profile-form-target="editButton"
                           data-action="click->profile-form#toggleEdit"
@@ -133,16 +133,13 @@
             </div>
 
             <div class="tab-pane fade" id="senha">
-              <div class="flex flex-col items-center justify-center space-y-4">
+                <div class="flex flex-col items-center justify-center space-y-4">
                 <p class="text-gray-600 dark:text-gray-400 text-center">
                   Para alterar sua senha, clique no botão abaixo. Você será redirecionado para a página de alteração de senha.
                 </p>
                 
                 <%= link_to edit_user_password_path, 
                     class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 inline-flex items-center" do %>
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m0 0v2m0-2h2m-2 0H10m5-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                  </svg>
                   Redefinir Senha
                 <% end %>
               </div>
